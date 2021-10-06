@@ -4,26 +4,29 @@ import store from "../../store";
 export default class PlayScene extends Scene {
   constructor() {
     super({ key: "PlayScene" });
+
+    this.cells = [];
   }
 
-  create() {
-    const bomb = this.physics.add.image(400, 200, "paper");
-    bomb.setCollideWorldBounds(true);
-    bomb.body.onWorldBounds = true; // enable worldbounds collision event
-    bomb.setBounce(1);
-    bomb.setVelocity(200, 20);
+  async create(data) {
+    const { server } = data;
+
+    this.server = server;
+
+    if (!this.server) {
+      throw new Error("Server instance missing..");
+    }
+
+    await this.server.join();
+
+    this.server.onceStateChanged(this.createBoard, this);
 
     this.sound.add("thud");
-    this.physics.world.on("worldbounds", () => {
-      this.sound.play("thud", { volume: 0.75 });
-    });
 
-    //let's see if we can listen for store events
+    //let's see if we can listen for vue store events
     store.watch(
       (state) => state.game.isPaused,
       (newValue, oldValue) => {
-        console.log(`IsGamePaused was`, oldValue);
-        console.log(`IsGamePaused is now`, newValue);
         if (newValue) {
           this.scene.pause("PlayScene");
         } else {
@@ -38,4 +41,46 @@ export default class PlayScene extends Scene {
   }
 
   update() {}
+
+  createBoard(state) {
+    const { width, height } = this.scale;
+    const cellSize = 128;
+
+    let x = width * 0.5 - cellSize;
+    let y = height * 0.5 - cellSize;
+    state.board.forEach((cellState, idx) => {
+      const cell = this.add
+        .rectangle(x, y, cellSize, cellSize, 0xffffff)
+        .setInteractive()
+        .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+          this.server?.makeSelection(idx);
+        });
+
+      this.cells.push({
+        display: cell,
+        value: cellState,
+      });
+
+      x += cellSize + 5;
+
+      if ((idx + 1) % 3 === 0) {
+        y += cellSize + 5;
+        x = width * 0.5 - cellSize;
+      }
+    });
+
+    this.server?.onBoardChanged(this.handleBoardChanged, this);
+  }
+
+  handleBoardChanged(board) {
+    for (let i = 0; i < board.length; i++) {
+      const cell = this.cells[i];
+      if (cell.value !== board[i]) {
+        this.sound.play("thud", { volume: 0.5 });
+        this.add
+          .star(cell.display.x, cell.display.y, 4, 4, 60, 0xff0000)
+          .setAngle(45);
+      }
+    }
+  }
 }

@@ -3,8 +3,8 @@ import BootScene from "./scenes/BootScene";
 import PlayScene from "./scenes/PlayScene";
 
 export default {
-  width: 720,
-  height: 1080,
+  width: 800,
+  height: 600,
   physics: {
     default: "arcade",
     arcade: {

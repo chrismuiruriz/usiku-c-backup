@@ -1,3 +1,4 @@
+require("babel-polyfill");
 const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -6,7 +7,7 @@ const { VueLoaderPlugin } = require("vue-loader");
 module.exports = {
   mode: "development",
   devtool: "inline-source-map",
-  entry: "./src/app.js",
+  entry: ["babel-polyfill", "./src/app.js"],
 
   output: {
     filename: "main.js",

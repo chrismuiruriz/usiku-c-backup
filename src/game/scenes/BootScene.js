@@ -1,4 +1,6 @@
 import { Scene } from "phaser";
+import Server from "../services/Server";
+
 import paper from "../../assets/img/paper.png";
 import thudMp3 from "../../assets/media/thud.mp3";
 import thudOgg from "../../assets/media/thud.ogg";
@@ -13,7 +15,13 @@ export default class BootScene extends Scene {
     this.load.audio("thud", [thudMp3, thudOgg]);
   }
 
+  init() {
+    this.server = new Server();
+  }
+
   create() {
-    this.scene.start("PlayScene");
+    this.scene.start("PlayScene", {
+      server: this.server,
+    });
   }
 }
