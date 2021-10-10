@@ -56,6 +56,16 @@ export default class PlayScene extends Scene {
           this.server?.makeSelection(idx);
         });
 
+      //draw initial state
+      switch (cellState) {
+        case 1:
+          this.add.star(cell.x, cell.y, 4, 4, 60, 0xff0000).setAngle(45);
+          break;
+        case 2:
+          this.add.circle(cell.x, cell.y, 50, 0x0000ff);
+          break;
+      }
+
       this.cells.push({
         display: cell,
         value: cellState,
@@ -70,17 +80,32 @@ export default class PlayScene extends Scene {
     });
 
     this.server?.onBoardChanged(this.handleBoardChanged, this);
+    this.server?.onPlayerTurnChanged(this.handlePlayerTurnChanged, this);
   }
 
   handleBoardChanged(board) {
     for (let i = 0; i < board.length; i++) {
       const cell = this.cells[i];
-      if (cell.value !== board[i]) {
-        this.sound.play("thud", { volume: 0.5 });
-        this.add
-          .star(cell.display.x, cell.display.y, 4, 4, 60, 0xff0000)
-          .setAngle(45);
+      const newValue = board[i];
+      if (cell.value !== newValue) {
+        //this.sound.play("thud", { volume: 0.5 });
+        switch (newValue) {
+          case 1:
+            this.add
+              .star(cell.display.x, cell.display.y, 4, 4, 60, 0xff0000)
+              .setAngle(45);
+            break;
+          case 2:
+            this.add.circle(cell.display.x, cell.display.y, 50, 0x0000ff);
+            break;
+        }
+
+        cell.value = newValue;
       }
     }
+  }
+
+  handlePlayerTurnChanged(playerIndex) {
+    console.log("Player index is: ", playerIndex);
   }
 }
