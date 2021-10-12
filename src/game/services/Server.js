@@ -13,11 +13,20 @@ export default class Server {
     return this.playerIndex;
   }
 
+  get gameState() {
+    if (!this.room) {
+      return 0;
+    }
+
+    return this.room?.state.gameState;
+  }
+
   async join() {
     this.room = await this.client.joinOrCreate("tmi");
     console.log(this.room.state);
 
     this.room.onMessage("playerIndex", (message) => {
+      console.log(`Message from playerIndex`, message);
       console.log(`Message from playerIndex`, message);
       this.playerIndex = message.playerIndex;
     });
@@ -35,13 +44,23 @@ export default class Server {
             //emit plater turn event
             this.events.emit("player-turn-changed", value);
             break;
+          case "winningPlayer":
+            this.events.emit("player-won", value);
+            break;
+          case "gameState":
+            this.events.emit("game-state-changed", value);
+            break;
         }
       });
     };
 
     //listen for board changes
-    this.room.state.board.onChange = (changes) => {
-      this.events.emit("board-changed", this.room?.state.board);
+    // this.room.state.board.onChange = (changes) => {
+    //   this.events.emit("board-changed", this.room?.state.board);
+    // };
+
+    this.room.state.board.onChange = (item, idx) => {
+      this.events.emit("board-changed", item, idx);
     };
 
     //listen for activePlayer changes
@@ -50,12 +69,21 @@ export default class Server {
     // };
   }
 
+  leave() {
+    this.room?.leave;
+    this.events.removeAllListeners();
+  }
+
   makeSelection(idx) {
     if (!this.room) {
       return;
     }
 
-    if (this.playerIndex != this.room.state.activePlayer) {
+    if (this.room.state.gameState !== 1) {
+      return;
+    }
+
+    if (this.playerIndex !== this.room.state.activePlayer) {
       console.warn(`Not this player's turn!`);
       return;
     }
@@ -73,5 +101,13 @@ export default class Server {
 
   onPlayerTurnChanged(cb, context) {
     this.events.on("player-turn-changed", cb, context);
+  }
+
+  onPlayerWon(cb, context) {
+    this.events.on("player-won", cb, context);
+  }
+
+  onGameStateChanged(cb, context) {
+    this.events.on("game-state-changed", cb, context);
   }
 }

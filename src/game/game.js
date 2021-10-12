@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import BootScene from "./scenes/BootScene";
 import PlayScene from "./scenes/PlayScene";
+import GameOverScene from "./scenes/GameOverScene";
 
 export default {
   width: 800,
@@ -13,5 +14,5 @@ export default {
     },
   },
   type: Phaser.AUTO,
-  scene: [BootScene, PlayScene],
+  scene: [BootScene, PlayScene, GameOverScene],
 };

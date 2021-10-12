@@ -6,12 +6,18 @@ export default class PlayScene extends Scene {
     super({ key: "PlayScene" });
 
     this.cells = [];
+    this.gameStateText = undefined;
+  }
+
+  init() {
+    this.cells = [];
   }
 
   async create(data) {
-    const { server } = data;
+    const { server, onGameOver } = data;
 
     this.server = server;
+    this.onGameOver = onGameOver;
 
     if (!this.server) {
       throw new Error("Server instance missing..");
@@ -79,33 +85,58 @@ export default class PlayScene extends Scene {
       }
     });
 
+    if (this.server?.gameState === 0) {
+      const width = this.scale.width;
+      this.gameStateText = this.add
+        .text(width * 0.5, 50, "Waiting for opponent...")
+        .setOrigin(0.5);
+    }
+
     this.server?.onBoardChanged(this.handleBoardChanged, this);
     this.server?.onPlayerTurnChanged(this.handlePlayerTurnChanged, this);
+    this.server?.onPlayerWon(this.handlePlayerWon, this);
+    this.server?.onGameStateChanged(this.handleGameStateChanged, this);
   }
 
-  handleBoardChanged(board) {
-    for (let i = 0; i < board.length; i++) {
-      const cell = this.cells[i];
-      const newValue = board[i];
-      if (cell.value !== newValue) {
-        //this.sound.play("thud", { volume: 0.5 });
-        switch (newValue) {
-          case 1:
-            this.add
-              .star(cell.display.x, cell.display.y, 4, 4, 60, 0xff0000)
-              .setAngle(45);
-            break;
-          case 2:
-            this.add.circle(cell.display.x, cell.display.y, 50, 0x0000ff);
-            break;
-        }
-
-        cell.value = newValue;
+  handleBoardChanged(newValue, idx) {
+    const cell = this.cells[idx];
+    if (cell.value !== newValue) {
+      switch (newValue) {
+        case 1:
+          this.add
+            .star(cell.display.x, cell.display.y, 4, 4, 60, 0xff0000)
+            .setAngle(45);
+          break;
+        case 2:
+          this.add.circle(cell.display.x, cell.display.y, 50, 0x0000ff);
+          break;
       }
+
+      cell.value = newValue;
     }
   }
 
   handlePlayerTurnChanged(playerIndex) {
-    console.log("Player index is: ", playerIndex);
+    //TODO: Show who's turn is it
+  }
+
+  handlePlayerWon(playerIndex) {
+    this.time.delayedCall(1000, () => {
+      if (!this.onGameOver) {
+        return;
+      }
+
+      this.onGameOver({
+        winner: this.server?.playerIndex === playerIndex,
+      });
+    });
+  }
+
+  handleGameStateChanged(state) {
+    if (state === 1 && this.gameStateText) {
+      console.log("destroy this.gameStateText");
+      this.gameStateText.destroy();
+      this.gameStateText = undefined;
+    }
   }
 }

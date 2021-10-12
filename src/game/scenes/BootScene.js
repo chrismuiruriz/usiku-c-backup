@@ -20,8 +20,28 @@ export default class BootScene extends Scene {
   }
 
   create() {
+    this.createNewGame();
+  }
+
+  handleGameOver = (data) => {
+    this.server.leave();
+    this.scene.stop("PlayScene");
+
+    this.scene.launch("GameOverScene", {
+      ...data,
+      onRestart: this.handleRestart,
+    });
+  };
+
+  handleRestart = () => {
+    this.scene.stop("GameOverScene");
+    this.createNewGame();
+  };
+
+  createNewGame() {
     this.scene.start("PlayScene", {
       server: this.server,
+      onGameOver: this.handleGameOver,
     });
   }
 }
