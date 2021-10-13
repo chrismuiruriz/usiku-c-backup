@@ -1,5 +1,6 @@
 import { Client, Room } from "colyseus.js";
 import Phaser from "phaser";
+import store from "../../store";
 
 export default class Server {
   playerIndex = -1;
@@ -22,12 +23,52 @@ export default class Server {
   }
 
   async join() {
-    this.room = await this.client.joinOrCreate("tmi");
-    console.log(this.room.state);
+    let gameMode = store.getters["game/getPlayerGameMode"];
+    let gameRoomId = store.getters["game/getGameRoomId"];
+    console.log("Joined called");
+
+    //if game is initialized &&
+    if (gameMode) {
+      if (gameMode === "HOST") {
+        this.setupGame(gameMode, gameRoomId);
+      } else {
+        await store.dispatch("game/startGame", {
+          player_game_mode: null,
+          game_room_id: null,
+        });
+        //this.setUpListeners();
+      }
+    } else {
+      //listen for game start event from store
+      this.setUpListeners();
+    }
+  }
+
+  setUpListeners() {
+    store.watch(
+      (state) => state.game.playerGameMode,
+      (newValue, oldValue) => {
+        console.log(`GameMode event triggered`, newValue);
+        let gamePassId = store.getters["game/getGameRoomId"];
+        if (gamePassId) {
+          this.setupGame(newValue, gamePassId);
+        }
+      }
+    );
+  }
+
+  async setupGame(playerGameMode, gamePassId) {
+    //joins an existing room or creates a room if it does not exist
+    if (playerGameMode === "HOST") {
+      this.room = await this.client.joinOrCreate("tmi");
+    } else if (playerGameMode === "GUEST") {
+      this.room = await this.client.joinById(gamePassId);
+    } else {
+      return;
+    }
+    console.log("Game Room", this.room);
 
     this.room.onMessage("playerIndex", (message) => {
-      console.log(`Message from playerIndex`, message);
-      console.log(`Message from playerIndex`, message);
       this.playerIndex = message.playerIndex;
     });
 
@@ -54,23 +95,13 @@ export default class Server {
       });
     };
 
-    //listen for board changes
-    // this.room.state.board.onChange = (changes) => {
-    //   this.events.emit("board-changed", this.room?.state.board);
-    // };
-
     this.room.state.board.onChange = (item, idx) => {
       this.events.emit("board-changed", item, idx);
     };
-
-    //listen for activePlayer changes
-    // this.room.state.activePlayer.onChange = (changes) => {
-    //   console.log(`ActivePlayer change detected!!!`);
-    // };
   }
 
   leave() {
-    this.room?.leave;
+    this.room?.leave();
     this.events.removeAllListeners();
   }
 

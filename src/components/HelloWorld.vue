@@ -3,7 +3,7 @@
     <div class="hello-wrapper" v-if="!initialize">
       <h1>Hello {{ jina }}</h1>
       <div class="flex">
-        <a href="#" class="bttn" @click.prevent="initializeGame">Initialize</a>
+        <a href="#" class="bttn" @click.prevent="initializeTheGame">Initialize</a>
       </div>
     </div>
     <div class="game-container">
@@ -15,6 +15,7 @@
 <script>
 //import Phaser from "phaser";
 import gameConfig from "../game/game";
+import { mapActions } from "vuex";
 
 export default {
   name: "HelloWorld",
@@ -31,7 +32,9 @@ export default {
     };
   },
   methods: {
-    initializeGame: function() {
+    ...mapActions("game", ["initializeGame"]),
+    initializeTheGame: function() {
+      this.initializeGame();
       this.initialize = true;
     },
   },

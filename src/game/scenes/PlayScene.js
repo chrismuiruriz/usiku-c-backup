@@ -30,19 +30,8 @@ export default class PlayScene extends Scene {
     this.sound.add("thud");
 
     //let's see if we can listen for vue store events
-    store.watch(
-      (state) => state.game.isPaused,
-      (newValue, oldValue) => {
-        if (newValue) {
-          this.scene.pause("PlayScene");
-        } else {
-          this.scene.resume("PlayScene");
-        }
-      }
-    );
-
     store.subscribe((mutation, state) => {
-      console.log(`Mutation detected`, mutation);
+      //TODO: Something awesome
     });
   }
 
