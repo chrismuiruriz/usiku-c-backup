@@ -6,15 +6,18 @@ export default class PlayScene extends Scene {
   }
 
   create(data) {
-    console.log(data, "from GameOverScene");
-    const text = data.winner ? "You Won!" : "You Lost!";
+    let styleConfig = {
+      color: "#3677f9",
+      fontSize: "2rem",
+      fontFamily: "'Bubblegum Sans', cursive",
+    };
+
+    const text = data.winner ? "You Won" : "You Lost!";
 
     const { width, height } = this.scale;
 
     const title = this.add
-      .text(width * 0.5, height * 0.5, text, {
-        fontSize: "48px",
-      })
+      .text(width * 0.5, height * 0.5, text, styleConfig)
       .setOrigin(0.5);
 
     this.add

@@ -1,14 +1,6 @@
 <template>
-  <div>
-    <div class="hello-wrapper" v-if="!initialize">
-      <h1>Hello {{ jina }}</h1>
-      <div class="flex">
-        <a href="#" class="bttn" @click.prevent="initializeTheGame">Initialize</a>
-      </div>
-    </div>
-    <div class="game-container">
-      <ion-phaser v-bind:game.prop="game" v-bind:initialize.prop="initialize" />
-    </div>
+  <div class="game-container">
+    <ion-phaser v-bind:game.prop="game" v-bind:initialize.prop="initialize" />
   </div>
 </template>
 
@@ -31,6 +23,9 @@ export default {
       game: gameConfig,
     };
   },
+  created() {
+    this.initializeTheGame();
+  },
   methods: {
     ...mapActions("game", ["initializeGame"]),
     initializeTheGame: function() {
@@ -42,13 +37,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.hello-wrapper {
-  padding: 1rem;
-  color: #cccccc;
-  background-color: black;
-}
 .game-container {
-  text-align: center;
+  position: absolute;
+  top: 0;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f6f8f7;
   ion-phaser {
     margin: 0 auto;
   }

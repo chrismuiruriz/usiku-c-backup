@@ -4,8 +4,9 @@ import PlayScene from "./scenes/PlayScene";
 import GameOverScene from "./scenes/GameOverScene";
 
 export default {
-  width: 800,
-  height: 600,
+  width: 320,
+  height: 480,
+  backgroundColor: "#F6F8F7",
   physics: {
     default: "arcade",
     arcade: {

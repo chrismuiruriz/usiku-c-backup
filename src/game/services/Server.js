@@ -60,12 +60,26 @@ export default class Server {
   async setupGame(playerGameMode, gamePassId) {
     //joins an existing room or creates a room if it does not exist
     if (playerGameMode === "HOST") {
-      this.room = await this.client.joinOrCreate("tmi");
+      this.room = await this.client.create("tmi");
     } else if (playerGameMode === "GUEST") {
-      this.room = await this.client.joinById(gamePassId);
+      try {
+        this.room = await this.client.joinById(gamePassId);
+      } catch (error) {
+        console.log(error);
+        //set hasError here
+        await store.dispatch("game/updateHasJoinGameError", {
+          hasError: true,
+        });
+        return;
+      }
     } else {
       return;
     }
+
+    await store.dispatch("game/storeGameRoomDisplayId", {
+      game_room_display_id: this.room.id,
+    });
+
     console.log("Game Room", this.room);
 
     this.room.onMessage("playerIndex", (message) => {

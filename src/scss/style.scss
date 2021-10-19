@@ -1,5 +1,102 @@
-$backgroundColor: #ffff00;
+@import url("https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Odibee+Sans&display=swap");
+
+$backgroundColor: #f6f8f7;
+
+html,
+body {
+  margin: 0;
+}
 
 body {
+  position: relative;
+  font-size: 18px;
+  font-family: "Bubblegum Sans", cursive;
   background-color: $backgroundColor;
+}
+
+.app-container {
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  body {
+    background-color: rgb(52, 52, 52);
+  }
+  .app-container {
+    max-width: 100%;
+    width: 411px;
+    margin: 0 auto;
+    background-color: $backgroundColor;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Bubblegum Sans", cursive;
+}
+
+.button-wrapper {
+  text-align: center;
+}
+
+.button {
+  appearance: none;
+  border: none;
+  background: none;
+  margin-bottom: 1rem;
+
+  min-width: 155px;
+  padding: 0.55rem 1.5rem;
+  border-radius: 20px;
+  border: 1px solid rgb(204 204 204 / 32%);
+  box-shadow: 0px 5px 5px 0px #ccc;
+  &.primary {
+    color: #ffffff;
+    box-shadow: 0px 5px 5px 0px #ccc;
+    background: -webkit-linear-gradient(right, #3677f9, #3677f9eb);
+    background: linear-gradient(right, #3677f9, #3677f9eb);
+  }
+  &.secondary {
+    box-shadow: 0px 5px 5px 0px #ccc;
+  }
+}
+
+button.plain {
+  appearance: none;
+  border: none;
+  background: none;
+
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  border: 1px solid rgb(204 204 204 / 32%);
+  box-shadow: 0px 5px 5px 0px #ccc;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  &.with-icon {
+    svg {
+      width: 18px;
+    }
+  }
+}
+
+.input-wrapper {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+input[type="text"] {
+  appearance: none;
+  border: none;
+  background: none;
+  margin-bottom: 1rem;
+
+  min-width: 120px;
+  padding: 0.65rem 1.8rem;
+  border-radius: 20px;
+  border: 1px solid rgb(204 204 204 / 39%);
+  box-shadow: 1px 1px 5px 0px #ccc;
+  text-align: center;
 }

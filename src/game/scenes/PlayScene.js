@@ -7,6 +7,7 @@ export default class PlayScene extends Scene {
 
     this.cells = [];
     this.gameStateText = undefined;
+    this.gameStateTextID = undefined;
   }
 
   init() {
@@ -39,13 +40,19 @@ export default class PlayScene extends Scene {
 
   createBoard(state) {
     const { width, height } = this.scale;
-    const cellSize = 128;
+    const cellSize = 95;
 
     let x = width * 0.5 - cellSize;
     let y = height * 0.5 - cellSize;
     state.board.forEach((cellState, idx) => {
+      console.log(`Index = ${idx} X = ${x}`);
+      let internalCellWidth = cellSize;
+      if (idx === 1 || idx === 4 || idx === 7) {
+        internalCellWidth = internalCellWidth - 2;
+      }
+
       const cell = this.add
-        .rectangle(x, y, cellSize, cellSize, 0xffffff)
+        .rectangle(x, y, internalCellWidth, cellSize, 0x3677f9)
         .setInteractive()
         .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
           this.server?.makeSelection(idx);
@@ -66,19 +73,45 @@ export default class PlayScene extends Scene {
         value: cellState,
       });
 
-      x += cellSize + 5;
+      x += cellSize;
 
       if ((idx + 1) % 3 === 0) {
-        y += cellSize + 5;
+        y += cellSize + 2;
         x = width * 0.5 - cellSize;
       }
     });
 
     if (this.server?.gameState === 0) {
       const width = this.scale.width;
+
+      let styleConfig = {
+        color: "#3677f9",
+        fontSize: "1.3rem",
+        fontFamily: "'Bubblegum Sans', cursive",
+      };
+
+      let styleConfig2 = {
+        color: "#f87235",
+        fontSize: "1.5rem",
+        fontFamily: "'Bubblegum Sans', cursive",
+      };
       this.gameStateText = this.add
-        .text(width * 0.5, 50, "Waiting for opponent...")
+        .text(width * 0.5, 15, "Waiting for opponent player 2", styleConfig)
         .setOrigin(0.5);
+
+      let gamePassId = store.getters["game/getGameRoomDisplayId"];
+
+      this.gameStateTextID = this.add
+        .text(
+          width * 0.5,
+          this.gameStateText.y + this.gameStateText.height + 10,
+          `${gamePassId}`,
+          styleConfig2
+        )
+        .setOrigin(0.5);
+
+      window.GLOBAL_TEXT = this.gameStateText;
+      window.GLOBAL_TEXT_2 = this.gameStateText;
     }
 
     this.server?.onBoardChanged(this.handleBoardChanged, this);
@@ -93,11 +126,11 @@ export default class PlayScene extends Scene {
       switch (newValue) {
         case 1:
           this.add
-            .star(cell.display.x, cell.display.y, 4, 4, 60, 0xff0000)
+            .star(cell.display.x, cell.display.y, 4, 4, 40, 0xf87235)
             .setAngle(45);
           break;
         case 2:
-          this.add.circle(cell.display.x, cell.display.y, 50, 0x0000ff);
+          this.add.circle(cell.display.x, cell.display.y, 30, 0xf87235);
           break;
       }
 
@@ -123,9 +156,11 @@ export default class PlayScene extends Scene {
 
   handleGameStateChanged(state) {
     if (state === 1 && this.gameStateText) {
-      console.log("destroy this.gameStateText");
       this.gameStateText.destroy();
       this.gameStateText = undefined;
+
+      this.gameStateTextID.destroy();
+      this.gameStateTextID = undefined;
     }
   }
 }

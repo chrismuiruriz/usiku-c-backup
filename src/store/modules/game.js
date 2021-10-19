@@ -3,13 +3,17 @@ const state = () => ({
   isGameInitialized: false,
   gameRoomPassId: "",
   gameRoomId: "",
+  gameRoomDisplayId: "",
   playerGameMode: null, // HOST or GUEST
+  hasJoinGameError: false,
 });
 
 const getters = {
   getGameRoomId: (state) => state.gameRoomId,
   getPlayerGameMode: (state) => state.playerGameMode,
   getIsGameInitiazed: (state) => state.isGameInitialized,
+  getGameRoomDisplayId: (state) => state.gameRoomDisplayId,
+  getHasJoinGameError: (state) => state.hasJoinGameError,
 };
 
 const actions = {
@@ -29,6 +33,14 @@ const actions = {
     commit("setGameRoomId", game_room_id);
     commit("gameStarted", player_game_mode);
   },
+
+  storeGameRoomDisplayId({ commit }, { game_room_display_id }) {
+    commit("setGameRoomDisplayId", game_room_display_id);
+  },
+
+  updateHasJoinGameError({ commit }, { hasError }) {
+    commit("setHasJoinGameError", hasError);
+  },
 };
 
 const mutations = {
@@ -46,6 +58,12 @@ const mutations = {
   },
   gameStarted(state, player_game_mode) {
     state.playerGameMode = player_game_mode;
+  },
+  setGameRoomDisplayId(state, game_room_display_id) {
+    state.gameRoomDisplayId = game_room_display_id;
+  },
+  setHasJoinGameError(state, hasError) {
+    state.hasJoinGameError = hasError;
   },
 };
 
