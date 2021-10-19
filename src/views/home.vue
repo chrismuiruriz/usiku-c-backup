@@ -136,10 +136,25 @@ export default {
     HelloWorld,
   },
   created() {
+    //let's listen for gaame restart changes
+    this.$store.watch(
+      (state) => state.game.isGameRestarted,
+      (newValue, oldValue) => {
+        if (newValue === true) {
+          this.roomId = null;
+        }
+      }
+    );
+
     this.resetState();
   },
   methods: {
-    ...mapActions("game", ["pauseGame", "resumeGame", "resetState", "restartGame"]),
+    ...mapActions("game", [
+      "pauseGame",
+      "resumeGame",
+      "resetState",
+      "restartGame",
+    ]),
     async createNewGame() {
       await this.resetState();
 

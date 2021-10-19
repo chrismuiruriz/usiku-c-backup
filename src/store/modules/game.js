@@ -1,8 +1,8 @@
 const state = () => ({
   isPaused: false,
   isGameInitialized: false,
-  gameRoomPassId: "",
-  gameRoomId: "",
+  gameRoomPassId: null,
+  gameRoomId: null,
   gameRoomDisplayId: "",
   playerGameMode: null, // HOST or GUEST
   hasJoinGameError: false,
@@ -54,6 +54,7 @@ const actions = {
 
   setGameOver({ commit }, { isGameOver }) {
     commit("toggleGameOver");
+    commit("setGameRoomId", null);
   },
 
   resetState({ commit }) {
@@ -78,6 +79,9 @@ const mutations = {
   setGameRoomId(state, game_room_id) {
     state.gameRoomId = game_room_id;
   },
+  setPlayerGameMode(state, player_game_mode) {
+    state.playerGameMode = player_game_mode;
+  },
   gameStarted(state, player_game_mode) {
     state.playerGameMode = player_game_mode;
   },
@@ -94,9 +98,9 @@ const mutations = {
     state.gameOver = !state.gameOver;
   },
   setDefaultStates(state) {
-    state.gameRoomPassId = "";
-    state.gameRoomId = "";
-    state.gameRoomDisplayId = "";
+    state.gameRoomPassId = null;
+    state.gameRoomId = null;
+    state.gameRoomDisplayId = null;
     state.playerGameMode = null;
     state.hasJoinGameError = false;
     state.playerTurnText = null;

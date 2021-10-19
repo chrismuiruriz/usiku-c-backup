@@ -25,19 +25,25 @@ export default class Server {
   async join() {
     let gameMode = store.getters["game/getPlayerGameMode"];
     let gameRoomId = store.getters["game/getGameRoomId"];
-    let isGameRestarted = store.getters["game/getIsGameRestarted"];
+    let isGameOver = store.getters["game/getGameOver"];
     console.log("Joined called");
 
+    console.log("Is game over", isGameOver);
+
     //if this is a restart, reset state
-    if (isGameRestarted) {
+    if (isGameOver === true) {
       await store.dispatch("game/resetState");
-      this.setUpListeners();
+      // this.setUpListeners();
+      return;
     }
 
     //if game is initialized &&
     if (gameMode) {
       if (gameMode === "HOST") {
-        this.setupGame(gameMode, gameRoomId);
+        let displaygameId = store.getters["game/getGameRoomDisplayId"];
+        if (!displaygameId) {
+          this.setupGame(gameMode, gameRoomId);
+        }
       } else {
         await store.dispatch("game/startGame", {
           player_game_mode: null,
@@ -57,8 +63,17 @@ export default class Server {
       (newValue, oldValue) => {
         console.log(`GameMode event triggered`, newValue);
         let gamePassId = store.getters["game/getGameRoomId"];
+        let isGameOver = store.getters["game/getGameOver"];
         if (gamePassId) {
-          this.setupGame(newValue, gamePassId);
+          console.log(`GameMode new`, newValue);
+          console.log(`GameMode old`, oldValue);
+
+          console.log(`GameMode old`, newValue !== oldValue);
+          if (newValue !== oldValue) {
+            if (isGameOver === false) {
+              this.setupGame(newValue, gamePassId);
+            }
+          }
         }
       }
     );
