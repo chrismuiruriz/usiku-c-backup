@@ -25,7 +25,14 @@ export default class Server {
   async join() {
     let gameMode = store.getters["game/getPlayerGameMode"];
     let gameRoomId = store.getters["game/getGameRoomId"];
+    let isGameRestarted = store.getters["game/getIsGameRestarted"];
     console.log("Joined called");
+
+    //if this is a restart, reset state
+    if (isGameRestarted) {
+      await store.dispatch("game/resetState");
+      this.setUpListeners();
+    }
 
     //if game is initialized &&
     if (gameMode) {
@@ -64,6 +71,10 @@ export default class Server {
     } else if (playerGameMode === "GUEST") {
       try {
         this.room = await this.client.joinById(gamePassId);
+
+        store.dispatch("game/updatePlayerTurnText", {
+          text: `Waiting for player 1 to start`,
+        });
       } catch (error) {
         console.log(error);
         //set hasError here
@@ -129,7 +140,6 @@ export default class Server {
     }
 
     if (this.playerIndex !== this.room.state.activePlayer) {
-      console.warn(`Not this player's turn!`);
       return;
     }
 

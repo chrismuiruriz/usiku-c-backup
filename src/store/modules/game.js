@@ -6,6 +6,9 @@ const state = () => ({
   gameRoomDisplayId: "",
   playerGameMode: null, // HOST or GUEST
   hasJoinGameError: false,
+  playerTurnText: null,
+  gameOver: false,
+  isGameRestarted: false,
 });
 
 const getters = {
@@ -14,6 +17,9 @@ const getters = {
   getIsGameInitiazed: (state) => state.isGameInitialized,
   getGameRoomDisplayId: (state) => state.gameRoomDisplayId,
   getHasJoinGameError: (state) => state.hasJoinGameError,
+  getPlayerTurnText: (state) => state.playerTurnText,
+  getGameOver: (state) => state.gameOver,
+  getIsGameRestarted: (state) => state.isGameRestarted,
 };
 
 const actions = {
@@ -38,8 +44,24 @@ const actions = {
     commit("setGameRoomDisplayId", game_room_display_id);
   },
 
+  updatePlayerTurnText({ commit }, { text }) {
+    commit("setPlayerTurnText", text);
+  },
+
   updateHasJoinGameError({ commit }, { hasError }) {
     commit("setHasJoinGameError", hasError);
+  },
+
+  setGameOver({ commit }, { isGameOver }) {
+    commit("toggleGameOver");
+  },
+
+  resetState({ commit }) {
+    commit("setDefaultStates");
+  },
+
+  restartGame({ commit }) {
+    commit("restartGame");
   },
 };
 
@@ -64,6 +86,25 @@ const mutations = {
   },
   setHasJoinGameError(state, hasError) {
     state.hasJoinGameError = hasError;
+  },
+  setPlayerTurnText(state, text) {
+    state.playerTurnText = text;
+  },
+  toggleGameOver(state) {
+    state.gameOver = !state.gameOver;
+  },
+  setDefaultStates(state) {
+    state.gameRoomPassId = "";
+    state.gameRoomId = "";
+    state.gameRoomDisplayId = "";
+    state.playerGameMode = null;
+    state.hasJoinGameError = false;
+    state.playerTurnText = null;
+    state.gameOver = false;
+    state.isGameRestarted = false;
+  },
+  restartGame(state) {
+    state.isGameRestarted = true;
   },
 };
 

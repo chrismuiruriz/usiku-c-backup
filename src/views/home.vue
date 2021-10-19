@@ -92,6 +92,14 @@
         </div>
       </div>
     </div>
+
+    <div class="footer" v-if="getGameOver">
+      <div class="button-wrapper">
+        <button @click="restartGame()" type="button" class="button primary">
+          Play Again
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -117,26 +125,41 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("game", ["getPlayerGameMode", "getHasJoinGameError"]),
+    ...mapGetters("game", [
+      "getPlayerGameMode",
+      "getHasJoinGameError",
+      "getPlayerTurnText",
+      "getGameOver",
+    ]),
   },
   components: {
     HelloWorld,
   },
+  created() {
+    this.resetState();
+  },
   methods: {
-    ...mapActions("game", ["pauseGame", "resumeGame"]),
-    createNewGame() {
+    ...mapActions("game", ["pauseGame", "resumeGame", "resetState", "restartGame"]),
+    async createNewGame() {
+      await this.resetState();
+
       this.$store.dispatch("game/startGame", {
         player_game_mode: "HOST",
         game_room_id: "NOTHING",
       });
     },
-    joinGameById() {
+    async joinGameById() {
+      await this.resetState();
+
       this.$store.dispatch("game/startGame", {
         player_game_mode: "GUEST",
         game_room_id: this.roomId,
       });
     },
-    toggleGameIdForm() {
+    async toggleGameIdForm() {
+      this.roomId = null;
+      await this.resetState();
+
       this.showGameIdForm = !this.showGameIdForm;
     },
     showIntialScreen() {
@@ -210,6 +233,15 @@ export default {
   .title-wrapper {
     margin-bottom: 2rem;
   }
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding-bottom: 2rem;
+  z-index: 200;
 }
 
 .enter-game-id {
