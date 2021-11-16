@@ -1,6 +1,7 @@
 FROM node:lts-alpine as build-stage
 
 ENV APP_ROOT /src
+ENV COLYSEUS_URL ws://localhost:8080
 
 RUN mkdir ${APP_ROOT}
 WORKDIR ${APP_ROOT}
