@@ -1,7 +1,5 @@
 <template>
-  <div class="game-container">
-    <ion-phaser v-bind:game.prop="game" v-bind:initialize.prop="initialize" />
-  </div>
+  <ion-phaser v-bind:game.prop="game" v-bind:initialize.prop="initialize" />
 </template>
 
 <script>
@@ -35,19 +33,3 @@ export default {
   },
 };
 </script>
-
-<style scoped lang="scss">
-.game-container {
-  position: absolute;
-  top: 0;
-  min-height: 100vh;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f6f8f7;
-  ion-phaser {
-    margin: 0 auto;
-  }
-}
-</style>

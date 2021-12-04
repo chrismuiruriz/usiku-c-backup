@@ -16,7 +16,7 @@ export default class BootScene extends Scene {
   }
 
   init() {
-    this.server = new Server();
+    this.server = "Server...";
   }
 
   create() {
@@ -24,7 +24,6 @@ export default class BootScene extends Scene {
   }
 
   handleGameOver = (data) => {
-    this.server.leave();
     this.scene.stop("PlayScene");
 
     this.scene.launch("GameOverScene", {
