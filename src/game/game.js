@@ -16,13 +16,6 @@ export default {
   dom: {
     createContainer: false,
   },
-  physics: {
-    default: "arcade",
-    arcade: {
-      gravity: { y: 300 },
-      debug: false,
-    },
-  },
   backgroundColor: 0x333333,
   scene: [BootScene, PlayScene, GameOverScene],
 };
