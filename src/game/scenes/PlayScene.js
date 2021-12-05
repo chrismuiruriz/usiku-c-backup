@@ -22,6 +22,7 @@ export default class PlayScene extends Scene {
 
   init() {
     this.debugDir = "right";
+    this.deltaTime = -1;
   }
 
   async create(data) {
@@ -33,21 +34,23 @@ export default class PlayScene extends Scene {
     this.sound.add("thud");
 
     //grid
-    const screenWidth = this.cameras.main.width;
-    const screenHeight = this.cameras.main.height;
+    this.screenWidth = this.cameras.main.width;
+    this.screenHeight = this.cameras.main.height;
 
-    const screenCenterX = this.cameras.main.worldView.x + screenWidth / 2;
-    const screenCenterY = this.cameras.main.worldView.y + screenHeight / 2;
+    const screenCenterX = this.cameras.main.worldView.x + this.screenWidth / 2;
+    const screenCenterY = this.cameras.main.worldView.y + this.screenHeight / 2;
 
     //add game background
-    this.add.image(screenCenterX, screenCenterY, "game-backround").setOrigin(0.5);
+    this.add
+      .image(screenCenterX, screenCenterY, "game-backround")
+      .setOrigin(0.5);
 
     const grid = this.add
       .grid(
         screenCenterX,
         screenCenterY,
-        screenWidth,
-        screenHeight,
+        this.screenWidth,
+        this.screenHeight,
         64,
         64,
         0xffffff,
@@ -96,17 +99,21 @@ export default class PlayScene extends Scene {
     this.setEventListeners();
 
     //debug
-    let curve = new Phaser.Curves.Line(
-      new Phaser.Math.Vector2(50, 50),
-      new Phaser.Math.Vector2(700, 50)
+    let line = new Phaser.Curves.Line(
+      new Phaser.Math.Vector2(0, 400),
+      new Phaser.Math.Vector2(this.screenWidth - 150, 400)
     );
 
     var graphics = this.add.graphics();
     graphics.lineStyle(4, 0xff0000, 1);
 
-    curve.draw(graphics);
+    line.draw(graphics);
 
-    this.bottle = this.matter.add.image(50, 50, "excavator-base");
+    this.bottle = this.matter.add.image(
+      this.screenWidth - 150,
+      350,
+      "excavator-base"
+    );
     this.bottle.setScale(0.5);
     this.bottle.setFriction(0.15);
 
@@ -115,6 +122,8 @@ export default class PlayScene extends Scene {
       console.log("collision 2", this.bottle);
       console.log("collision", pair);
     });
+
+    this.drawRiverPath();
 
     //let's see if we can listen for vue store events
     store.subscribe((mutation, state) => {
@@ -139,26 +148,83 @@ export default class PlayScene extends Scene {
             //console.log("excavator arm tween complete");
           },
         });
+
+        //debug start path follower
+        this.deltaTime = 0;
       },
       this
     );
   }
 
   update(time, delta) {
-    if (this.bottle.x >= 600) {
-      this.debugDir = "left";
+    // if (this.bottle.x >= 600) {
+    //   this.debugDir = "left";
+    // }
+
+    // if (this.bottle.x <= 50) {
+    //   this.debugDir = "right";
+    // }
+
+    // if (this.debugDir == "left") {
+    //   this.bottle.x -= 1;
+    // }
+
+    // if (this.debugDir === "right") {
+    //   this.bottle.x += 1;
+    // }
+
+    this.followRiverPath(delta);
+  }
+
+  // draw a path in the river that the bottle will follow
+  drawRiverPath() {
+    let graphics = this.add.graphics();
+
+    this.riverLine = new Phaser.Geom.Line(
+      this.screenWidth - 150,
+      350,
+      100,
+      520
+    );
+
+    let points = [];
+
+    points.push(this.riverLine.getPointA());
+
+    const length = Phaser.Geom.Line.Length(this.riverLine);
+
+    //push points
+    points.push(new Phaser.Math.Vector2(876, 330));
+
+    points.push(new Phaser.Math.Vector2(650, 410));
+
+    points.push(new Phaser.Math.Vector2(450, 400));
+
+    points.push(new Phaser.Math.Vector2(250, 440));
+
+    points.push(this.riverLine.getPointB());
+
+    this.riverCurve = new Phaser.Curves.Spline(points);
+
+    graphics.lineStyle(4, 0xffffff, 1);
+    this.riverCurve.draw(graphics, 64);
+  }
+
+  //bottle follow riverPath
+  followRiverPath(delta) {
+    if (this.deltaTime === -1) {
+      return;
     }
 
-    if (this.bottle.x <= 50) {
-      this.debugDir = "right";
-    }
+    this.deltaTime += delta;
 
-    if (this.debugDir == "left") {
-      this.bottle.x -= 1;
-    }
+    if (this.deltaTime >= 5000) {
+      this.bottle.setVelocity(0, 0);
+    } else {
+      let d = this.deltaTime / 5000;
+      var p = this.riverCurve.getPoint(d);
 
-    if (this.debugDir === "right") {
-      this.bottle.x += 1;
+      this.bottle.setPosition(p.x, p.y);
     }
   }
 }
