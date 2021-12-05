@@ -23,6 +23,13 @@ export default class PlayScene extends Scene {
   init() {
     this.debugDir = "right";
     this.deltaTime = 0;
+    this.deltaTimeRemoveBottle = 0;
+
+    this.bottleRemoveFromRiverDuration = 850;
+
+    this.isPlayerTouchingExcavator = false;
+    this.isBottleTouchingExcavator = false;
+    this.isBottleGrabbedFromRiver = false;
   }
 
   async create(data) {
@@ -37,18 +44,18 @@ export default class PlayScene extends Scene {
     this.screenWidth = this.cameras.main.width;
     this.screenHeight = this.cameras.main.height;
 
-    const screenCenterX = this.cameras.main.worldView.x + this.screenWidth / 2;
-    const screenCenterY = this.cameras.main.worldView.y + this.screenHeight / 2;
+    this.screenCenterX = this.cameras.main.worldView.x + this.screenWidth / 2;
+    this.screenCenterY = this.cameras.main.worldView.y + this.screenHeight / 2;
 
     //add game background
     this.add
-      .image(screenCenterX, screenCenterY, "game-backround")
+      .image(this.screenCenterX, this.screenCenterY, "game-backround")
       .setOrigin(0.5);
 
     const grid = this.add
       .grid(
-        screenCenterX,
-        screenCenterY,
+        this.screenCenterX,
+        this.screenCenterY,
         this.screenWidth,
         this.screenHeight,
         64,
@@ -60,7 +67,45 @@ export default class PlayScene extends Scene {
       )
       .setOrigin(0.5);
 
-    var shapes = {
+    this.createPipes();
+
+    this.createShapes();
+
+    this.drawRiverPath();
+
+    this.createBottle();
+
+    this.drawBottleFromRiverPath();
+
+    this.createExcavator();
+
+    this.createdFactoryStation();
+
+    //set up collisions
+    this.setUpAllCollisions();
+
+    //setup listeners
+    this.setEventListeners();
+  }
+
+  //create pipes
+  createPipes() {
+    this.add
+      .sprite(this.screenCenterX, this.screenCenterY, "pipes")
+      .setOrigin(0.5);
+  }
+
+  createdFactoryStation() {
+    this.factoryStation = this.matter.add
+      .sprite(this.screenWidth - 240, 0, "factory-station")
+      .setStatic(true);
+
+    this.factoryStation.setY(this.screenHeight - this.factoryStation.height / 2);
+  }
+
+  //create shapes
+  createShapes() {
+    this.shapes = {
       rectangle: [
         [
           { x: 35, y: -160 },
@@ -70,9 +115,31 @@ export default class PlayScene extends Scene {
         ],
       ],
     };
+  }
 
+  //create bottle
+  createBottle() {
+    this.bottle = this.matter.add.image(
+      this.screenWidth - 150,
+      350,
+      "excavator-base",
+      null,
+      { label: "bottle" }
+    );
+    this.bottle.setScale(0.3);
+    this.bottle.setFriction(0.15);
+  }
+
+  //create exacavator
+  createExcavator() {
     //add excavator base
-    this.excavatorBase = this.matter.add.sprite(350, 500, "excavator-base");
+    this.excavatorBase = this.matter.add.sprite(
+      350,
+      500,
+      "excavator-base",
+      null,
+      { label: "excavator-base" }
+    );
     this.excavatorBase.setStatic(true);
     this.excavatorBase.setOrigin(0.5, 0.5);
 
@@ -83,7 +150,8 @@ export default class PlayScene extends Scene {
       "excavator-arm",
       null,
       {
-        shape: { type: "fromVerts", verts: shapes.rectangle },
+        label: "excavator-arm",
+        shape: { type: "fromVerts", verts: this.shapes.rectangle },
         render: { sprite: { xOffset: 0.5, yOffset: 0.5 } },
       }
     );
@@ -94,34 +162,43 @@ export default class PlayScene extends Scene {
 
     this.excavatorArm.x = this.excavatorBase.x;
     this.excavatorArm.y = this.excavatorBase.y;
+  }
 
-    //setup listeners
-    this.setEventListeners();
-
-    this.bottle = this.matter.add.image(
-      this.screenWidth - 150,
-      350,
-      "excavator-base"
-    );
-    this.bottle.setScale(0.3);
-    this.bottle.setFriction(0.15);
-
-    //collision
-    this.excavatorArm.setOnCollideWith(this.bottle, (pair) => {
-      this.bottle.setVelocity(0, 0);
-      //this.deltaTime = -1;
-      console.log("collision 2", this.bottle);
-      console.log("collision", pair);
+  // collisions
+  setUpAllCollisions() {
+    this.matter.world.on("collisionstart", (event, bodyA, bodyB) => {
+      //if the bottle is touching the excavator
+      this.bottleAndExcavatorArmCollisionStart(bodyA, bodyB);
     });
 
-    this.drawRiverPath();
-
-    this.drawBottleFromRiverPath();
-
-    //let's see if we can listen for vue store events
-    store.subscribe((mutation, state) => {
-      //TODO: Something awesome
+    this.matter.world.on("collisionend", (event, bodyA, bodyB) => {
+      //if bottle has stopped touching the excavator
+      this.bottleAndExcavatorArmCollisionEnd(bodyA, bodyB);
     });
+  }
+
+  //bottle and excavator-arm collision start
+  bottleAndExcavatorArmCollisionStart(bodyA, bodyB) {
+    if (
+      (bodyA.label === "bottle" && bodyB.label === "excavator-arm") ||
+      (bodyB.label === "bottle" && bodyA.label === "excavator-arm")
+    ) {
+      this.isBottleTouchingExcavator = true;
+
+      if (this.isPlayerTouchingExcavator) {
+        this.isBottleGrabbedFromRiver = true;
+      }
+    }
+  }
+
+  //bottle and excavator-arm collision end
+  bottleAndExcavatorArmCollisionEnd(bodyA, bodyB) {
+    if (
+      (bodyA.label === "bottle" && bodyB.label === "excavator-arm") ||
+      (bodyB.label === "bottle" && bodyA.label === "excavator-arm")
+    ) {
+      this.isBottleTouchingExcavator = false;
+    }
   }
 
   // Set event listeners here
@@ -130,6 +207,8 @@ export default class PlayScene extends Scene {
     this.excavatorArm.on(
       "pointerdown",
       (pointer, localX, localY, event) => {
+        this.isPlayerTouchingExcavator = true;
+
         this.excavatorArmTween = this.tweens.add({
           targets: this.excavatorArm,
           angle: { from: 0, to: 90 },
@@ -144,25 +223,14 @@ export default class PlayScene extends Scene {
       },
       this
     );
+
+    this.excavatorArm.on("pointerup", function(pointer, localX, localY, event) {
+      this.isPlayerTouchingExcavator = false;
+    });
   }
 
   update(time, delta) {
-    // if (this.bottle.x >= 600) {
-    //   this.debugDir = "left";
-    // }
-
-    // if (this.bottle.x <= 50) {
-    //   this.debugDir = "right";
-    // }
-
-    // if (this.debugDir == "left") {
-    //   this.bottle.x -= 1;
-    // }
-
-    // if (this.debugDir === "right") {
-    //   this.bottle.x += 1;
-    // }
-
+    //make sure the bottle is touching the excavator
     this.followRiverPath(delta);
   }
 
@@ -202,6 +270,11 @@ export default class PlayScene extends Scene {
 
   //bottle follow riverPath
   followRiverPath(delta) {
+    if (this.isBottleGrabbedFromRiver) {
+      this.followBottleFromRiverPath(delta);
+      return;
+    }
+
     this.deltaTime += delta;
 
     if (this.deltaTime >= 5000) {
@@ -219,7 +292,7 @@ export default class PlayScene extends Scene {
   drawBottleFromRiverPath() {
     let graphics = this.add.graphics();
 
-    this.bottleFromRiverLine = new Phaser.Geom.Line(360, 412, 445, 520);
+    this.bottleFromRiverLine = new Phaser.Geom.Line(377, 410, 445, 540);
 
     let points = [];
 
@@ -227,7 +300,7 @@ export default class PlayScene extends Scene {
     const length = Phaser.Geom.Line.Length(this.bottleFromRiverLine);
 
     //push points
-    points.push(new Phaser.Math.Vector2(420, 445));
+    points.push(new Phaser.Math.Vector2(418, 453));
 
     points.push(this.bottleFromRiverLine.getPointB());
 
@@ -238,5 +311,23 @@ export default class PlayScene extends Scene {
   }
 
   //remove bottle from river path
-  followBottleFromRiverPath() {}
+  followBottleFromRiverPath(delta) {
+    this.deltaTimeRemoveBottle += delta;
+
+    if (this.deltaTimeRemoveBottle >= this.bottleRemoveFromRiverDuration) {
+      //reset
+      this.isBottleGrabbedFromRiver = false;
+      this.isBottleTouchingExcavator = false;
+      this.isPlayerTouchingExcavator = false;
+
+      this.deltaTimeRemoveBottle = 0;
+      this.deltaTime = 0;
+      this.bottle.setPosition(this.screenWidth - 150, 350);
+    } else {
+      let d = this.deltaTimeRemoveBottle / this.bottleRemoveFromRiverDuration;
+      var p = this.bottleFromRiverCurve.getPoint(d);
+
+      this.bottle.setPosition(p.x, p.y);
+    }
+  }
 }
