@@ -22,7 +22,7 @@ export default class PlayScene extends Scene {
 
   init() {
     this.debugDir = "right";
-    this.deltaTime = -1;
+    this.deltaTime = 0;
   }
 
   async create(data) {
@@ -98,32 +98,25 @@ export default class PlayScene extends Scene {
     //setup listeners
     this.setEventListeners();
 
-    //debug
-    let line = new Phaser.Curves.Line(
-      new Phaser.Math.Vector2(0, 400),
-      new Phaser.Math.Vector2(this.screenWidth - 150, 400)
-    );
-
-    var graphics = this.add.graphics();
-    graphics.lineStyle(4, 0xff0000, 1);
-
-    line.draw(graphics);
-
     this.bottle = this.matter.add.image(
       this.screenWidth - 150,
       350,
       "excavator-base"
     );
-    this.bottle.setScale(0.5);
+    this.bottle.setScale(0.3);
     this.bottle.setFriction(0.15);
 
     //collision
     this.excavatorArm.setOnCollideWith(this.bottle, (pair) => {
+      this.bottle.setVelocity(0, 0);
+      //this.deltaTime = -1;
       console.log("collision 2", this.bottle);
       console.log("collision", pair);
     });
 
     this.drawRiverPath();
+
+    this.drawBottleFromRiverPath();
 
     //let's see if we can listen for vue store events
     store.subscribe((mutation, state) => {
@@ -148,9 +141,6 @@ export default class PlayScene extends Scene {
             //console.log("excavator arm tween complete");
           },
         });
-
-        //debug start path follower
-        this.deltaTime = 0;
       },
       this
     );
@@ -212,14 +202,11 @@ export default class PlayScene extends Scene {
 
   //bottle follow riverPath
   followRiverPath(delta) {
-    if (this.deltaTime === -1) {
-      return;
-    }
-
     this.deltaTime += delta;
 
     if (this.deltaTime >= 5000) {
-      this.bottle.setVelocity(0, 0);
+      this.deltaTime = 0;
+      this.bottle.setPosition(this.screenWidth - 150, 350);
     } else {
       let d = this.deltaTime / 5000;
       var p = this.riverCurve.getPoint(d);
@@ -227,4 +214,29 @@ export default class PlayScene extends Scene {
       this.bottle.setPosition(p.x, p.y);
     }
   }
+
+  //draw bottle from river path
+  drawBottleFromRiverPath() {
+    let graphics = this.add.graphics();
+
+    this.bottleFromRiverLine = new Phaser.Geom.Line(360, 412, 445, 520);
+
+    let points = [];
+
+    points.push(this.bottleFromRiverLine.getPointA());
+    const length = Phaser.Geom.Line.Length(this.bottleFromRiverLine);
+
+    //push points
+    points.push(new Phaser.Math.Vector2(420, 445));
+
+    points.push(this.bottleFromRiverLine.getPointB());
+
+    this.bottleFromRiverCurve = new Phaser.Curves.Spline(points);
+
+    graphics.lineStyle(4, 0xffffff, 1);
+    this.bottleFromRiverCurve.draw(graphics, 64);
+  }
+
+  //remove bottle from river path
+  followBottleFromRiverPath() {}
 }
