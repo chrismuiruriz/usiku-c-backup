@@ -79,7 +79,13 @@ export default class PlayScene extends Scene {
 
     this.createExcavator();
 
-    this.createdFactoryStation();
+    this.createFactoryStation();
+
+    this.createLabStation();
+
+    this.createMenuButton();
+
+    this.createFarmIconButtons();
 
     //set up collisions
     this.setUpAllCollisions();
@@ -91,16 +97,120 @@ export default class PlayScene extends Scene {
   //create pipes
   createPipes() {
     this.add
-      .sprite(this.screenCenterX, this.screenCenterY, "pipes")
+      .sprite(this.screenCenterX, this.screenCenterY, "pipes", null, {
+        label: "pipes",
+      })
       .setOrigin(0.5);
   }
 
-  createdFactoryStation() {
+  //create factory station
+  createFactoryStation() {
     this.factoryStation = this.matter.add
-      .sprite(this.screenWidth - 240, 0, "factory-station")
+      .sprite(this.screenWidth - 240, 0, "factory-station", null, {
+        label: "factory-station",
+      })
       .setStatic(true);
 
-    this.factoryStation.setY(this.screenHeight - this.factoryStation.height / 2);
+    this.factoryStation.setY(
+      this.screenHeight - this.factoryStation.height / 2
+    );
+
+    //the dock
+    this.dock = this.matter.add
+      .sprite(this.screenWidth - 270, this.screenCenterY + 6, "dock", null, {
+        label: "dock",
+      })
+      .setStatic(true);
+
+    //the boat
+    this.boat = this.matter.add
+      .sprite(this.dock.x + 66, this.dock.y + 4.5, "boat", null, {
+        label: "boat",
+      })
+      .setStatic(true);
+
+    this.createFactoryStationButtons();
+  }
+
+  //create factory station buttons
+  createFactoryStationButtons() {
+    this.greenTriangleButton = this.add.sprite(
+      this.factoryStation.x - 16,
+      0,
+      "green-triangle-button"
+    );
+    this.greenTriangleButton.y =
+      this.factoryStation.y +
+      this.factoryStation.height / 2 -
+      this.greenTriangleButton.height +
+      5;
+
+    this.redTriangleButton = this.add.sprite(
+      this.greenTriangleButton.x - this.greenTriangleButton.width - 20,
+      this.greenTriangleButton.y,
+      "red-triangle-button"
+    );
+
+    this.blueTriangleButton = this.add.sprite(
+      this.greenTriangleButton.x + this.greenTriangleButton.width + 20,
+      this.greenTriangleButton.y,
+      "blue-triangle-button"
+    );
+  }
+
+  //create lab station
+  createLabStation() {
+    this.labStation = this.matter.add
+      .sprite(340, 0, "lab-station", null, { label: "lab-station" })
+      .setStatic(true);
+
+    this.labStation.setY(this.labStation.height / 2);
+  }
+
+  //created farm icon buttons
+  createFarmIconButtons() {
+    this.farmCleanButton = this.add.sprite(
+      this.screenWidth - 310,
+      0,
+      "farm-clean-icon"
+    );
+    this.farmCleanButton.setY(this.farmCleanButton.height / 2);
+    this.add
+      .image(
+        this.farmCleanButton.x,
+        this.farmCleanButton.y + this.farmCleanButton.height / 2 + 10,
+        "farm-clean-text"
+      )
+      .setAngle(-4);
+
+    this.farmPollutingButton = this.add.sprite(
+      this.screenWidth - 120,
+      0,
+      "farm-polluting-icon"
+    );
+    this.farmPollutingButton.setY(this.farmPollutingButton.height / 2);
+    this.add
+      .image(
+        this.farmPollutingButton.x,
+        this.farmPollutingButton.y + this.farmPollutingButton.height / 2 + 2,
+        "farm-polluting-text"
+      )
+      .setAngle(4);
+  }
+
+  //create menu button
+  createMenuButton() {
+    this.menuButton = this.add
+      .sprite(
+        this.screenWidth - 50,
+        this.screenCenterY - 90,
+        "menu-button",
+        null,
+        {
+          label: "menu-button",
+        }
+      )
+      .setOrigin(0.5);
   }
 
   //create shapes
