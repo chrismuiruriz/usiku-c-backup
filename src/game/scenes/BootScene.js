@@ -19,6 +19,9 @@ import dock from "../../assets/img/game-play/dock-2.png";
 import boat from "../../assets/img/game-play/boat-5.png";
 
 import labStation from "../../assets/img/game-play/lab-station.png";
+import labStationRightButton from "../../assets/img/game-play/lab-station-right-button.png";
+import labStationUpButton from "../../assets/img/game-play/lab-station-up-button.png";
+import labStationDownButton from "../../assets/img/game-play/lab-station-down-button.png";
 
 import excavatorBase from "../../assets/img/game-play/excavator-base.png";
 import excavatorArm from "../../assets/img/game-play/excavator-arm.png";
@@ -49,6 +52,9 @@ export default class BootScene extends Scene {
     this.load.image("boat", boat);
 
     this.load.image("lab-station", labStation);
+    this.load.image("lab-station-right-button", labStationRightButton);
+    this.load.image("lab-station-up-button", labStationUpButton);
+    this.load.image("lab-station-down-button", labStationDownButton);
 
     this.load.image("excavator-base", excavatorBase);
     this.load.image("excavator-arm", excavatorArm);

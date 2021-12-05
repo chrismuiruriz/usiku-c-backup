@@ -165,6 +165,32 @@ export default class PlayScene extends Scene {
       .setStatic(true);
 
     this.labStation.setY(this.labStation.height / 2);
+
+    this.createLabStationButtons();
+  }
+
+  // lab station buttons
+  createLabStationButtons() {
+    this.labStationRightButton = this.add.sprite(
+      this.labStation.x,
+      0,
+      "lab-station-right-button"
+    );
+    this.labStationRightButton.y = this.labStationRightButton.height / 2 + 5;
+
+    this.labStationDownButton = this.add.sprite(
+      this.labStation.x - this.labStationRightButton.width * 2 - 11,
+      0,
+      "lab-station-down-button"
+    );
+    this.labStationDownButton.y = this.labStationDownButton.height / 2 + 8;
+
+    this.labStationUpButton = this.add.sprite(
+      this.labStation.x - this.labStationRightButton.width * 2 - 11,
+      0,
+      "lab-station-up-button"
+    );
+    this.labStationUpButton.y = (this.labStationUpButton.height / 2 + 24) * 2;
   }
 
   //created farm icon buttons
