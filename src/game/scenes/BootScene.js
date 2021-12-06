@@ -9,6 +9,10 @@ import gameBg from "../../assets/img/game-play/game-bg.png";
 import pipes from "../../assets/img/game-play/pipes.png";
 
 import menuButton from "../../assets/img/game-play/menu-button.png";
+import stars from "../../assets/img/game-play/stars-25.png";
+import starsBg from "../../assets/img/game-play/stars-bg.png";
+import bigProgressBar from "../../assets/img/game-play/big-progress-bar-21x340.png";
+import brownBarTitle from "../../assets/img/game-play/brown-bar-title.png";
 
 import factoryStation from "../../assets/img/game-play/factory-station.png";
 import redTriangleButton from "../../assets/img/game-play/red-triangle-button.png";
@@ -22,9 +26,11 @@ import labStation from "../../assets/img/game-play/lab-station.png";
 import labStationRightButton from "../../assets/img/game-play/lab-station-right-button.png";
 import labStationUpButton from "../../assets/img/game-play/lab-station-up-button.png";
 import labStationDownButton from "../../assets/img/game-play/lab-station-down-button.png";
+import labStationPuzzleIcons from "../../assets/img/game-play/lab-station-puzzle-icons-38x42.png";
 
 import excavatorBase from "../../assets/img/game-play/excavator-base.png";
 import excavatorArm from "../../assets/img/game-play/excavator-arm.png";
+import truck from "../../assets/img/game-play/truck-empty.png";
 
 import farmCleanIcon from "../../assets/img/game-play/farm-clean-icon.png";
 import farmPollutingIcon from "../../assets/img/game-play/farm-polluting-icon.png";
@@ -43,6 +49,13 @@ export default class BootScene extends Scene {
     this.load.image("game-backround", gameBg);
     this.load.image("pipes", pipes);
     this.load.image("menu-button", menuButton);
+    this.load.spritesheet("stars", stars, { frameWidth: 25, frameHeight: 25 });
+    this.load.image("stars-bg", starsBg);
+    this.load.spritesheet("big-progress-bar", bigProgressBar, {
+      frameWidth: 21,
+      frameHeight: 340,
+    });
+    this.load.image("brown-bar-title", brownBarTitle);
 
     this.load.image("factory-station", factoryStation);
     this.load.image("red-triangle-button", redTriangleButton);
@@ -55,9 +68,14 @@ export default class BootScene extends Scene {
     this.load.image("lab-station-right-button", labStationRightButton);
     this.load.image("lab-station-up-button", labStationUpButton);
     this.load.image("lab-station-down-button", labStationDownButton);
+    this.load.spritesheet("lab-station-puzzle-icons", labStationPuzzleIcons, {
+      frameWidth: 38,
+      frameHeight: 42,
+    });
 
     this.load.image("excavator-base", excavatorBase);
     this.load.image("excavator-arm", excavatorArm);
+    this.load.image("truck", truck);
 
     this.load.image("farm-clean-icon", farmCleanIcon);
     this.load.image("farm-polluting-icon", farmPollutingIcon);

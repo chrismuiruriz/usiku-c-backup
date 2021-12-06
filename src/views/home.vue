@@ -1163,13 +1163,13 @@ export default {
       uiStartStoryBtn: "",
       uiTimeInterval: null,
       uiChats: [
-        "../assets/img/story/chats/1-david.png",
-        "../assets/img/story/chats/2-kezia.png",
-        "../assets/img/story/chats/3-elder.png",
-        "../assets/img/story/chats/4-elder.png",
-        "../assets/img/story/chats/5-elder.png",
-        "../assets/img/story/chats/6-elder.png",
-        "../assets/img/story/chats/7-elder.png",
+        "./src/assets/img/story/chats/1-david.png",
+        "./src/assets/img/story/chats/2-kezia.png",
+        "./src/assets/img/story/chats/3-elder.png",
+        "./src/assets/img/story/chats/4-elder.png",
+        "./src/assets/img/story/chats/5-elder.png",
+        "./src/assets/img/story/chats/6-elder.png",
+        "./src/assets/img/story/chats/7-elder.png",
       ],
     };
   },
@@ -1192,7 +1192,7 @@ export default {
 
     //loading timer
     setTimeout(() => {
-      this.showGameUIScreen("GAME_PLAY_SCREEN");
+      this.showGameUIScreen("START_SCREEN");
     }, 4000);
   },
   methods: {

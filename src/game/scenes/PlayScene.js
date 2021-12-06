@@ -7,14 +7,14 @@ export default class PlayScene extends Scene {
       key: "PlayScene",
       physics: {
         arcade: {
-          debug: true,
+          debug: false,
         },
         matter: {
           gravity: {
             x: 0,
             y: 0,
           },
-          debug: true,
+          debug: false,
         },
       },
     });
@@ -30,6 +30,10 @@ export default class PlayScene extends Scene {
     this.isPlayerTouchingExcavator = false;
     this.isBottleTouchingExcavator = false;
     this.isBottleGrabbedFromRiver = false;
+
+    this.isDebug = false;
+    this.debugAlphaHalf = 0;
+    this.debugAlphaFull = 0;
   }
 
   async create(data) {
@@ -63,7 +67,7 @@ export default class PlayScene extends Scene {
         0xffffff,
         0,
         0xffffff,
-        0.5
+        this.debugAlphaHalf
       )
       .setOrigin(0.5);
 
@@ -78,6 +82,12 @@ export default class PlayScene extends Scene {
     this.drawBottleFromRiverPath();
 
     this.createExcavator();
+
+    this.createTruck();
+
+    this.createHUD();
+
+    /* nothing else after this */
 
     this.createFactoryStation();
 
@@ -167,6 +177,8 @@ export default class PlayScene extends Scene {
     this.labStation.setY(this.labStation.height / 2);
 
     this.createLabStationButtons();
+
+    this.createLabStationPuzzle();
   }
 
   // lab station buttons
@@ -184,6 +196,13 @@ export default class PlayScene extends Scene {
       "lab-station-down-button"
     );
     this.labStationDownButton.y = this.labStationDownButton.height / 2 + 8;
+    this.labStationDownButton.setInteractive();
+    this.labStationDownButton.on("pointerdown", () => {
+      this.puzzleIconCrossGreen.y =
+        this.puzzleIconCrossGreen.y - this.puzzleIconCrossGreen.height;
+    });
+
+    /* ****************** */
 
     this.labStationUpButton = this.add.sprite(
       this.labStation.x - this.labStationRightButton.width * 2 - 11,
@@ -191,6 +210,60 @@ export default class PlayScene extends Scene {
       "lab-station-up-button"
     );
     this.labStationUpButton.y = (this.labStationUpButton.height / 2 + 24) * 2;
+
+    this.labStationUpButton.setInteractive();
+    this.labStationUpButton.on("pointerdown", () => {
+      this.puzzleIconCrossGreen.y =
+        this.puzzleIconCrossGreen.y + this.puzzleIconCrossGreen.height;
+    });
+  }
+
+  //lab station puzzle
+  createLabStationPuzzle() {
+    this.gridPuzzle = this.add
+      .grid(
+        this.labStation.x + 10,
+        0,
+        210,
+        210,
+        42,
+        42,
+        0xffffff,
+        0,
+        0xffffff,
+        0.2
+      )
+      .setOrigin(0.5);
+
+    this.gridPuzzle.y = this.labStation.y + 35;
+
+    this.createLabStationPuzzleIcons();
+  }
+
+  //create lab station puzzle icons
+  createLabStationPuzzleIcons() {
+    this.puzzleIconCrossGreen = this.physics.add
+      .sprite(434, 114, "lab-station-puzzle-icons")
+      .setOrigin(0.5)
+      .setScale(0.85)
+      .setCollideWorldBounds(true)
+      .setVelocityX(-30);
+    this.puzzleIconCrossGreen.setFrame(0);
+
+    this.puzzleIconCrossGreen.body.setBoundsRectangle(
+      new Phaser.Geom.Rectangle(
+        this.gridPuzzle.x - this.gridPuzzle.width / 2 + 5,
+        this.gridPuzzle.y - this.gridPuzzle.height / 2,
+        this.gridPuzzle.width,
+        this.gridPuzzle.height
+      )
+    );
+
+    // this.add
+    //   .graphics()
+    //   .lineStyle(5, 0x00ffff, 0.5)
+    //   .strokeRectShape(this.puzzleIconCrossGreen.body.customBoundsRectangle)
+    //   .strokeRectShape(this.puzzleIconCrossGreen.body.customBoundsRectangle);
   }
 
   //created farm icon buttons
@@ -300,6 +373,100 @@ export default class PlayScene extends Scene {
     this.excavatorArm.y = this.excavatorBase.y;
   }
 
+  //create track
+  createTruck() {
+    this.truck = this.add.sprite(
+      this.screenWidth - 150,
+      this.screenCenterY - 100,
+      "truck",
+      null,
+      { label: "truck" }
+    );
+
+    this.drawTruckPath();
+
+    this.truckFollowPath();
+  }
+
+  //draw truck path
+  drawTruckPath() {
+    let graphics = this.add.graphics();
+
+    this.truckLine = new Phaser.Geom.Line(
+      0,
+      this.screenHeight - 20,
+      800,
+      this.screenHeight - 20
+    );
+
+    let points = [];
+
+    points.push(this.truckLine.getPointA());
+
+    const length = Phaser.Geom.Line.Length(this.truckLine);
+
+    //push points
+    points.push(new Phaser.Math.Vector2(170, this.screenHeight - 60));
+
+    points.push(new Phaser.Math.Vector2(350, this.screenHeight - 180));
+
+    points.push(new Phaser.Math.Vector2(465, this.screenHeight - 180));
+
+    points.push(new Phaser.Math.Vector2(600, this.screenHeight - 45));
+
+    points.push(this.truckLine.getPointB());
+
+    this.truckCurve = new Phaser.Curves.Spline(points);
+
+    graphics.lineStyle(4, 0xffffff, 0);
+    this.truckCurve.draw(graphics, 64);
+    let ppaths = [];
+    for (var i = 0; i < this.truckCurve.points.length; i++) {
+      ppaths.push(
+        this.truckCurve.points[i].x + "," + this.truckCurve.points[i].y
+      );
+      graphics.fillCircle(
+        this.truckCurve.points[i].x,
+        this.truckCurve.points[i].y,
+        4
+      );
+    }
+  }
+
+  //truck follow path
+  truckFollowPath() {
+    var truck = this.add.follower(this.truckCurve, 0, 730, "truck");
+
+    truck.startFollow({
+      duration: 10000,
+      yoyo: false,
+      repeat: -1,
+      rotateToPath: true,
+      verticalAdjust: true,
+    });
+  }
+
+  //creaed HUD
+  createHUD() {
+    //stars bg
+    this.starsBg = this.add
+      .image(90, this.screenHeight / 2 + 5, "stars-bg")
+      .setScale(1.5, 2.2)
+      .setOrigin(0.5);
+
+    this.star1 = this.add
+      .sprite(90, this.starsBg.y - this.starsBg.height / 2, "stars")
+      .setFrame(0);
+
+    this.star2 = this.add
+      .sprite(90, this.star1.y + this.star1.height + 7, "stars")
+      .setFrame(1);
+
+    this.star3 = this.add
+      .sprite(90, this.star2.y + this.star2.height + 7, "stars")
+      .setFrame(1);
+  }
+
   // collisions
   setUpAllCollisions() {
     this.matter.world.on("collisionstart", (event, bodyA, bodyB) => {
@@ -400,7 +567,7 @@ export default class PlayScene extends Scene {
 
     this.riverCurve = new Phaser.Curves.Spline(points);
 
-    graphics.lineStyle(4, 0xffffff, 1);
+    graphics.lineStyle(4, 0xffffff, this.debugAlphaFull);
     this.riverCurve.draw(graphics, 64);
   }
 
@@ -442,7 +609,7 @@ export default class PlayScene extends Scene {
 
     this.bottleFromRiverCurve = new Phaser.Curves.Spline(points);
 
-    graphics.lineStyle(4, 0xffffff, 1);
+    graphics.lineStyle(4, 0xffffff, this.debugAlphaFull);
     this.bottleFromRiverCurve.draw(graphics, 64);
   }
 
