@@ -27,6 +27,7 @@ import labStationRightButton from "../../assets/img/game-play/lab-station-right-
 import labStationUpButton from "../../assets/img/game-play/lab-station-up-button.png";
 import labStationDownButton from "../../assets/img/game-play/lab-station-down-button.png";
 import labStationPuzzleIcons from "../../assets/img/game-play/lab-station-puzzle-icons-38x42.png";
+import labStationGrid from "../../assets/img/game-play/grid.png";
 
 import excavatorBase from "../../assets/img/game-play/excavator-base.png";
 import excavatorArm from "../../assets/img/game-play/excavator-arm.png";
@@ -68,6 +69,7 @@ export default class BootScene extends Scene {
     this.load.image("lab-station-right-button", labStationRightButton);
     this.load.image("lab-station-up-button", labStationUpButton);
     this.load.image("lab-station-down-button", labStationDownButton);
+    this.load.image("gridup", labStationGrid);
     this.load.spritesheet("lab-station-puzzle-icons", labStationPuzzleIcons, {
       frameWidth: 38,
       frameHeight: 42,

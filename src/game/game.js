@@ -16,6 +16,9 @@ export default {
   dom: {
     createContainer: false,
   },
+  input: {
+    activePointers: 3,
+  },
   backgroundColor: 0x333333,
   scene: [BootScene, PlayScene, GameOverScene],
 };

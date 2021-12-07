@@ -1192,8 +1192,8 @@ export default {
 
     //loading timer
     setTimeout(() => {
-      this.showGameUIScreen("START_SCREEN");
-    }, 4000);
+      this.showGameUIScreen("GAME_PLAY_SCREEN");
+    }, 500);
   },
   methods: {
     ...mapActions("game", [
