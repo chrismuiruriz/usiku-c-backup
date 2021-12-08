@@ -35,6 +35,12 @@ export default class PlayScene extends Scene {
     this.isBottleGrabbedFromRiver = false;
 
     this.trucks = [];
+    this.truckFollowConfig = {
+      duration: 10000,
+      ease: "Sine.easeInOut",
+      rotateToPath: true,
+      verticalAdjust: true,
+    };
 
     this.isDebug = true;
     this.debugAlphaHalf = 1;
@@ -237,12 +243,6 @@ export default class PlayScene extends Scene {
 
   //create track
   createTruck() {
-    this.truck = this.add
-      .sprite(this.screenWidth - 150, this.screenCenterY - 100, "truck", null, {
-        label: "truck",
-      })
-      .setVisible(false);
-
     this.drawTruckPath();
 
     this.truckFollowPath();
@@ -304,18 +304,9 @@ export default class PlayScene extends Scene {
       );
     }
 
-    const followConfig = {
-      duration: 10000,
-      ease: "Sine.easeInOut",
-      rotateToPath: true,
-      verticalAdjust: true,
-    };
-
-    //this.truckFollow.startFollow(followConfig);
-
     //set timeout of 2 seconds
     setTimeout(() => {
-      this.trucks[0].startFollow(followConfig);
+      this.trucks[0].startFollow(this.truckFollowConfig);
     }, 2000);
   }
 
@@ -325,14 +316,33 @@ export default class PlayScene extends Scene {
       let truckX = truck.x;
       let truckY = truck.y;
 
+      //let's keep track of the moving truck
       if (truck.isFollowing()) {
         //check if truckX is between 465 and 467
-        if (Math.round(truckX) >= 455 && Math.round(truckX) <= 456) {
-          console.log(`x is`, Math.round(truckX));
-          this.trucks[idx].x = 456 + 0.1;
+        if (
+          Math.round(truckX) >= 455 &&
+          Math.round(truckX) <= 456 &&
+          !truckY.isFull
+        ) {
+          console.log("truck pause", truck);
           this.trucks[idx].isActive = true;
           truck.pauseFollow();
         }
+
+        //if this truck is full and truckX rounded is greater than 700
+        if (this.trucks[idx].isFull && Math.round(truckX) >= 760) {
+          console.log(`x is`, Math.round(truckX));
+          //destroy truck
+          this.trucks[idx].destroy();
+          //remove truck from trucks array
+          this.trucks.splice(idx, 1);
+
+          //generate a new quiz
+          this.factoryStation.generateQuiz();
+        }
+
+        //log remaining trucks
+        console.log(`trucks remaining`, this.trucks.length);
       }
     });
   }
@@ -402,8 +412,6 @@ export default class PlayScene extends Scene {
       "pointerdown",
       (pointer, localX, localY, event) => {
         this.isPlayerTouchingExcavator = true;
-
-        this.factoryStation.generateQuiz();
 
         this.excavatorArmTween = this.tweens.add({
           targets: this.excavatorArm,
@@ -525,9 +533,15 @@ export default class PlayScene extends Scene {
 
       this.trucks.forEach((truck, idx) => {
         if (truck.isActive) {
-          truck.isActive = false;
+          this.trucks[idx].isActive = false;
+          this.trucks[idx].isFull = true;
           setTimeout(() => {
             truck.resumeFollow();
+
+            //make sure we have some trucks left
+            if (this.trucks.length > 1) {
+              this.trucks[idx + 1].startFollow(this.truckFollowConfig);
+            }
           }, 100);
         }
       });

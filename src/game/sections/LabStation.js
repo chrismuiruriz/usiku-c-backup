@@ -79,7 +79,6 @@ export default class LapFactory {
 
   //puzzle logic here
   moveTimer() {
-    // console.log("move_tick", this.timerRunning);
     if (this.timerRunning == false) return;
 
     // ******** CHECK FOR MATCHING BEIGHBOURS & MARK THEM
@@ -88,7 +87,6 @@ export default class LapFactory {
 
     // ******** MOVE ALL PEBBLES IF POSSIBLE
     this.pebbles.forEach((pebble) => {
-      //   console.log("moving pebble", pebble);
       this.movePebbleIfPossible(pebble);
     });
     //then try moving the ACTIVE pebble as well
@@ -119,7 +117,6 @@ export default class LapFactory {
     // ******** ADD PEBBLE TO BOARD FROM STACK (if there isn't already an active_pebble)
     if (this.active_pebble === false) {
       var newPebble = this.stack.shift();
-      // console.log("newPebble?", newPebble);
       if (newPebble) {
         newPebble.setVisible(true);
         this.active_pebble = newPebble; //make it the active pebble
@@ -132,8 +129,6 @@ export default class LapFactory {
 
   // create a pebble of a specified type, and add it to the 'stack'
   createPebble(type) {
-    console.log("creating pebble of type: ", type);
-
     var img_num = 1;
     var min = 1;
     var max = 4;
@@ -156,23 +151,17 @@ export default class LapFactory {
 
     // add it to the containing 'stack' array
     this.stack.push(pebble);
-    // console.log("updated STACK", this.stack);
   }
 
   updatePosition(pebble) {
-    // console.log("going to square", pebble.col, pebble.row);
     var newX = this.grid.x + pebble.col * this.grid_size; //relative to GRID origin
     var newY = this.grid.y + pebble.row * this.grid_size;
-    // console.log("going to newX, newY", newX, newY);
     pebble.x = newX;
     pebble.y = newY;
-    // console.log("moved pebble", pebble);
   }
 
   movePebbleIfPossible(pebble, isActive) {
     if (!pebble) return false;
-
-    // console.log("moving pebble", pebble, isActive);
 
     var canMove = true;
     if (pebble.col <= 1) {
@@ -180,13 +169,11 @@ export default class LapFactory {
     } else {
       //otherwise, check for collision
       this.pebbles.some((other_pebble) => {
-        // console.log("checking other_pebble", other_pebble.col, pebble.col-1);
         if (
           other_pebble.row == pebble.row &&
           other_pebble.col == pebble.col - 1
         ) {
           //if there's a pebble immediately to the left already
-          // console.log("can't move, blocked by", other_pebble);
           canMove = false; //can't move; it's at the end
           return true; //no need to go further in the loop
         }
@@ -208,7 +195,6 @@ export default class LapFactory {
   }
 
   dropActive() {
-    console.log("dropping active_pebble to bottom");
     if (!this.active_pebble) return false;
 
     var curCol = this.active_pebble.col;
@@ -237,13 +223,11 @@ export default class LapFactory {
     } else {
       //otherwise, check for collision above it
       this.pebbles.some((other_pebble) => {
-        // console.log("checking other_pebble", other_pebble.row, this.active_pebble.row-1);
         if (
           other_pebble.col == this.active_pebble.col &&
           other_pebble.row == this.active_pebble.row - 1
         ) {
           //if there's a pebble immediately above already
-          // console.log("can't move, blocked by", other_pebble);
           canMove = false; //can't move; it's at the end
           return true; //no need to go further in the loop
         }
@@ -266,13 +250,11 @@ export default class LapFactory {
     } else {
       //otherwise, check for collision above it
       this.pebbles.some((other_pebble) => {
-        // console.log("checking other_pebble", other_pebble.row, this.active_pebble.row-1);
         if (
           other_pebble.col == this.active_pebble.col &&
           other_pebble.row == this.active_pebble.row + 1
         ) {
           //if there's a pebble immediately below already
-          // console.log("can't move, blocked by", other_pebble);
           canMove = false; //can't move; it's at the end
           return true; //no need to go further in the loop
         }
@@ -287,12 +269,8 @@ export default class LapFactory {
   }
 
   findMatches() {
-    // console.log("checking for matches");
-
     this.pebbles.forEach((pebble) => {
       this.pebbles.some((other_pebble) => {
-        // console.log("checking other_pebble", other_pebble.row, this.active_pebble.row-1);
-
         // if it's the same type
         if (other_pebble.type == pebble.type) {
           // check to each side
@@ -306,7 +284,6 @@ export default class LapFactory {
             (other_pebble.col == pebble.col + 1 &&
               other_pebble.row == pebble.row)
           ) {
-            // console.log("found a match", other_pebble);
             pebble.matched = true; // set it as 'matched' as well
             return true; //no need to go further in the loop
           }
@@ -314,24 +291,17 @@ export default class LapFactory {
       });
     });
 
-    // console.log("pebbles", this.pebbles);
-
     this.processMatches(); //process matches immediately
   }
 
   processMatches() {
-    // console.log("processing matches for pebbles", this.pebbles.length);
-
     // this.pebbles.forEach((pebble, index)=>{
     var i;
     for (i = this.pebbles.length - 1; i >= 0; i -= 1) {
       var pebble = this.pebbles[i];
-      // console.log("processing pebble", i, pebble);
       if (pebble.matched == true) {
-        // console.log("destroying pebble", i, pebble);
         this.point_count += 1; //get some points for it
         //passplayer4score();
-        // console.log("setting points to", this.point_count);
 
         //this.points.text = this.point_count; //increase the point display
 

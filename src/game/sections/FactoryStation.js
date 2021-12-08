@@ -46,6 +46,13 @@ export default class FactoryStation {
     this.currentQuestion = question;
   }
 
+  clearQuiz() {
+    this.question.setText("...");
+    this.optionA.setText("...");
+    this.optionB.setText("...");
+    this.optionC.setText("...");
+  }
+
   //create factory station
   createFactoryStation() {
     this.factoryStation = this.scene.matter.add
@@ -61,7 +68,7 @@ export default class FactoryStation {
     //the dock
     this.dock = this.scene.matter.add
       .sprite(
-        this.screenWidth - 270,
+        this.sceneData.screenWidth - 270,
         this.sceneData.screenCenterY + 6,
         "dock",
         null,
