@@ -1,4 +1,6 @@
 import { Scene } from "phaser";
+import Quiz from "../data/Quiz";
+import LabStation from "../sections/LabStation";
 import store from "../../store";
 
 export default class PlayScene extends Scene {
@@ -7,14 +9,14 @@ export default class PlayScene extends Scene {
       key: "PlayScene",
       physics: {
         arcade: {
-          debug: false,
+          debug: true,
         },
         matter: {
           gravity: {
             x: 0,
             y: 0,
           },
-          debug: false,
+          debug: true,
         },
       },
     });
@@ -31,7 +33,15 @@ export default class PlayScene extends Scene {
     this.isBottleTouchingExcavator = false;
     this.isBottleGrabbedFromRiver = false;
 
-    this.isDebug = false;
+    this.trucks = [];
+
+    this.quizList = new Quiz();
+
+    this.LabStation = new LabStation(this);
+
+    console.log("init", this.quizList.questions);
+
+    this.isDebug = true;
     this.debugAlphaHalf = 1;
     this.debugAlphaFull = 1;
   }
@@ -144,6 +154,18 @@ export default class PlayScene extends Scene {
 
   //create factory station buttons
   createFactoryStationButtons() {
+    const textStyle = {
+      font: "bold 16px Arial",
+      fill: "#FFFFFF",
+      align: "center",
+    };
+
+    const quizTextStyle = {
+      font: "bold 18px Arial",
+      fill: "#FFFFFF",
+      align: "center",
+    };
+
     this.greenTriangleButton = this.add.sprite(
       this.factoryStation.x - 16,
       0,
@@ -154,6 +176,12 @@ export default class PlayScene extends Scene {
       this.factoryStation.height / 2 -
       this.greenTriangleButton.height +
       5;
+    this.add.text(
+      this.greenTriangleButton.x - 16,
+      this.greenTriangleButton.y - this.greenTriangleButton.height + 11,
+      `606`,
+      textStyle
+    );
 
     this.redTriangleButton = this.add.sprite(
       this.greenTriangleButton.x - this.greenTriangleButton.width - 20,
@@ -161,10 +189,31 @@ export default class PlayScene extends Scene {
       "red-triangle-button"
     );
 
+    this.add.text(
+      this.redTriangleButton.x - 16,
+      this.redTriangleButton.y - this.redTriangleButton.height + 11,
+      `667`,
+      textStyle
+    );
+
     this.blueTriangleButton = this.add.sprite(
       this.greenTriangleButton.x + this.greenTriangleButton.width + 20,
       this.greenTriangleButton.y,
       "blue-triangle-button"
+    );
+
+    this.add.text(
+      this.blueTriangleButton.x - 16,
+      this.blueTriangleButton.y - this.blueTriangleButton.height + 11,
+      `698`,
+      textStyle
+    );
+
+    this.quiz = this.add.text(
+      this.factoryStation.x - this.factoryStation.width / 2 + 120,
+      this.factoryStation.y - 68,
+      `Add 334 and 333`,
+      quizTextStyle
     );
   }
 
@@ -389,8 +438,9 @@ export default class PlayScene extends Scene {
       }
     );
     this.excavatorArm.setStatic(true);
+    this.excavatorArm.setAngle(90);
     this.excavatorArm.setOrigin(0.5, 0.75);
-    //this.excavatorArm.setAngle(90);
+    this.excavatorArm.setAngle(90);
     this.excavatorArm.setFriction(0.005);
 
     this.excavatorArm.x = this.excavatorBase.x;
@@ -399,13 +449,11 @@ export default class PlayScene extends Scene {
 
   //create track
   createTruck() {
-    this.truck = this.add.sprite(
-      this.screenWidth - 150,
-      this.screenCenterY - 100,
-      "truck",
-      null,
-      { label: "truck" }
-    );
+    this.truck = this.add
+      .sprite(this.screenWidth - 150, this.screenCenterY - 100, "truck", null, {
+        label: "truck",
+      })
+      .setVisible(false);
 
     this.drawTruckPath();
 
@@ -442,7 +490,7 @@ export default class PlayScene extends Scene {
 
     this.truckCurve = new Phaser.Curves.Spline(points);
 
-    graphics.lineStyle(4, 0xffffff, 0);
+    graphics.lineStyle(4, 0xffffff, this.debugAlphaFull);
     this.truckCurve.draw(graphics, 64);
     let ppaths = [];
     for (var i = 0; i < this.truckCurve.points.length; i++) {
@@ -459,14 +507,45 @@ export default class PlayScene extends Scene {
 
   //truck follow path
   truckFollowPath() {
-    var truck = this.add.follower(this.truckCurve, 0, 730, "truck");
+    //this.truckFollow = this.add.follower(this.truckCurve, 0, 730, "truck");
 
-    truck.startFollow({
+    //add 10 truckFollow to trucks array
+    for (var i = 0; i < 10; i++) {
+      this.trucks.push(
+        this.add.follower(this.truckCurve, 0 - 30, 730, "truck")
+      );
+    }
+
+    const followConfig = {
       duration: 10000,
-      yoyo: false,
-      repeat: -1,
+      ease: "Sine.easeInOut",
       rotateToPath: true,
       verticalAdjust: true,
+    };
+
+    //this.truckFollow.startFollow(followConfig);
+
+    //set timeout of 2 seconds
+    setTimeout(() => {
+      this.trucks[0].startFollow(followConfig);
+    }, 2000);
+  }
+
+  //keep track of the trucks
+  trackTruck() {
+    this.trucks.forEach((truck, idx) => {
+      let truckX = truck.x;
+      let truckY = truck.y;
+
+      if (truck.isFollowing()) {
+        //check if truckX is between 465 and 467
+        if (Math.round(truckX) >= 455 && Math.round(truckX) <= 456) {
+          console.log(`x is`, Math.round(truckX));
+          this.trucks[idx].x = 456 + 0.1;
+          this.trucks[idx].isActive = true;
+          truck.pauseFollow();
+        }
+      }
     });
   }
 
@@ -538,8 +617,8 @@ export default class PlayScene extends Scene {
 
         this.excavatorArmTween = this.tweens.add({
           targets: this.excavatorArm,
-          angle: { from: 0, to: 90 },
-          duration: 500,
+          angle: { from: 90, to: 0 },
+          duration: 447,
           ease: "Linear",
           yoyo: true,
           repeat: 0,
@@ -559,6 +638,9 @@ export default class PlayScene extends Scene {
   update(time, delta) {
     //make sure the bottle is touching the excavator
     this.followRiverPath(delta);
+
+    //let's truck the trucks
+    this.trackTruck();
   }
 
   // draw a path in the river that the bottle will follow
@@ -650,6 +732,15 @@ export default class PlayScene extends Scene {
       this.deltaTimeRemoveBottle = 0;
       this.deltaTime = 0;
       this.bottle.setPosition(this.screenWidth - 150, 350);
+
+      this.trucks.forEach((truck, idx) => {
+        if (truck.isActive) {
+          truck.isActive = false;
+          setTimeout(() => {
+            truck.resumeFollow();
+          }, 100);
+        }
+      });
     } else {
       let d = this.deltaTimeRemoveBottle / this.bottleRemoveFromRiverDuration;
       var p = this.bottleFromRiverCurve.getPoint(d);
@@ -717,7 +808,7 @@ export default class PlayScene extends Scene {
 
     var img_num = 1;
     var min = 1;
-    var max = 5;
+    var max = 4;
     if (type == "random") {
       img_num = Math.floor(Math.random() * (max - min + 1)) + min;
     }
@@ -923,7 +1014,6 @@ export default class PlayScene extends Scene {
   }
 
   resetPuzzle() {
-    console.log("GAME OVER");
     this.timerRunning = false;
 
     //reset some stuff...
@@ -935,6 +1025,6 @@ export default class PlayScene extends Scene {
     this.active_pebble = false;
 
     this.timerRunning = true;
-    this.createPebble("random")
+    this.createPebble("random");
   }
 }
