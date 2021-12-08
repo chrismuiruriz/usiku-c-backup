@@ -10,16 +10,16 @@ export default class Quiz {
       },
       {
         question: `1 + 4`,
-        A: `3`,
-        B: `4`,
-        C: `5`,
+        A: `4`,
+        B: `5`,
+        C: `3`,
         answer: `C`,
       },
       {
         question: `2 + 2`,
-        A: `3`,
-        B: `4`,
-        C: `5`,
+        A: `5`,
+        B: `3`,
+        C: `4`,
         answer: `A`,
       },
     ];
@@ -29,8 +29,10 @@ export default class Quiz {
   getNextQuestion(currentQuestionIndex) {
     let nextQuestionIndex = currentQuestionIndex + 1;
     if (currentQuestionIndex >= this.questions.length - 1) {
+      this.questions[0]["index"] = 0;
       return this.questions[0];
     } else {
+      this.questions[nextQuestionIndex]["index"] = nextQuestionIndex;
       return this.questions[nextQuestionIndex];
     }
   }
