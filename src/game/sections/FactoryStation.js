@@ -84,13 +84,13 @@ export default class FactoryStation {
   //create factory station buttons
   createFactoryStationButtons() {
     const textStyle = {
-      font: "bold 16px Arial",
+      font: "bold 18px Arial",
       fill: "#FFFFFF",
       align: "center",
     };
 
     const quizTextStyle = {
-      font: "bold 18px Arial",
+      font: "bold 20px Arial",
       fill: "#FFFFFF",
       align: "center",
     };
@@ -106,12 +106,15 @@ export default class FactoryStation {
       this.greenTriangleButton.height +
       5;
 
-    this.optionB = this.scene.add.text(
-      this.greenTriangleButton.x - 16,
-      this.greenTriangleButton.y - this.greenTriangleButton.height + 11,
-      `...`,
-      textStyle
-    );
+    this.optionB = this.scene.add
+      .text(
+        this.greenTriangleButton.x,
+        this.greenTriangleButton.y - this.greenTriangleButton.height + 18,
+        `...`,
+        textStyle
+      )
+      .setOrigin(0.5);
+    this.optionB.width = this.greenTriangleButton.width;
 
     this.redTriangleButton = this.scene.add.sprite(
       this.greenTriangleButton.x - this.greenTriangleButton.width - 20,
@@ -119,12 +122,15 @@ export default class FactoryStation {
       "red-triangle-button"
     );
 
-    this.optionA = this.scene.add.text(
-      this.redTriangleButton.x - 16,
-      this.redTriangleButton.y - this.redTriangleButton.height + 11,
-      `...`,
-      textStyle
-    );
+    this.optionA = this.scene.add
+      .text(
+        this.redTriangleButton.x,
+        this.redTriangleButton.y - this.redTriangleButton.height + 18,
+        `...`,
+        textStyle
+      )
+      .setOrigin(0.5);
+    this.optionA.width = this.redTriangleButton.width;
 
     this.blueTriangleButton = this.scene.add.sprite(
       this.greenTriangleButton.x + this.greenTriangleButton.width + 20,
@@ -132,18 +138,24 @@ export default class FactoryStation {
       "blue-triangle-button"
     );
 
-    this.optionC = this.scene.add.text(
-      this.blueTriangleButton.x - 16,
-      this.blueTriangleButton.y - this.blueTriangleButton.height + 11,
-      `...`,
-      textStyle
-    );
+    this.optionC = this.scene.add
+      .text(
+        this.blueTriangleButton.x,
+        this.blueTriangleButton.y - this.blueTriangleButton.height + 18,
+        `...`,
+        textStyle
+      )
+      .setOrigin(0.5);
+    this.optionC.width = this.blueTriangleButton.width;
 
-    this.question = this.scene.add.text(
-      this.factoryStation.x - this.factoryStation.width / 2 + 120,
-      this.factoryStation.y - 68,
-      `...`,
-      quizTextStyle
-    );
+    this.question = this.scene.add
+      .text(
+        this.factoryStation.x - 16,
+        this.factoryStation.y - 60,
+        `...`,
+        quizTextStyle
+      )
+      .setOrigin(0.5);
+    this.question.width = this.factoryStation.width;
   }
 }
