@@ -13,6 +13,7 @@ import stars from "../../assets/img/game-play/stars-25.png";
 import starsBg from "../../assets/img/game-play/stars-bg.png";
 import bigProgressBar from "../../assets/img/game-play/big-progress-bar-21x340.png";
 import brownBarTitle from "../../assets/img/game-play/brown-bar-title.png";
+import cleanPolluteIcon from "../../assets/img/game-play/icon.png";
 
 import factoryStation from "../../assets/img/game-play/factory-station.png";
 import redTriangleButton from "../../assets/img/game-play/red-triangle-button.png";
@@ -51,6 +52,7 @@ export default class BootScene extends Scene {
     this.load.image("game-backround", gameBg);
     this.load.image("pipes", pipes);
     this.load.image("menu-button", menuButton);
+    this.load.image("clean-pollute-icon", cleanPolluteIcon);    
     this.load.spritesheet("stars", stars, { frameWidth: 25, frameHeight: 25 });
     this.load.image("stars-bg", starsBg);
     this.load.spritesheet("big-progress-bar", bigProgressBar, {
@@ -73,7 +75,7 @@ export default class BootScene extends Scene {
     this.load.image("gridup", labStationGrid);
     this.load.spritesheet("lab-station-puzzle-icons", labStationPuzzleIcons, {
       frameWidth: 38,
-      frameHeight: 42,
+      frameHeight: 41,
     });
     this.load.spritesheet("lab-station-pebbles", labStationPebbles, {
       frameWidth: 38,

@@ -129,17 +129,21 @@ export default class LapFactory {
 
   // create a pebble of a specified type, and add it to the 'stack'
   createPebble(type) {
-    var img_num = 1;
+    var img_num = 0;
     var min = 1;
-    var max = 4;
+    var max = 2;
     if (type == "random") {
+      console.log("createPebble called from PlayScene!");
       img_num = Math.floor(Math.random() * (max - min + 1)) + min;
+    } else if (type == "default") {
+      img_num = 0;
+    } else {
+      img_num = type;
     }
 
     var pebble = this.scene.add.sprite(0, 0, "lab-station-puzzle-icons");
     pebble.setFrame(img_num);
-    pebble.setOrigin(1, 1); // using the bottom right corner, for alignment to rows/cols
-    //pebble.setScale(0.8); //just to fit in the box. would be better to scale the graphic...
+    pebble.setOrigin(1, 1);
     pebble.type = img_num; //used for matching
     pebble.col = this.start_col; //used for positioning in updatePosition()
     pebble.row = this.start_row;
@@ -322,7 +326,7 @@ export default class LapFactory {
     this.pebbles = [];
     this.active_pebble = false;
 
-    this.timerRunning = true;
-    this.createPebble("random");
+    //this.timerRunning = true;
+    //this.createPebble("random");
   }
 }

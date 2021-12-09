@@ -10,14 +10,14 @@ export default class PlayScene extends Scene {
       key: "PlayScene",
       physics: {
         arcade: {
-          debug: false,
+          debug: true,
         },
         matter: {
           gravity: {
             x: 0,
             y: 0,
           },
-          debug: false,
+          debug: true,
         },
       },
     });
@@ -149,6 +149,8 @@ export default class PlayScene extends Scene {
       )
       .setAngle(-4);
 
+    /*********************/
+
     this.farmPollutingButton = this.add.sprite(
       this.screenWidth - 120,
       0,
@@ -162,6 +164,38 @@ export default class PlayScene extends Scene {
         "farm-polluting-text"
       )
       .setAngle(4);
+
+    /*********************/
+    this.createCleanOrPolluteIcon();
+  }
+
+  //create cleanOrPollute icon
+  createCleanOrPolluteIcon() {
+    let cleanOrPolluteIcon = this.physics.add
+      .sprite(
+        this.farmCleanButton.x + this.farmCleanButton.width / 2,
+        this.farmCleanButton.y + this.farmCleanButton.height,
+        "clean-pollute-icon"
+      )
+      .setInteractive({ draggable: true, dropZone: true });
+
+    cleanOrPolluteIcon.on("drag", (pointer, dragX, dragY) => {
+      cleanOrPolluteIcon.x = dragX;
+      cleanOrPolluteIcon.y = dragY;
+    });
+
+    cleanOrPolluteIcon.on("drop", (pointer, gameObject, dropZone) => {
+      //get the difference between farmCleanButton and cleanOrPolluteIcon x position and check if it's less than 20
+      if (Math.abs(this.farmCleanButton.x - cleanOrPolluteIcon.x) < 20) {
+        console.log("drop icon on clean");
+        this.labStation.createPebble(2);
+      }
+
+      if (Math.abs(this.farmPollutingButton.x - cleanOrPolluteIcon.x) < 20) {
+        console.log("drop icon on pollute");
+        this.labStation.createPebble(1);
+      }
+    });
   }
 
   //create menu button
