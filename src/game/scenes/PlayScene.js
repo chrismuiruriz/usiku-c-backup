@@ -212,7 +212,12 @@ export default class PlayScene extends Scene {
           label: "menu-button",
         }
       )
-      .setOrigin(0.5);
+      .setOrigin(0.5)
+      .setInteractive();
+
+    this.menuButton.on("pointerdown", () => {
+      this.toggleFullScreen();
+    });
   }
 
   //create shapes
@@ -579,6 +584,15 @@ export default class PlayScene extends Scene {
       var p = this.bottleFromRiverCurve.getPoint(d);
 
       this.bottle.setPosition(p.x, p.y);
+    }
+  }
+
+  // helpers debug
+  toggleFullScreen() {
+    if (!this.scale.isFullscreen) {
+      this.scale.startFullscreen();
+    } else {
+      this.scale.stopFullscreen();
     }
   }
 }
