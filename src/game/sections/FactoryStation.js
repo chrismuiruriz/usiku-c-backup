@@ -22,10 +22,20 @@ export default class FactoryStation {
 
     this.quiz = new Quiz();
     this.currentQuestion = null;
+    this.boats = [];
+    this.currentBoatIndex = -1;
 
     this.createFactoryStation();
 
     this.drawBoatPath();
+
+    this.timeCounter = 0;
+    this.timedEvent = this.scene.time.addEvent({
+      delay: 1000,
+      callback: this.moveTimer,
+      callbackScope: this,
+      loop: true,
+    });
   }
 
   /**
@@ -146,6 +156,7 @@ export default class FactoryStation {
       } else {
         this.isWrong();
       }
+      this.startBoat();
     });
 
     this.optionA = this.scene.add
@@ -174,6 +185,7 @@ export default class FactoryStation {
       } else {
         this.isWrong();
       }
+      this.startBoat();
     });
 
     this.optionC = this.scene.add
@@ -207,12 +219,15 @@ export default class FactoryStation {
     this.question.setText("Wrong!");
   }
 
+  moveTimer() {
+    this.timeCounter++;
+  }
+
   // Draw river path
   drawBoatPath() {
     let graphics = this.scene.add.graphics();
 
     let sWidth = this.sceneData.screenWidth;
-    let sHeight = this.sceneData.screenHeight;
 
     this.boatLine = new Phaser.Geom.Line(
       this.dock.x + 66,
@@ -250,21 +265,45 @@ export default class FactoryStation {
   }
 
   boatFollowPath() {
-    this.boat = this.scene.add
-      .follower(this.boatCurve, this.dock.x + 66, this.dock.y + 4.5, "boat")
-      .setAngle(-80);
+    //add 50 followers to boats
+    for (var i = 0; i < 50; i++) {
+      this.boats.push(
+        this.scene.add
+          .follower(this.boatCurve, this.dock.x + 66, this.dock.y + 4.5, "boat")
+          .setAngle(-80)
+      );
+    }
   }
 
   startBoat() {
-    this.boat.startFollow({
+    console.log("start boat idx", this.currentBoatIndex);
+    let boatIndex = this.currentBoatIndex + 1;
+    if (this.currentBoatIndex < 0) {
+      boatIndex = 0;
+      this.currentBoatIndex = 0;
+    }
+
+    this.boats[boatIndex].startFollow({
       duration: 6000,
       ease: "Sine.easeInOut",
       rotateToPath: true,
-      yoyo: true,
       verticalAdjust: true,
+      onUpdate: (a, b, c) => {
+        if (b.value == 1) {
+          this.generateCleanOrPolluteIcon();
+        }
+      },
       onComplete() {
         console.log("boat follow complete");
       },
     });
+  }
+
+  generateCleanOrPolluteIcon() {
+    console.log(`Boat`);
+    this.boats[this.currentBoatIndex].setVisible(false);
+    this.boats.splice(this.currentBoatIndex, 1);
+
+    this.scene.createCleanOrPolluteIcon();
   }
 }

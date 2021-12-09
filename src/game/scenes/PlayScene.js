@@ -166,7 +166,7 @@ export default class PlayScene extends Scene {
       .setAngle(4);
 
     /*********************/
-    this.createCleanOrPolluteIcon();
+    //this.createCleanOrPolluteIcon();
   }
 
   //create cleanOrPollute icon
@@ -188,11 +188,13 @@ export default class PlayScene extends Scene {
       //get the difference between farmCleanButton and cleanOrPolluteIcon x position and check if it's less than 20
       if (Math.abs(this.farmCleanButton.x - cleanOrPolluteIcon.x) < 20) {
         console.log("drop icon on clean");
+        cleanOrPolluteIcon.destroy();
         this.labStation.createPebble(2);
       }
 
       if (Math.abs(this.farmPollutingButton.x - cleanOrPolluteIcon.x) < 20) {
         console.log("drop icon on pollute");
+        cleanOrPolluteIcon.destroy();
         this.labStation.createPebble(1);
       }
     });
