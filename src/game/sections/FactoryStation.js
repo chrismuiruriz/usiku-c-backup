@@ -24,6 +24,8 @@ export default class FactoryStation {
     this.currentQuestion = null;
 
     this.createFactoryStation();
+
+    this.drawBoatPath();
   }
 
   /**
@@ -78,13 +80,6 @@ export default class FactoryStation {
       )
       .setStatic(true);
 
-    //the boat
-    this.boat = this.scene.matter.add
-      .sprite(this.dock.x + 66, this.dock.y + 4.5, "boat", null, {
-        label: "boat",
-      })
-      .setStatic(true);
-
     this.createFactoryStationButtons();
   }
 
@@ -97,7 +92,7 @@ export default class FactoryStation {
     };
 
     const quizTextStyle = {
-      font: "bold 20px Arial",
+      font: "bold 24px Arial",
       fill: "#FFFFFF",
       align: "center",
     };
@@ -113,6 +108,18 @@ export default class FactoryStation {
       this.greenTriangleButton.height +
       5;
 
+    // when the pointer is touched/clicked
+    this.greenTriangleButton.setInteractive();
+    this.greenTriangleButton.on("pointerdown", () => {
+      if (this.quiz.checkAnswer(this.currentQuestion.index, "B")) {
+        this.isCorrect();
+      } else {
+        this.isWrong();
+      }
+
+      this.startBoat();
+    });
+
     this.optionB = this.scene.add
       .text(
         this.greenTriangleButton.x,
@@ -123,11 +130,23 @@ export default class FactoryStation {
       .setOrigin(0.5);
     this.optionB.width = this.greenTriangleButton.width;
 
+    /**********************/
+
     this.redTriangleButton = this.scene.add.sprite(
       this.greenTriangleButton.x - this.greenTriangleButton.width - 20,
       this.greenTriangleButton.y,
       "red-triangle-button"
     );
+
+    // when the pointer is touched/clicked
+    this.redTriangleButton.setInteractive();
+    this.redTriangleButton.on("pointerdown", () => {
+      if (this.quiz.checkAnswer(this.currentQuestion.index, "A")) {
+        this.isCorrect();
+      } else {
+        this.isWrong();
+      }
+    });
 
     this.optionA = this.scene.add
       .text(
@@ -139,11 +158,23 @@ export default class FactoryStation {
       .setOrigin(0.5);
     this.optionA.width = this.redTriangleButton.width;
 
+    /**********************/
+
     this.blueTriangleButton = this.scene.add.sprite(
       this.greenTriangleButton.x + this.greenTriangleButton.width + 20,
       this.greenTriangleButton.y,
       "blue-triangle-button"
     );
+
+    // when the pointer is touched/clicked
+    this.blueTriangleButton.setInteractive();
+    this.blueTriangleButton.on("pointerdown", () => {
+      if (this.quiz.checkAnswer(this.currentQuestion.index, "C")) {
+        this.isCorrect();
+      } else {
+        this.isWrong();
+      }
+    });
 
     this.optionC = this.scene.add
       .text(
@@ -164,5 +195,76 @@ export default class FactoryStation {
       )
       .setOrigin(0.5);
     this.question.width = this.factoryStation.width;
+  }
+
+  isCorrect() {
+    this.clearQuiz();
+    this.question.setText("Correct!");
+  }
+
+  isWrong() {
+    this.clearQuiz();
+    this.question.setText("Wrong!");
+  }
+
+  // Draw river path
+  drawBoatPath() {
+    let graphics = this.scene.add.graphics();
+
+    let sWidth = this.sceneData.screenWidth;
+    let sHeight = this.sceneData.screenHeight;
+
+    this.boatLine = new Phaser.Geom.Line(
+      this.dock.x + 66,
+      this.dock.y + 4.5,
+      sWidth - 235,
+      50
+    );
+
+    let points = [];
+
+    points.push(this.boatLine.getPointA());
+
+    //push points
+    points.push(new Phaser.Math.Vector2(this.boatLine.x1 - 60, 200));
+
+    points.push(this.boatLine.getPointB());
+
+    this.boatCurve = new Phaser.Curves.Spline(points);
+
+    graphics.lineStyle(4, 0xffffff, this.scene.debugAlphaFull);
+    this.boatCurve.draw(graphics, 64);
+    let ppaths = [];
+    for (var i = 0; i < this.boatCurve.points.length; i++) {
+      ppaths.push(
+        this.boatCurve.points[i].x + "," + this.boatCurve.points[i].y
+      );
+      graphics.fillCircle(
+        this.boatCurve.points[i].x,
+        this.boatCurve.points[i].y,
+        4
+      );
+    }
+
+    this.boatFollowPath();
+  }
+
+  boatFollowPath() {
+    this.boat = this.scene.add
+      .follower(this.boatCurve, this.dock.x + 66, this.dock.y + 4.5, "boat")
+      .setAngle(-80);
+  }
+
+  startBoat() {
+    this.boat.startFollow({
+      duration: 6000,
+      ease: "Sine.easeInOut",
+      rotateToPath: true,
+      yoyo: true,
+      verticalAdjust: true,
+      onComplete() {
+        console.log("boat follow complete");
+      },
+    });
   }
 }

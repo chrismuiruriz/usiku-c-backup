@@ -102,7 +102,7 @@ export default class LapFactory {
       //ie. every n ticks based on default_pebble_frequency
 
       // add a default pebble to the stack
-      this.createPebble("random");
+      this.createPebble("default");
     }
 
     // ******** CHECK IF WE'RE AT THE END OF THE GAME

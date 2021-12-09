@@ -13,14 +13,14 @@ export default class Quiz {
         A: `4`,
         B: `5`,
         C: `3`,
-        answer: `C`,
+        answer: `B`,
       },
       {
         question: `2 + 2`,
         A: `5`,
         B: `3`,
         C: `4`,
-        answer: `A`,
+        answer: `C`,
       },
     ];
   }
@@ -43,5 +43,14 @@ export default class Quiz {
 
   getQuestions() {
     return this.questions;
+  }
+
+  checkAnswer(questionIndex, answer) {
+    let question = this.getQuestion(questionIndex);
+    if (question.answer === answer) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

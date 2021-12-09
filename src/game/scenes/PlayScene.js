@@ -10,14 +10,14 @@ export default class PlayScene extends Scene {
       key: "PlayScene",
       physics: {
         arcade: {
-          debug: true,
+          debug: false,
         },
         matter: {
           gravity: {
             x: 0,
             y: 0,
           },
-          debug: true,
+          debug: false,
         },
       },
     });
@@ -42,9 +42,9 @@ export default class PlayScene extends Scene {
       verticalAdjust: true,
     };
 
-    this.isDebug = true;
-    this.debugAlphaHalf = 1;
-    this.debugAlphaFull = 1;
+    this.isDebug = false;
+    this.debugAlphaHalf = 0;
+    this.debugAlphaFull = 0;
   }
 
   async create(data) {
@@ -263,8 +263,6 @@ export default class PlayScene extends Scene {
 
     points.push(this.truckLine.getPointA());
 
-    const length = Phaser.Geom.Line.Length(this.truckLine);
-
     //push points
     points.push(new Phaser.Math.Vector2(170, this.screenHeight - 60));
 
@@ -324,14 +322,12 @@ export default class PlayScene extends Scene {
           Math.round(truckX) <= 456 &&
           !truckY.isFull
         ) {
-          console.log("truck pause", truck);
           this.trucks[idx].isActive = true;
           truck.pauseFollow();
         }
 
         //if this truck is full and truckX rounded is greater than 700
         if (this.trucks[idx].isFull && Math.round(truckX) >= 760) {
-          console.log(`x is`, Math.round(truckX));
           //destroy truck
           this.trucks[idx].destroy();
           //remove truck from trucks array
@@ -340,9 +336,6 @@ export default class PlayScene extends Scene {
           //generate a new quiz
           this.factoryStation.generateQuiz();
         }
-
-        //log remaining trucks
-        console.log(`trucks remaining`, this.trucks.length);
       }
     });
   }
