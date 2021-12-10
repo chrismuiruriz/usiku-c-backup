@@ -121,6 +121,10 @@ export default class FactoryStation {
     // when the pointer is touched/clicked
     this.greenTriangleButton.setInteractive();
     this.greenTriangleButton.on("pointerdown", () => {
+      if (!this.currentQuestion) {
+        return;
+      }
+
       if (this.quiz.checkAnswer(this.currentQuestion.index, "B")) {
         this.isCorrect();
       } else {
@@ -151,6 +155,10 @@ export default class FactoryStation {
     // when the pointer is touched/clicked
     this.redTriangleButton.setInteractive();
     this.redTriangleButton.on("pointerdown", () => {
+      if (!this.currentQuestion) {
+        return;
+      }
+
       if (this.quiz.checkAnswer(this.currentQuestion.index, "A")) {
         this.isCorrect();
       } else {
@@ -180,6 +188,10 @@ export default class FactoryStation {
     // when the pointer is touched/clicked
     this.blueTriangleButton.setInteractive();
     this.blueTriangleButton.on("pointerdown", () => {
+      if (!this.currentQuestion) {
+        return;
+      }
+
       if (this.quiz.checkAnswer(this.currentQuestion.index, "C")) {
         this.isCorrect();
       } else {

@@ -305,9 +305,10 @@ export default class LapFactory {
       var pebble = this.pebbles[i];
       if (pebble.matched == true) {
         this.point_count += 1; //get some points for it
-        //passplayer4score();
-
-        //this.points.text = this.point_count; //increase the point display
+        //TODO: find a better approach for this
+        if (pebble.type == 1 || pebble.type == 2) {
+          this.scene.updateProgressBar(10);
+        }
 
         pebble.destroy(); //delete it from the board
         this.pebbles.splice(i, 1); //remove it from the pebbles array

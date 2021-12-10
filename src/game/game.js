@@ -1,5 +1,8 @@
 import Phaser from "phaser";
 import BootScene from "./scenes/BootScene";
+import LoadingScene from "./scenes/LoadingScene";
+import StartScene from "./scenes/StartScene";
+import StoryScene from "./scenes/StoryScene";
 import PlayScene from "./scenes/PlayScene";
 import GameOverScene from "./scenes/GameOverScene";
 
@@ -20,5 +23,12 @@ export default {
     activePointers: 3,
   },
   backgroundColor: 0x333333,
-  scene: [BootScene, PlayScene, GameOverScene],
+  scene: [
+    BootScene,
+    LoadingScene,
+    StartScene,
+    StoryScene,
+    PlayScene,
+    GameOverScene,
+  ],
 };

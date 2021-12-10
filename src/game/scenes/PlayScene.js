@@ -10,20 +10,34 @@ export default class PlayScene extends Scene {
       key: "PlayScene",
       physics: {
         arcade: {
-          debug: true,
+          debug: false,
         },
         matter: {
           gravity: {
             x: 0,
             y: 0,
           },
-          debug: true,
+          debug: false,
         },
       },
     });
   }
 
   init() {
+    // Some games configurations
+
+    //game timer
+    this.gameTimerDuration = 100; //secs
+    this.gameTimerCountdown = 100; //secs
+    this.gameTimer = new Phaser.Time.TimerEvent({
+      delay: this.gameTimerDuration * 1000,
+    });
+
+    this.truckSpeed = 10000;
+    this.firstTruckStartDelay = 2000;
+    this.excavatorArmRotateSpeed = 447;
+    this.bottleSpeedOnRiver = 2500;
+
     this.debugDir = "right";
     this.deltaTime = 0;
     this.deltaTimeRemoveBottle = 0;
@@ -36,8 +50,7 @@ export default class PlayScene extends Scene {
 
     this.trucks = [];
     this.truckFollowConfig = {
-      duration: 10000,
-      ease: "Sine.easeInOut",
+      duration: this.truckSpeed,
       rotateToPath: true,
       verticalAdjust: true,
     };
@@ -346,7 +359,7 @@ export default class PlayScene extends Scene {
     //set timeout of 2 seconds
     setTimeout(() => {
       this.trucks[0].startFollow(this.truckFollowConfig);
-    }, 2000);
+    }, this.firstTruckStartDelay);
   }
 
   //keep track of the trucks
@@ -403,7 +416,7 @@ export default class PlayScene extends Scene {
 
     //text style
     const textStyle = {
-      font: "bold 16px Arial",
+      font: "bold 14px Arial",
       fill: "#FFFFFF",
       align: "center",
     };
@@ -424,11 +437,11 @@ export default class PlayScene extends Scene {
     this.progressBarGreen = this.add
       .sprite(
         this.starsBg.x - this.starsBg.width / 2 - 5,
-        this.star2.y,
+        0,
         "big-progress-bar"
       )
       .setOrigin(1, 1)
-      .setScale(1, 0.5);
+      .setScale(1, 0);
     this.progressBarGreen.setFrame(1);
     this.progressBarGreen.setY(this.star2.y + this.progressBarGreen.height / 2);
     //this.progressBarGreen.scaleY = 0.1;
@@ -436,23 +449,60 @@ export default class PlayScene extends Scene {
     this.progressBarRed = this.add
       .sprite(
         this.progressBarGreen.x - this.progressBarGreen.width + 2,
-        this.star2.y,
+        0,
         "big-progress-bar"
       )
       .setOrigin(1, 1)
       .setAngle(180)
-      .setScale(1, 0.5);
+      .setScale(1, 1);
     this.progressBarRed.setFrame(0);
     this.progressBarRed.setY(this.star2.y - this.progressBarRed.height / 2);
     //this.progressBarRed.scaleY = 0.1;
 
     //title bar
     this.titleBar = this.add.sprite(0, this.star2.y, "brown-bar-title");
-    this.titleBar.x = this.titleBar.width / 2;
+    this.titleBar.setOrigin(0, 0.5);
+    this.titleBar.setScale(0.9, 1);
+    this.titleBar.x = 0;
     this.titleText = this.add
-      .text(this.titleBar.x, this.titleBar.y, "ROUND 1 OF 1", textStyle)
+      .text(
+        this.titleBar.x + this.titleBar.width / 2 - 5,
+        this.titleBar.y,
+        "ROUND 1 OF 1",
+        textStyle
+      )
       .setOrigin(0.5)
       .setAngle(-90);
+
+    //clock timer
+    this.startGameTimer();
+  }
+
+  //lights the HUD
+  lightStar(star) {
+    let num = star;
+    if (num == 3) {
+      this.star3.setFrame(1);
+    } else if (num == 2) {
+      this.star2.setFrame(1);
+    } else {
+      this.star1.setFrame(1);
+    }
+  }
+
+  //update progress bar
+  updateProgressBar(point) {
+    // 10pts = 0.1
+    //decrese red bar
+    let newRedScaleY = this.progressBarRed.scaleY - 0.005;
+    this.progressBarRed.setScale(this.progressBarRed.scaleX, newRedScaleY);
+
+    //increase green bar
+    let newGreenScaleY = this.progressBarGreen.scaleY + 0.005;
+    this.progressBarGreen.setScale(
+      this.progressBarGreen.scaleX,
+      newGreenScaleY
+    );
   }
 
   // collisions
@@ -499,11 +549,12 @@ export default class PlayScene extends Scene {
       "pointerdown",
       (pointer, localX, localY, event) => {
         this.isPlayerTouchingExcavator = true;
+        this.updateProgressBar(10);
 
         this.excavatorArmTween = this.tweens.add({
           targets: this.excavatorArm,
           angle: { from: 90, to: 0 },
-          duration: 447,
+          duration: this.excavatorArmRotateSpeed,
           ease: "Linear",
           yoyo: true,
           repeat: 0,
@@ -526,6 +577,42 @@ export default class PlayScene extends Scene {
 
     //let's truck the trucks
     this.trackTruck();
+
+    //update timer
+    let progress = this.gameTimer.getProgress() * this.gameTimerDuration;
+    let absProgress = this.gameTimerCountdown - parseInt(progress.toFixed(0));
+    let strProgress =
+      absProgress < 10 ? `0${absProgress}:00` : `${absProgress}:00`;
+    this.clockText.setText(strProgress);
+    if (absProgress >= this.gameTimerDuration) {
+      //round over
+      this.onGameTimerComplete();
+    }
+  }
+
+  //use this to start the game time
+  startGameTimer() {
+    this.time.addEvent(this.gameTimer);
+  }
+
+  //use the to pause the game timer
+  pauseGameTimer() {
+    this.gameTimer.paused = true;
+  }
+
+  //use this to resume the game timer
+  resumeGameTimer() {
+    this.gameTimer.paused = false;
+  }
+
+  //use this to reset the game timer
+  resetGameTimer() {
+    this.time.addEvent(this.gameTimer);
+  }
+
+  //this is called once the timer elapses
+  onGameTimerComplete() {
+    //TODO: Something awesome
   }
 
   // draw a path in the river that the bottle will follow
@@ -571,11 +658,11 @@ export default class PlayScene extends Scene {
 
     this.deltaTime += delta;
 
-    if (this.deltaTime >= 5000) {
+    if (this.deltaTime >= this.bottleSpeedOnRiver) {
       this.deltaTime = 0;
       this.bottle.setPosition(this.screenWidth - 150, 350);
     } else {
-      let d = this.deltaTime / 5000;
+      let d = this.deltaTime / this.bottleSpeedOnRiver;
       var p = this.riverCurve.getPoint(d);
 
       this.bottle.setPosition(p.x, p.y);

@@ -41,6 +41,22 @@ import farmPollutingIcon from "../../assets/img/game-play/farm-polluting-icon.pn
 import farmCleanText from "../../assets/img/game-play/farm-clean-text.png";
 import farmPollutingText from "../../assets/img/game-play/farm-polluting-text.png";
 
+import loadingSceneBg from "../../assets/img/loading/loading-bg.png";
+import gameLogo from "../../assets/img/common/game-logo.png";
+import kicdLogo from "../../assets/img/common/kicd-logo.png";
+import navigationButton from "../../assets/img/common/navigation-73x73.png";
+
+import startSceneBg from "../../assets/img/start/start-bg.png";
+import storySceneBg from "../../assets/img/story/story-bg.png";
+import startSceneCharacters from "../../assets/img/start/characters.png";
+
+import startBtn from "../../assets/img/common/start-btn-241x129.png";
+import continueBtn from "../../assets/img/common/continue-btn-283x169.png";
+import okBtn from "../../assets/img/common/ok-btn-146x154.png";
+
+import storyCharacterKids from "../../assets/img/story/characters/char-happy.png";
+import storyCharacterElder from "../../assets/img/story/characters/elder-smile.png";
+
 export default class BootScene extends Scene {
   constructor() {
     super({ key: "BootScene" });
@@ -83,6 +99,10 @@ export default class BootScene extends Scene {
       frameWidth: 38,
       frameHeight: 38,
     });
+    this.load.spritesheet("navigation-btn", navigationButton, {
+      frameWidth: 73,
+      frameHeight: 73,
+    });
 
     this.load.image("excavator-base", excavatorBase);
     this.load.image("excavator-arm", excavatorArm);
@@ -92,6 +112,29 @@ export default class BootScene extends Scene {
     this.load.image("farm-polluting-icon", farmPollutingIcon);
     this.load.image("farm-clean-text", farmCleanText);
     this.load.image("farm-polluting-text", farmPollutingText);
+
+    this.load.image("loading-scene-bg", loadingSceneBg);
+    this.load.image("start-scene-bg", startSceneBg);
+    this.load.image("story-scene-bg", storySceneBg);
+    this.load.image("start-scene-characters", startSceneCharacters);
+
+    this.load.image("story-kids", storyCharacterKids);
+    this.load.image("story-elder", storyCharacterElder);
+
+    this.load.image("game-logo", gameLogo);
+    this.load.image("kicd-logo", kicdLogo);
+    this.load.spritesheet("start-btn", startBtn, {
+      frameWidth: 241,
+      frameHeight: 129,
+    });
+    this.load.spritesheet("continue-btn", continueBtn, {
+      frameWidth: 283,
+      frameHeight: 169,
+    });
+    this.load.spritesheet("ok-btn", okBtn, {
+      frameWidth: 146,
+      frameHeight: 154,
+    });
   }
 
   init() {
@@ -117,7 +160,7 @@ export default class BootScene extends Scene {
   };
 
   createNewGame() {
-    this.scene.start("PlayScene", {
+    this.scene.start("StoryScene", {
       server: this.server,
       onGameOver: this.handleGameOver,
     });
