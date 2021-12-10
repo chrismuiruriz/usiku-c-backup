@@ -3,6 +3,7 @@ import BootScene from "./scenes/BootScene";
 import LoadingScene from "./scenes/LoadingScene";
 import StartScene from "./scenes/StartScene";
 import StoryScene from "./scenes/StoryScene";
+import GameSetupScene from "./scenes/GameSetupScene";
 import PlayScene from "./scenes/PlayScene";
 import GameOverScene from "./scenes/GameOverScene";
 
@@ -28,6 +29,7 @@ export default {
     LoadingScene,
     StartScene,
     StoryScene,
+    GameSetupScene,
     PlayScene,
     GameOverScene,
   ],

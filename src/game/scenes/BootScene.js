@@ -57,6 +57,8 @@ import okBtn from "../../assets/img/common/ok-btn-146x154.png";
 import storyCharacterKids from "../../assets/img/story/characters/char-happy.png";
 import storyCharacterElder from "../../assets/img/story/characters/elder-smile.png";
 
+import greenBackground from "../../assets/img/common/green-bg.png";
+
 export default class BootScene extends Scene {
   constructor() {
     super({ key: "BootScene" });
@@ -117,6 +119,7 @@ export default class BootScene extends Scene {
     this.load.image("start-scene-bg", startSceneBg);
     this.load.image("story-scene-bg", storySceneBg);
     this.load.image("start-scene-characters", startSceneCharacters);
+    this.load.image("green-bg", greenBackground);
 
     this.load.image("story-kids", storyCharacterKids);
     this.load.image("story-elder", storyCharacterElder);
@@ -160,7 +163,7 @@ export default class BootScene extends Scene {
   };
 
   createNewGame() {
-    this.scene.start("StoryScene", {
+    this.scene.start("GameSetupScene", {
       server: this.server,
       onGameOver: this.handleGameOver,
     });
