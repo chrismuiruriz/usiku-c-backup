@@ -400,6 +400,59 @@ export default class PlayScene extends Scene {
     this.star3 = this.add
       .sprite(90, this.star2.y + this.star2.height + 7, "stars")
       .setFrame(1);
+
+    //text style
+    const textStyle = {
+      font: "bold 16px Arial",
+      fill: "#FFFFFF",
+      align: "center",
+    };
+
+    //clock
+    this.clockBg = this.add.sprite(
+      this.star2.x + 75,
+      this.star2.y - 10,
+      "clock-bg"
+    );
+    this.clockBg.setScale(0.7);
+    this.clockText = this.add
+      .text(this.clockBg.x, this.clockBg.y, "00:00", textStyle)
+      .setOrigin(0.5)
+      .setAngle(-90);
+
+    //progress bar
+    this.progressBarGreen = this.add
+      .sprite(
+        this.starsBg.x - this.starsBg.width / 2 - 5,
+        this.star2.y,
+        "big-progress-bar"
+      )
+      .setOrigin(1, 1)
+      .setScale(1, 0.5);
+    this.progressBarGreen.setFrame(1);
+    this.progressBarGreen.setY(this.star2.y + this.progressBarGreen.height / 2);
+    //this.progressBarGreen.scaleY = 0.1;
+
+    this.progressBarRed = this.add
+      .sprite(
+        this.progressBarGreen.x - this.progressBarGreen.width + 2,
+        this.star2.y,
+        "big-progress-bar"
+      )
+      .setOrigin(1, 1)
+      .setAngle(180)
+      .setScale(1, 0.5);
+    this.progressBarRed.setFrame(0);
+    this.progressBarRed.setY(this.star2.y - this.progressBarRed.height / 2);
+    //this.progressBarRed.scaleY = 0.1;
+
+    //title bar
+    this.titleBar = this.add.sprite(0, this.star2.y, "brown-bar-title");
+    this.titleBar.x = this.titleBar.width / 2;
+    this.titleText = this.add
+      .text(this.titleBar.x, this.titleBar.y, "ROUND 1 OF 1", textStyle)
+      .setOrigin(0.5)
+      .setAngle(-90);
   }
 
   // collisions
