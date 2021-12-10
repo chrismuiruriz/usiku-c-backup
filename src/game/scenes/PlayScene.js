@@ -416,8 +416,8 @@ export default class PlayScene extends Scene {
 
     //text style
     const textStyle = {
-      font: "bold 14px Arial",
-      fill: "#FFFFFF",
+      font: "14px Arial",
+      fill: "#85F560",
       align: "center",
     };
 

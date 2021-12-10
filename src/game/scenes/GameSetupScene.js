@@ -2,6 +2,7 @@ import { Scene } from "phaser";
 import store from "../../store";
 
 import board from "../../assets/img/setup/board.png";
+import boardTitle from "../../assets/img/setup/board-title.png";
 
 export default class GameSetupScene extends Scene {
   constructor() {
@@ -12,6 +13,7 @@ export default class GameSetupScene extends Scene {
 
   preload() {
     this.load.image(`board`, board);
+    this.load.image(`board-title`, boardTitle);
   }
 
   async create(data) {
@@ -37,10 +39,17 @@ export default class GameSetupScene extends Scene {
       "board"
     );
 
+    this.boardTitle = this.add.sprite(
+      this.board.x,
+      this.board.y - this.board.height / 2 + 10,
+      "board-title"
+    );
+
+    this.createText();
+
     this.startButton = this.add
       .sprite(this.screenCenterX, 617, "continue-btn")
-      .setFrame(0)
-      .setScale(0.8);
+      .setFrame(0);
     this.startButton.setInteractive();
 
     this.startButton.on("pointerover", (pointer) => {
@@ -57,6 +66,43 @@ export default class GameSetupScene extends Scene {
     });
 
     this.createNavigationButtons();
+  }
+
+  createText() {
+    let styleConfig = {
+      color: "#FFFFFF",
+      fontSize: "34px",
+      fontFamily: "'Bubblegum Sans', cursive",
+      fontWeight: "Bold",
+      align: "center",
+    };
+
+    this.text2 = this.add.text(
+      this.board.x,
+      this.board.y - 20,
+      "Take turns playing at each station",
+      styleConfig
+    );
+    this.text2.setOrigin(0.5);
+    this.text2.width = this.board.width;
+
+    this.text1 = this.add.text(
+      this.text2.x,
+      this.text2.y - 100,
+      "Work together to clean the river",
+      styleConfig
+    );
+    this.text1.setOrigin(0.5);
+    this.text1.width = this.board.width;
+
+    this.text3 = this.add.text(
+      this.text2.x,
+      this.text2.y + 100,
+      "Play together on one device",
+      styleConfig
+    );
+    this.text3.setOrigin(0.5);
+    this.text3.width = this.board.width;
   }
 
   createNavigationButtons() {
@@ -84,7 +130,7 @@ export default class GameSetupScene extends Scene {
   }
 
   startNextScene() {
-    this.scene.start("StoryScene", {
+    this.scene.start("TakePositionScene", {
       server: {},
       onGameOver: {},
     });

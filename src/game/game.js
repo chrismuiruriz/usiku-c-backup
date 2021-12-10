@@ -4,6 +4,9 @@ import LoadingScene from "./scenes/LoadingScene";
 import StartScene from "./scenes/StartScene";
 import StoryScene from "./scenes/StoryScene";
 import GameSetupScene from "./scenes/GameSetupScene";
+import TakePositionScene from "./scenes/TakePositionScene";
+import ChatTimeScene from "./scenes/ChatTimeScene";
+import HowToPlayScene from "./scenes/HowToPlayScene";
 import PlayScene from "./scenes/PlayScene";
 import GameOverScene from "./scenes/GameOverScene";
 
@@ -30,6 +33,9 @@ export default {
     StartScene,
     StoryScene,
     GameSetupScene,
+    TakePositionScene,
+    ChatTimeScene,
+    HowToPlayScene,
     PlayScene,
     GameOverScene,
   ],
