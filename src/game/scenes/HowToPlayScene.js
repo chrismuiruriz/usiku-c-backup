@@ -1,10 +1,9 @@
 import { Scene } from "phaser";
-import store from "../../store";
 
-import label from "../../assets/img/take-position/labels-168x49.png";
-import bg from "../../assets/img/common/game-bg-no-filter.png";
+import howToPlayLabel from "../../assets/img/take-position/labels-168x49.png";
+import howToPlayBg from "../../assets/img/common/game-bg-no-filter.png";
 
-import board from "../../assets/img/how-to-play/board-bottom.png";
+import howToPlayBoard from "../../assets/img/how-to-play/board-bottom.png";
 
 export default class HowToPlayScene extends Scene {
   constructor() {
@@ -14,18 +13,16 @@ export default class HowToPlayScene extends Scene {
   }
 
   preload() {
-    this.load.image(`bg`, bg);
-    this.load.spritesheet(`label`, label, {
+    this.load.image(`how-to-play-bg`, howToPlayBg);
+    this.load.spritesheet(`how-to-play-label`, howToPlayLabel, {
       frameWidth: 168,
       frameHeight: 49,
     });
 
-    this.load.image(`board`, board);
+    this.load.image(`how-to-play-board`, howToPlayBoard);
   }
 
-  async create(data) {
-    const { width, height } = this.scale;
-
+  create(data) {
     this.screenWidth = this.cameras.main.width;
     this.screenHeight = this.cameras.main.height;
 
@@ -38,7 +35,9 @@ export default class HowToPlayScene extends Scene {
 
     this.selectionCounter = 0;
 
-    this.add.image(this.screenCenterX, this.screenCenterY, "bg").setOrigin(0.5);
+    this.add
+      .image(this.screenCenterX, this.screenCenterY, "how-to-play-bg")
+      .setOrigin(0.5);
 
     this.createBoards();
 
@@ -46,19 +45,19 @@ export default class HowToPlayScene extends Scene {
   }
 
   createBoards() {
-    this.boardTL = this.add.sprite(0, 0, "board").setAngle(180);
+    this.boardTL = this.add.sprite(0, 0, "how-to-play-board").setAngle(180);
     this.boardTL.x = this.boardTL.width / 2;
     this.boardTL.y = this.boardTL.height / 2;
 
-    this.boardTR = this.add.sprite(0, 0, "board").setAngle(180);
+    this.boardTR = this.add.sprite(0, 0, "how-to-play-board").setAngle(180);
     this.boardTR.x = this.screenWidth - this.boardTR.width / 2;
     this.boardTR.y = this.boardTR.height / 2;
 
-    this.boardBR = this.add.sprite(0, 0, "board");
+    this.boardBR = this.add.sprite(0, 0, "how-to-play-board");
     this.boardBR.x = this.screenWidth - this.boardBR.width / 2;
     this.boardBR.y = this.screenHeight - this.boardBR.height / 2;
 
-    this.boardBL = this.add.sprite(0, 0, "board");
+    this.boardBL = this.add.sprite(0, 0, "how-to-play-board");
     this.boardBL.x = this.boardBL.width / 2;
     this.boardBL.y = this.screenHeight - this.boardBL.height / 2;
   }
@@ -71,7 +70,7 @@ export default class HowToPlayScene extends Scene {
       wordWrap: { width: this.boardTL.width - 30, useAdvancedWrap: true },
     };
 
-    this.labLabel = this.add.image(this.boardTL.x, 0, "label");
+    this.labLabel = this.add.image(this.boardTL.x, 0, "how-to-play-label");
     this.labLabel.y =
       this.boardTL.y + this.boardTL.height / 2 - this.labLabel.height;
     this.labLabel.setFrame(3);
@@ -110,7 +109,7 @@ export default class HowToPlayScene extends Scene {
 
     /*********************/
 
-    this.farmLabel = this.add.image(this.boardTR.x, 0, "label");
+    this.farmLabel = this.add.image(this.boardTR.x, 0, "how-to-play-label");
     this.farmLabel.y =
       this.boardTR.y + this.boardTR.height / 2 - this.farmLabel.height;
     this.farmLabel.setFrame(2);
@@ -150,7 +149,7 @@ export default class HowToPlayScene extends Scene {
 
     /*********************/
 
-    this.factoryLabel = this.add.image(this.boardBR.x, 0, "label");
+    this.factoryLabel = this.add.image(this.boardBR.x, 0, "how-to-play-label");
     this.factoryLabel.y =
       this.boardBR.y - this.boardBR.height / 2 + this.factoryLabel.height;
     this.factoryLabel.setFrame(1);
@@ -189,7 +188,11 @@ export default class HowToPlayScene extends Scene {
 
     /*********************/
 
-    this.excavatorLabel = this.add.image(this.boardBL.x, 0, "label");
+    this.excavatorLabel = this.add.image(
+      this.boardBL.x,
+      0,
+      "how-to-play-label"
+    );
     this.excavatorLabel.y =
       this.boardBL.y - this.boardBL.height / 2 + this.excavatorLabel.height;
     this.excavatorLabel.setFrame(0);
@@ -257,6 +260,7 @@ export default class HowToPlayScene extends Scene {
   }
 
   startNextScene() {
+    this.scene.stop("HowToPlayScene");
     this.scene.start("PlayScene", {
       server: {},
       onGameOver: {},

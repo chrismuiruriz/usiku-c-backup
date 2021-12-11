@@ -1,5 +1,4 @@
 import { Scene } from "phaser";
-import store from "../../store";
 
 export default class StartScene extends Scene {
   constructor() {
@@ -9,14 +8,6 @@ export default class StartScene extends Scene {
   }
 
   async create(data) {
-    let styleConfig = {
-      color: "#FFFFFF",
-      fontSize: "18px",
-      fontFamily: "'Bubblegum Sans', cursive",
-      align: "center",
-    };
-    const { width, height } = this.scale;
-
     this.screenWidth = this.cameras.main.width;
     this.screenHeight = this.cameras.main.height;
 
@@ -60,6 +51,7 @@ export default class StartScene extends Scene {
   }
 
   startNextScene() {
+    this.scene.stop("StartScene");
     this.scene.start("StoryScene", {
       server: {},
       onGameOver: {},

@@ -2,7 +2,6 @@ import { Scene } from "phaser";
 import Quiz from "../data/Quiz";
 import LabStation from "../sections/LabStation";
 import FactoryStation from "../sections/FactoryStation";
-import store from "../../store";
 
 export default class PlayScene extends Scene {
   constructor() {
@@ -25,15 +24,17 @@ export default class PlayScene extends Scene {
 
   init() {
     // Some games configurations
+    this.isGamePaused = false;
 
     //game timer
-    this.gameTimerDuration = 100; //secs
-    this.gameTimerCountdown = 100; //secs
+    this.gameTimerDuration = 15; //secs
+    this.gameTimerCountdown = 15; //secs
     this.gameTimer = new Phaser.Time.TimerEvent({
       delay: this.gameTimerDuration * 1000,
     });
+    //use startAt: 10 * 1000; to handle pause = 90 secs
 
-    this.truckSpeed = 10000;
+    this.truckSpeed = 8000;
     this.firstTruckStartDelay = 2000;
     this.excavatorArmRotateSpeed = 447;
     this.bottleSpeedOnRiver = 2500;
@@ -200,15 +201,15 @@ export default class PlayScene extends Scene {
     cleanOrPolluteIcon.on("drop", (pointer, gameObject, dropZone) => {
       //get the difference between farmCleanButton and cleanOrPolluteIcon x position and check if it's less than 20
       if (Math.abs(this.farmCleanButton.x - cleanOrPolluteIcon.x) < 20) {
-        console.log("drop icon on clean");
         cleanOrPolluteIcon.destroy();
         this.labStation.createPebble(2);
+        this.updateProgressBar(10, "farm");
       }
 
       if (Math.abs(this.farmPollutingButton.x - cleanOrPolluteIcon.x) < 20) {
-        console.log("drop icon on pollute");
         cleanOrPolluteIcon.destroy();
         this.labStation.createPebble(1);
+        this.updateProgressBar(10, "farm");
       }
     });
   }
@@ -229,7 +230,7 @@ export default class PlayScene extends Scene {
       .setInteractive();
 
     this.menuButton.on("pointerdown", () => {
-      this.toggleFullScreen();
+      this.openMenu();
     });
   }
 
@@ -352,7 +353,7 @@ export default class PlayScene extends Scene {
     //add 10 truckFollow to trucks array
     for (var i = 0; i < 10; i++) {
       this.trucks.push(
-        this.add.follower(this.truckCurve, 0 - 30, 730, "truck")
+        this.add.follower(this.truckCurve, 0 - 30, 730, "trucks").setFrame(0)
       );
     }
 
@@ -366,7 +367,6 @@ export default class PlayScene extends Scene {
   trackTruck() {
     this.trucks.forEach((truck, idx) => {
       let truckX = truck.x;
-      let truckY = truck.y;
 
       //let's keep track of the moving truck
       if (truck.isFollowing()) {
@@ -374,7 +374,7 @@ export default class PlayScene extends Scene {
         if (
           Math.round(truckX) >= 455 &&
           Math.round(truckX) <= 456 &&
-          !truckY.isFull
+          !truck.isFull
         ) {
           this.trucks[idx].isActive = true;
           truck.pauseFollow();
@@ -491,7 +491,8 @@ export default class PlayScene extends Scene {
   }
 
   //update progress bar
-  updateProgressBar(point) {
+  //@param {string} source - excavator || factory || farm || lab
+  updateProgressBar(point, source) {
     // 10pts = 0.1
     //decrese red bar
     let newRedScaleY = this.progressBarRed.scaleY - 0.005;
@@ -503,6 +504,34 @@ export default class PlayScene extends Scene {
       this.progressBarGreen.scaleX,
       newGreenScaleY
     );
+
+    this.setGamePoints(10, source);
+  }
+
+  //set points
+  setGamePoints(points, source) {
+    switch (source) {
+      case "excavator":
+        sessionStorage.excavatorPoints = sessionStorage.excavatorPoints
+          ? parseInt(sessionStorage.excavatorPoints) + parseInt(points)
+          : 0;
+        break;
+      case "factory":
+        sessionStorage.factoryPoints = sessionStorage.factoryPoints
+          ? parseInt(sessionStorage.factoryPoints) + parseInt(points)
+          : 0;
+        break;
+      case "farm":
+        sessionStorage.farmPoints = sessionStorage.farmPoints
+          ? parseInt(sessionStorage.farmPoints) + parseInt(points)
+          : 0;
+        break;
+      case "lab":
+        sessionStorage.labPoints = sessionStorage.labPoints
+          ? parseInt(sessionStorage.labPoints) + parseInt(points)
+          : 0;
+        break;
+    }
   }
 
   // collisions
@@ -549,7 +578,6 @@ export default class PlayScene extends Scene {
       "pointerdown",
       (pointer, localX, localY, event) => {
         this.isPlayerTouchingExcavator = true;
-        this.updateProgressBar(10);
 
         this.excavatorArmTween = this.tweens.add({
           targets: this.excavatorArm,
@@ -584,7 +612,8 @@ export default class PlayScene extends Scene {
     let strProgress =
       absProgress < 10 ? `0${absProgress}:00` : `${absProgress}:00`;
     this.clockText.setText(strProgress);
-    if (absProgress >= this.gameTimerDuration) {
+    console.log;
+    if (absProgress <= 0) {
       //round over
       this.onGameTimerComplete();
     }
@@ -612,7 +641,11 @@ export default class PlayScene extends Scene {
 
   //this is called once the timer elapses
   onGameTimerComplete() {
-    //TODO: Something awesome
+    this.scene.stop("PlayScene");
+    this.scene.start("RoundCompleteScene", {
+      server: {},
+      onGameOver: {},
+    });
   }
 
   // draw a path in the river that the bottle will follow
@@ -710,7 +743,10 @@ export default class PlayScene extends Scene {
           this.trucks[idx].isActive = false;
           this.trucks[idx].isFull = true;
           setTimeout(() => {
+            truck.setFrame(1);
             truck.resumeFollow();
+
+            this.updateProgressBar(10, "excavator");
 
             //make sure we have some trucks left
             if (this.trucks.length > 1) {
@@ -725,6 +761,15 @@ export default class PlayScene extends Scene {
 
       this.bottle.setPosition(p.x, p.y);
     }
+  }
+
+  //open menu
+  openMenu() {
+    this.scene.stop("PlayScene");
+    this.scene.start("MenuScene", {
+      server: {},
+      onGameOver: {},
+    });
   }
 
   // helpers debug

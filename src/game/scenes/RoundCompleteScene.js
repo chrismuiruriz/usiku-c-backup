@@ -1,18 +1,17 @@
 import { Scene } from "phaser";
-import store from "../../store";
 
-import label from "../../assets/img/take-position/labels-168x49.png";
-import bg from "../../assets/img/common/game-bg-no-filter.png";
+import rc_label from "../../assets/img/take-position/labels-168x49.png";
+import rc_bg from "../../assets/img/common/game-bg-no-filter.png";
 
-import board from "../../assets/img/round-summary/board.png";
+import rc_board from "../../assets/img/round-summary/board.png";
 
-import groupScoreText from "../../assets/img/round-summary/group-score.png";
+import rc_groupScoreText from "../../assets/img/round-summary/group-score.png";
 
-import chatBubbles from "../../assets/img/round-summary/chatbubbles-441x163.png";
+import rc_chatBubbles from "../../assets/img/round-summary/chatbubbles-441x163.png";
 
-import starFrame from "../../assets/img/round-summary/star-frame.png";
+import rc_starFrame from "../../assets/img/round-summary/star-frame.png";
 
-import stars from "../../assets/img/round-summary/stars-39x38.png";
+import rc_stars from "../../assets/img/round-summary/stars-39x38.png";
 
 export default class RoundCompleteScene extends Scene {
   constructor() {
@@ -22,30 +21,28 @@ export default class RoundCompleteScene extends Scene {
   }
 
   preload() {
-    this.load.image(`bg`, bg);
-    this.load.spritesheet(`label`, label, {
+    this.load.image(`rc_bg`, rc_bg);
+    this.load.spritesheet(`rc_label`, rc_label, {
       frameWidth: 168,
       frameHeight: 49,
     });
 
-    this.load.image(`board`, board);
-    this.load.image(`group-score`, groupScoreText);
-    this.load.image(`star-frame`, starFrame);
+    this.load.image(`rc_board`, rc_board);
+    this.load.image(`rc_group-score`, rc_groupScoreText);
+    this.load.image(`rc_star-frame`, rc_starFrame);
 
-    this.load.spritesheet("chat-bubbles", chatBubbles, {
+    this.load.spritesheet("rc_chat-bubbles", rc_chatBubbles, {
       frameWidth: 441,
       frameHeight: 163,
     });
 
-    this.load.spritesheet("stars_", stars, {
+    this.load.spritesheet("rc_stars", rc_stars, {
       frameWidth: 39,
       frameHeight: 38,
     });
   }
 
   async create(data) {
-    const { width, height } = this.scale;
-
     this.screenWidth = this.cameras.main.width;
     this.screenHeight = this.cameras.main.height;
 
@@ -58,12 +55,22 @@ export default class RoundCompleteScene extends Scene {
 
     this.selectionCounter = 0;
 
-    this.add.image(this.screenCenterX, this.screenCenterY, "bg").setOrigin(0.5);
-
-    this.createBoard("group-score", 200, this.screenCenterY, 99, 2, false, 1);
+    this.add
+      .image(this.screenCenterX, this.screenCenterY, "rc_bg")
+      .setOrigin(0.5);
 
     this.createBoard(
-      "group-score",
+      "rc_group-score",
+      200,
+      this.screenCenterY,
+      99,
+      2,
+      false,
+      1
+    );
+
+    this.createBoard(
+      "rc_group-score",
       this.screenWidth - 200,
       this.screenCenterY,
       99,
@@ -86,7 +93,7 @@ export default class RoundCompleteScene extends Scene {
     isRotated,
     scaleFactor
   ) {
-    let board = this.add.sprite(0, 0, "board").setScale(scaleFactor);
+    let board = this.add.sprite(0, 0, "rc_board").setScale(scaleFactor);
     board.x = boardX;
     board.y = boardY;
 
@@ -101,7 +108,7 @@ export default class RoundCompleteScene extends Scene {
         board.y - (board.height * scaleFactor) / 2 - 15 * scaleFactor;
     }
 
-    let starFrame = this.add.image(0, 0, "star-frame").setScale(scaleFactor);
+    let starFrame = this.add.image(0, 0, "rc_star-frame").setScale(scaleFactor);
     starFrame.x = board.x;
     if (isRotated) {
       starFrame.setAngle(180);
@@ -128,7 +135,7 @@ export default class RoundCompleteScene extends Scene {
 
     for (let i = 0; i < 3; i++) {
       let star = this.add
-        .sprite(0, 0, "stars_")
+        .sprite(0, 0, "rc_stars")
         .setFrame(0)
         .setOrigin(0.5, 0.5)
         .setScale(scaleFactor);
@@ -168,7 +175,7 @@ export default class RoundCompleteScene extends Scene {
       this.checkIfAllSelected();
     });
 
-    this.labLabel = this.add.image(0, 0, "label").setOrigin(0, 0);
+    this.labLabel = this.add.image(0, 0, "rc_label").setOrigin(0, 0);
     this.labLabel.x = this.topLeftButton.x + this.topLeftButton.width - 20;
     this.labLabel.y = this.topLeftButton.y + 8;
     this.labLabel.setFrame(3);
@@ -192,7 +199,7 @@ export default class RoundCompleteScene extends Scene {
       this.checkIfAllSelected();
     });
 
-    this.farmLabel = this.add.image(0, 0, "label").setOrigin(0, 0);
+    this.farmLabel = this.add.image(0, 0, "rc_label").setOrigin(0, 0);
     this.farmLabel.x = this.topRightButton.x - this.topRightButton.width - 40;
     this.farmLabel.y = this.topRightButton.y + 8;
     this.farmLabel.setFrame(2);
@@ -217,7 +224,7 @@ export default class RoundCompleteScene extends Scene {
       //do something
     });
 
-    this.factoryLabel = this.add.image(0, 0, "label").setOrigin(1, 1);
+    this.factoryLabel = this.add.image(0, 0, "rc_label").setOrigin(1, 1);
     this.factoryLabel.x =
       this.screenWidth - this.bottomRightButton.width / 2 - 50;
     this.factoryLabel.y = this.screenHeight - 8;
@@ -243,7 +250,7 @@ export default class RoundCompleteScene extends Scene {
       //do something
     });
 
-    this.excavatorLabel = this.add.image(0, 0, "label").setOrigin(0, 1);
+    this.excavatorLabel = this.add.image(0, 0, "rc_label").setOrigin(0, 1);
     this.excavatorLabel.x =
       this.bottomLeftButton.x + this.bottomLeftButton.width - 30;
     this.excavatorLabel.y = this.screenHeight - 8;
@@ -260,7 +267,7 @@ export default class RoundCompleteScene extends Scene {
 
     /*****************/
 
-    let chatBubbleBL = this.add.sprite(0, 0, "chat-bubbles").setOrigin(0, 1);
+    let chatBubbleBL = this.add.sprite(0, 0, "rc_chat-bubbles").setOrigin(0, 1);
     chatBubbleBL.x = 0;
     chatBubbleBL.y = this.screenHeight - chatBubbleBL.height / 2;
     chatBubbleBL.setFrame(0);
@@ -271,7 +278,7 @@ export default class RoundCompleteScene extends Scene {
 
     /*****************/
 
-    let chatBubbleBR = this.add.sprite(0, 0, "chat-bubbles").setOrigin(1, 1);
+    let chatBubbleBR = this.add.sprite(0, 0, "rc_chat-bubbles").setOrigin(1, 1);
     chatBubbleBR.x = this.screenWidth;
     chatBubbleBR.y = this.screenHeight - chatBubbleBR.height / 2;
     chatBubbleBR.setFrame(1);
@@ -282,7 +289,7 @@ export default class RoundCompleteScene extends Scene {
 
     /*****************/
 
-    let chatBubbleTR = this.add.sprite(0, 0, "chat-bubbles").setOrigin(1, 0);
+    let chatBubbleTR = this.add.sprite(0, 0, "rc_chat-bubbles").setOrigin(1, 0);
     chatBubbleTR.x = this.screenWidth;
     chatBubbleTR.y = chatBubbleTR.height / 2;
     chatBubbleTR.setFrame(2);
@@ -296,7 +303,7 @@ export default class RoundCompleteScene extends Scene {
 
     /*****************/
 
-    let chatBubbleTL = this.add.sprite(0, 0, "chat-bubbles").setOrigin(0, 0);
+    let chatBubbleTL = this.add.sprite(0, 0, "rc_chat-bubbles").setOrigin(0, 0);
     chatBubbleTL.x = 0;
     chatBubbleTL.y = chatBubbleTL.height / 2;
     chatBubbleTL.setFrame(3);
@@ -340,8 +347,10 @@ export default class RoundCompleteScene extends Scene {
   }
 
   startNextScene() {
-    this.scene.start("PlayScene", {
+    this.scene.stop("RoundCompleteScene");
+    this.scene.start("ChatTimeScene", {
       server: {},
+      preScene: "RoundCompleteScene",
       onGameOver: {},
     });
   }

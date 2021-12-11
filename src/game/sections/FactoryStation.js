@@ -223,6 +223,7 @@ export default class FactoryStation {
 
   isCorrect() {
     this.clearQuiz();
+    this.scene.updateProgressBar(10, "factory");
     this.question.setText("Correct!");
   }
 

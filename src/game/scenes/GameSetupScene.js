@@ -1,8 +1,7 @@
 import { Scene } from "phaser";
-import store from "../../store";
 
-import board from "../../assets/img/setup/board.png";
-import boardTitle from "../../assets/img/setup/board-title.png";
+import gameSetUpBoard from "../../assets/img/setup/board.png";
+import gameSetUpBoardTitle from "../../assets/img/setup/board-title.png";
 
 export default class GameSetupScene extends Scene {
   constructor() {
@@ -12,8 +11,8 @@ export default class GameSetupScene extends Scene {
   }
 
   preload() {
-    this.load.image(`board`, board);
-    this.load.image(`board-title`, boardTitle);
+    this.load.image(`game-setup-board`, gameSetUpBoard);
+    this.load.image(`game-setup-board-title`, gameSetUpBoardTitle);
   }
 
   async create(data) {
@@ -36,13 +35,13 @@ export default class GameSetupScene extends Scene {
     this.board = this.add.sprite(
       this.screenCenterX,
       this.screenCenterY,
-      "board"
+      "game-setup-board"
     );
 
     this.boardTitle = this.add.sprite(
       this.board.x,
       this.board.y - this.board.height / 2 + 10,
-      "board-title"
+      "game-setup-board-title"
     );
 
     this.createText();
@@ -130,6 +129,7 @@ export default class GameSetupScene extends Scene {
   }
 
   startNextScene() {
+    this.scene.stop("GameSetupScene");
     this.scene.start("TakePositionScene", {
       server: {},
       onGameOver: {},

@@ -35,6 +35,7 @@ import labStationGrid from "../../assets/img/game-play/grid.png";
 import excavatorBase from "../../assets/img/game-play/excavator-base.png";
 import excavatorArm from "../../assets/img/game-play/excavator-arm.png";
 import truck from "../../assets/img/game-play/truck-empty.png";
+import trucks from "../../assets/img/game-play/trucks-59x37.png";
 
 import farmCleanIcon from "../../assets/img/game-play/farm-clean-icon.png";
 import farmPollutingIcon from "../../assets/img/game-play/farm-polluting-icon.png";
@@ -105,7 +106,10 @@ export default class BootScene extends Scene {
       frameWidth: 73,
       frameHeight: 73,
     });
-
+    this.load.spritesheet("trucks", trucks, {
+      frameWidth: 59,
+      frameHeight: 37,
+    });
     this.load.image("excavator-base", excavatorBase);
     this.load.image("excavator-arm", excavatorArm);
     this.load.image("truck", truck);

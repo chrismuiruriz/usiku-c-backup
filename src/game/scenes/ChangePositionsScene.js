@@ -1,13 +1,12 @@
 import { Scene } from "phaser";
-import store from "../../store";
 
-import label from "../../assets/img/take-position/labels-168x49.png";
-import bg from "../../assets/img/change-position/change-position-bg.png";
+import cp_label from "../../assets/img/take-position/labels-168x49.png";
+import cp_bg from "../../assets/img/change-position/change-position-bg.png";
 
-import chatTop from "../../assets/img/take-position/chat-top.png";
-import chatBottom from "../../assets/img/take-position/chat-bottom.png";
+import cp_chatTop from "../../assets/img/take-position/chat-top.png";
+import cp_chatBottom from "../../assets/img/take-position/chat-bottom.png";
 
-import title from "../../assets/img/change-position/move-to-the-right.png";
+import cp_title from "../../assets/img/change-position/move-to-the-right.png";
 
 export default class ChangePositionsScene extends Scene {
   constructor() {
@@ -17,21 +16,19 @@ export default class ChangePositionsScene extends Scene {
   }
 
   preload() {
-    this.load.image(`bg`, bg);
-    this.load.spritesheet(`label`, label, {
+    this.load.image(`cp_bg`, cp_bg);
+    this.load.spritesheet(`cp_label`, cp_label, {
       frameWidth: 168,
       frameHeight: 49,
     });
 
-    this.load.image(`chat-top`, chatTop);
-    this.load.image(`chat-bottom`, chatBottom);
+    this.load.image(`cp_chat-top`, cp_chatTop);
+    this.load.image(`cp_chat-bottom`, cp_chatBottom);
 
-    this.load.image(`title`, title);
+    this.load.image(`cp_title`, cp_title);
   }
 
   async create(data) {
-    const { width, height } = this.scale;
-
     this.screenWidth = this.cameras.main.width;
     this.screenHeight = this.cameras.main.height;
 
@@ -44,23 +41,21 @@ export default class ChangePositionsScene extends Scene {
 
     this.selectionCounter = 0;
 
-    this.add.image(this.screenCenterX, this.screenCenterY, "bg").setOrigin(0.5);
+    this.add
+      .image(this.screenCenterX, this.screenCenterY, "cp_bg")
+      .setOrigin(0.5);
 
     //add temporary text
 
-    let styleConfig = {
-      fill: "#E6C43F",
-      font: "bold 42px cursive",
-      align: "center",
-    };
-
     this.text1 = this.add
-      .image(this.screenCenterX, 0, "title")
+      .image(this.screenCenterX, 0, "cp_title")
       .setOrigin(0.5)
       .setAngle(180);
     this.text1.y = this.screenCenterY - this.text1.height / 2;
 
-    this.text2 = this.add.image(this.screenCenterX, 0, "title").setOrigin(0.5);
+    this.text2 = this.add
+      .image(this.screenCenterX, 0, "cp_title")
+      .setOrigin(0.5);
     this.text2.y = this.screenCenterY + this.text2.height / 2;
 
     this.createChatBubbles();
@@ -69,9 +64,9 @@ export default class ChangePositionsScene extends Scene {
   }
 
   createChatBubbles() {
-    this.add.image(this.screenCenterX, 0, "chat-top").setOrigin(0.5, 0);
+    this.add.image(this.screenCenterX, 0, "cp_chat-top").setOrigin(0.5, 0);
     this.add
-      .image(this.screenCenterX, this.screenHeight, "chat-bottom")
+      .image(this.screenCenterX, this.screenHeight, "cp_chat-bottom")
       .setOrigin(0.5, 1);
   }
 
@@ -94,7 +89,7 @@ export default class ChangePositionsScene extends Scene {
     this.labLabel = this.add.image(
       this.topLeftButton.x,
       this.topLeftButton.y + this.topLeftButton.height / 2 + 30,
-      "label"
+      "cp_label"
     );
     this.labLabel.setFrame(3);
 
@@ -118,7 +113,7 @@ export default class ChangePositionsScene extends Scene {
     this.farmLabel = this.add.image(
       this.topRightButton.x,
       this.topRightButton.y + this.topRightButton.height / 2 + 30,
-      "label"
+      "cp_label"
     );
     this.farmLabel.setFrame(2);
 
@@ -141,7 +136,7 @@ export default class ChangePositionsScene extends Scene {
     this.factoryLabel = this.add.image(
       this.bottomRightButton.x,
       this.bottomRightButton.y + this.bottomRightButton.height / 2 + 30,
-      "label"
+      "cp_label"
     );
     this.factoryLabel.setFrame(1);
 
@@ -163,7 +158,7 @@ export default class ChangePositionsScene extends Scene {
     this.excavatorLabel = this.add.image(
       this.bottomLeftButton.x,
       this.bottomLeftButton.y + this.bottomLeftButton.height / 2 + 30,
-      "label"
+      "cp_label"
     );
     this.excavatorLabel.setFrame(0);
   }
@@ -199,7 +194,8 @@ export default class ChangePositionsScene extends Scene {
   }
 
   startNextScene() {
-    this.scene.start("StoryScene", {
+    this.scene.stop("ChangePositionsScene");
+    this.scene.start("GameSummaryScene", {
       server: {},
       onGameOver: {},
     });

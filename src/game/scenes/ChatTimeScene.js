@@ -1,7 +1,6 @@
 import { Scene } from "phaser";
-import store from "../../store";
 
-import bg from "../../assets/img/chat-time/chat-time-bg.png";
+import chatTimeBg from "../../assets/img/chat-time/chat-time-bg.png";
 import chatTimeText from "../../assets/img/chat-time/chat-time.png";
 
 import chatTop from "../../assets/img/take-position/chat-top.png";
@@ -23,7 +22,7 @@ export default class ChatTimeScene extends Scene {
   }
 
   preload() {
-    this.load.image(`bg`, bg);
+    this.load.image(`chat-time-bg`, chatTimeBg);
     this.load.image(`chat-time-text`, chatTimeText);
 
     this.load.image(`chat-top`, chatTop);
@@ -31,7 +30,9 @@ export default class ChatTimeScene extends Scene {
   }
 
   async create(data) {
-    const { width, height } = this.scale;
+    const { preScene } = data;
+
+    this.previousScene = preScene;
 
     this.screenWidth = this.cameras.main.width;
     this.screenHeight = this.cameras.main.height;
@@ -45,7 +46,9 @@ export default class ChatTimeScene extends Scene {
 
     this.selectionCounter = 0;
 
-    this.add.image(this.screenCenterX, this.screenCenterY, "bg").setOrigin(0.5);
+    this.add
+      .image(this.screenCenterX, this.screenCenterY, "chat-time-bg")
+      .setOrigin(0.5);
 
     this.clockBg = this.add.sprite(
       this.screenCenterX,
@@ -133,15 +136,24 @@ export default class ChatTimeScene extends Scene {
     let strProgress =
       absProgress < 10 ? `0${absProgress}:00` : `${absProgress}:00`;
     this.clockText.setText(strProgress);
-    if (absProgress >= this.gameTimerDuration) {
-      //if from game resume to game
-      //else show how to play
-      this.startNextScene();
-      //this.resetGameTimer();
+    console.log(`absProgress`, absProgress);
+    console.log(`this.gameTimerDuration`, this.gameTimerDuration);
+
+    if (absProgress <= 0) {
+      if (this.previousScene === "TakePositionScene") {
+        this.startNextScene();
+      } else {
+        this.scene.stop("ChatTimeScene");
+        this.scene.start("ChangePositionsScene", {
+          server: {},
+          onGameOver: {},
+        });
+      }
     }
   }
 
   startNextScene() {
+    this.scene.stop("ChatTimeScene");
     this.scene.start("HowToPlayScene", {
       server: {},
       onGameOver: {},

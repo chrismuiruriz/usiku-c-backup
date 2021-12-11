@@ -1,10 +1,9 @@
 import { Scene } from "phaser";
-import store from "../../store";
 
-import label from "../../assets/img/take-position/labels-168x49.png";
-import bg from "../../assets/img/common/game-bg-no-filter.png";
+import gs_label from "../../assets/img/take-position/labels-168x49.png";
+import gs_bg from "../../assets/img/common/game-bg-no-filter.png";
 
-import board from "../../assets/img/round-summary/board.png";
+import gs_board from "../../assets/img/round-summary/board.png";
 
 import groupScoreText from "../../assets/img/round-summary/group-score.png";
 
@@ -26,13 +25,13 @@ export default class GameSummaryScene extends Scene {
   }
 
   preload() {
-    this.load.image(`bg`, bg);
-    this.load.spritesheet(`label`, label, {
+    this.load.image(`gs_bg`, gs_bg);
+    this.load.spritesheet(`gs_label`, gs_label, {
       frameWidth: 168,
       frameHeight: 49,
     });
 
-    this.load.image(`board`, board);
+    this.load.image(`gs_board`, gs_board);
     this.load.image(`group-score`, groupScoreText);
     this.load.image(`star-frame`, starFrame);
 
@@ -55,8 +54,6 @@ export default class GameSummaryScene extends Scene {
   }
 
   async create(data) {
-    const { width, height } = this.scale;
-
     this.screenWidth = this.cameras.main.width;
     this.screenHeight = this.cameras.main.height;
 
@@ -69,7 +66,9 @@ export default class GameSummaryScene extends Scene {
 
     this.selectionCounter = 0;
 
-    this.add.image(this.screenCenterX, this.screenCenterY, "bg").setOrigin(0.5);
+    this.add
+      .image(this.screenCenterX, this.screenCenterY, "gs_bg")
+      .setOrigin(0.5);
 
     this.add
       .image(this.screenCenterX, this.screenCenterY, "game-complete-text")
@@ -202,7 +201,7 @@ export default class GameSummaryScene extends Scene {
     scaleFactor,
     frame
   ) {
-    let board = this.add.sprite(0, 0, "board").setScale(scaleFactor);
+    let board = this.add.sprite(0, 0, "gs_board").setScale(scaleFactor);
     board.x = boardX;
     board.y = boardY;
 
@@ -459,7 +458,8 @@ export default class GameSummaryScene extends Scene {
   }
 
   startNextScene() {
-    this.scene.start("PlayScene", {
+    this.scene.stop("GameSummaryScene");
+    this.scene.start("LoadingScene", {
       server: {},
       onGameOver: {},
     });

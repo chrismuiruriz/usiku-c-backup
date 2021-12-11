@@ -1,5 +1,4 @@
 import { Scene } from "phaser";
-import store from "../../store";
 
 import chat1 from "../../assets/img/story/chats/1-david.png";
 import chat2 from "../../assets/img/story/chats/2-kezia.png";
@@ -216,6 +215,7 @@ export default class StoryScene extends Scene {
   }
 
   startNextScene() {
+    this.scene.stop("StoryScene");
     this.scene.start("GameSetupScene", {
       server: {},
       onGameOver: {},

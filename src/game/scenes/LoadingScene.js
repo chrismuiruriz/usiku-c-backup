@@ -1,5 +1,4 @@
 import { Scene } from "phaser";
-import store from "../../store";
 
 export default class LoadingScene extends Scene {
   constructor() {
@@ -53,6 +52,7 @@ export default class LoadingScene extends Scene {
   }
 
   startNextScene() {
+    this.scene.stop("LoadingScene");
     this.scene.start("StartScene", {
       server: {},
       onGameOver: {},

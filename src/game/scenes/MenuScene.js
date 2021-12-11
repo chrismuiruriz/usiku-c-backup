@@ -1,8 +1,4 @@
 import { Scene } from "phaser";
-import store from "../../store";
-
-import board from "../../assets/img/setup/board.png";
-import boardTitle from "../../assets/img/setup/board-title.png";
 
 import menuButtons from "../../assets/img/menu/menu-buttons.png";
 
@@ -14,8 +10,6 @@ export default class MenuScene extends Scene {
   }
 
   preload() {
-    this.load.image(`board`, board);
-    this.load.image(`board-title`, boardTitle);
     this.load.spritesheet(`menu-buttons`, menuButtons, {
       frameWidth: 314,
       frameHeight: 64,
@@ -23,8 +17,6 @@ export default class MenuScene extends Scene {
   }
 
   async create(data) {
-    const { width, height } = this.scale;
-
     this.screenWidth = this.cameras.main.width;
     this.screenHeight = this.cameras.main.height;
 
@@ -138,31 +130,19 @@ export default class MenuScene extends Scene {
   }
 
   createNavigationButtons() {
-    this.backBtn = this.add.sprite(50, 50, "navigation-btn").setFrame(0);
-    this.backBtn.setInteractive();
-
-    this.backBtn.on("pointerdown", (pointer) => {
-      this.scene.start("StartScene", {
-        server: {},
-        onGameOver: {},
-      });
-    });
-
     this.closeBtn = this.add
-      .sprite(50, this.backBtn.y + this.backBtn.height + 10, "navigation-btn")
+      .sprite(50, 50, "navigation-btn")
       .setFrame(1)
       .setInteractive();
 
     this.closeBtn.on("pointerdown", (pointer) => {
-      this.scene.start("LoadingScene", {
-        server: {},
-        onGameOver: {},
-      });
+      this.startNextScene();
     });
   }
 
   startNextScene() {
-    this.scene.start("TakePositionScene", {
+    this.scene.stop("MenuScene");
+    this.scene.start("PlayScene", {
       server: {},
       onGameOver: {},
     });
