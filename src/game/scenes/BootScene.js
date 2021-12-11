@@ -163,7 +163,7 @@ export default class BootScene extends Scene {
   };
 
   createNewGame() {
-    this.scene.start("GameSummaryScene", {
+    this.scene.start("LoadingScene", {
       server: this.server,
       onGameOver: this.handleGameOver,
     });

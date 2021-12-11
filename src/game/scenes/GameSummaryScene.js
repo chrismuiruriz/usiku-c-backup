@@ -14,6 +14,10 @@ import starFrame from "../../assets/img/round-summary/star-frame.png";
 
 import stars from "../../assets/img/round-summary/stars-39x38.png";
 
+import rounds from "../../assets/img/game-complete/rounds-241x70.png";
+
+import gameCompleteText from "../../assets/img/game-complete/game-complete.png";
+
 export default class GameSummaryScene extends Scene {
   constructor() {
     super({
@@ -32,9 +36,16 @@ export default class GameSummaryScene extends Scene {
     this.load.image(`group-score`, groupScoreText);
     this.load.image(`star-frame`, starFrame);
 
+    this.load.image(`game-complete-text`, gameCompleteText);
+
     this.load.spritesheet("chat-bubbles", chatBubbles, {
       frameWidth: 441,
       frameHeight: 163,
+    });
+
+    this.load.spritesheet("rounds", rounds, {
+      frameWidth: 241,
+      frameHeight: 70,
     });
 
     this.load.spritesheet("stars_", stars, {
@@ -60,25 +71,125 @@ export default class GameSummaryScene extends Scene {
 
     this.add.image(this.screenCenterX, this.screenCenterY, "bg").setOrigin(0.5);
 
-    this.createBoard("group-score", 230, 80, 99, 2, true, 0.5);
+    this.add
+      .image(this.screenCenterX, this.screenCenterY, "game-complete-text")
+      .setOrigin(0.5, 0);
 
-    this.createBoard("group-score", 390, 80, 99, 2, true, 0.5);
+    this.add
+      .image(this.screenCenterX, this.screenCenterY, "game-complete-text")
+      .setOrigin(0.5, 0)
+      .setAngle(180);
 
-    this.createBoard("group-score", 550, 80, 99, 2, true, 0.5);
+    this.scoreBoardScaleFactor = 0.6;
+    this.scoreBoardDistance = 200;
+    this.scoreBoardTopY = 200;
+    this.scoreBoardBottomY = this.screenHeight + 300;
 
-    this.createBoard("group-score", 710, 80, 99, 2, true, 0.5);
+    this.createTopScoreBoards();
+
+    this.createBottomScoreBoards();
+
+    this.createButtons();
+  }
+
+  createTopScoreBoards() {
+    this.createBoard(
+      "rounds",
+      this.screenCenterX -
+        this.scoreBoardDistance * this.scoreBoardScaleFactor -
+        this.scoreBoardDistance,
+      this.scoreBoardTopY * this.scoreBoardScaleFactor,
+      99,
+      2,
+      true,
+      this.scoreBoardScaleFactor,
+      3
+    );
 
     this.createBoard(
-      "group-score",
-      this.screenWidth - 200,
-      this.screenCenterY,
+      "rounds",
+      this.screenCenterX - this.scoreBoardDistance * this.scoreBoardScaleFactor,
+      this.scoreBoardTopY * this.scoreBoardScaleFactor,
       99,
-      1,
+      2,
       true,
+      this.scoreBoardScaleFactor,
+      2
+    );
+
+    this.createBoard(
+      "rounds",
+      this.screenCenterX + this.scoreBoardDistance * this.scoreBoardScaleFactor,
+      this.scoreBoardTopY * this.scoreBoardScaleFactor,
+      99,
+      2,
+      true,
+      this.scoreBoardScaleFactor,
       1
     );
 
-    this.createButtons();
+    this.createBoard(
+      "rounds",
+      this.screenCenterX +
+        this.scoreBoardDistance * this.scoreBoardScaleFactor +
+        this.scoreBoardDistance,
+      this.scoreBoardTopY * this.scoreBoardScaleFactor,
+      99,
+      2,
+      true,
+      this.scoreBoardScaleFactor,
+      0
+    );
+  }
+
+  createBottomScoreBoards() {
+    this.createBoard(
+      "rounds",
+      this.screenCenterX -
+        this.scoreBoardDistance * this.scoreBoardScaleFactor -
+        this.scoreBoardDistance,
+      this.scoreBoardBottomY * this.scoreBoardScaleFactor,
+      99,
+      2,
+      false,
+      this.scoreBoardScaleFactor,
+      0
+    );
+
+    this.createBoard(
+      "rounds",
+      this.screenCenterX - this.scoreBoardDistance * this.scoreBoardScaleFactor,
+      this.scoreBoardBottomY * this.scoreBoardScaleFactor,
+      99,
+      2,
+      false,
+      this.scoreBoardScaleFactor,
+      1
+    );
+
+    this.createBoard(
+      "rounds",
+      this.screenCenterX + this.scoreBoardDistance * this.scoreBoardScaleFactor,
+      this.scoreBoardBottomY * this.scoreBoardScaleFactor,
+      99,
+      2,
+      false,
+      this.scoreBoardScaleFactor,
+      2
+    );
+
+    this.createBoard(
+      "rounds",
+      this.screenCenterX +
+        this.scoreBoardDistance * this.scoreBoardScaleFactor +
+        this.scoreBoardDistance,
+      this.scoreBoardBottomY * this.scoreBoardScaleFactor,
+      99,
+      2,
+      false,
+      this.scoreBoardScaleFactor,
+      3
+    );
   }
 
   createBoard(
@@ -88,13 +199,17 @@ export default class GameSummaryScene extends Scene {
     scoresText,
     starsCount,
     isRotated,
-    scaleFactor
+    scaleFactor,
+    frame
   ) {
     let board = this.add.sprite(0, 0, "board").setScale(scaleFactor);
     board.x = boardX;
     board.y = boardY;
 
-    let groupScore = this.add.image(0, 0, titleTexture).setScale(scaleFactor);
+    let groupScore = this.add
+      .image(0, 0, titleTexture)
+      .setScale(scaleFactor)
+      .setFrame(frame);
     groupScore.x = board.x;
     if (isRotated) {
       groupScore.setAngle(180);

@@ -136,13 +136,13 @@ export default class ChatTimeScene extends Scene {
     if (absProgress >= this.gameTimerDuration) {
       //if from game resume to game
       //else show how to play
-      //this.startNextScene();
+      this.startNextScene();
       //this.resetGameTimer();
     }
   }
 
   startNextScene() {
-    this.scene.start("StoryScene", {
+    this.scene.start("HowToPlayScene", {
       server: {},
       onGameOver: {},
     });

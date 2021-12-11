@@ -216,7 +216,7 @@ export default class StoryScene extends Scene {
   }
 
   startNextScene() {
-    this.scene.start("StoryScene", {
+    this.scene.start("GameSetupScene", {
       server: {},
       onGameOver: {},
     });

@@ -196,7 +196,7 @@ export default class TakePositionScene extends Scene {
   }
 
   startNextScene() {
-    this.scene.start("StoryScene", {
+    this.scene.start("ChatTimeScene", {
       server: {},
       onGameOver: {},
     });
