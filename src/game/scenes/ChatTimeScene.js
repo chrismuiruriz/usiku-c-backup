@@ -6,6 +6,8 @@ import chatTimeText from "../../assets/img/chat-time/chat-time.png";
 import chatTop from "../../assets/img/take-position/chat-top.png";
 import chatBottom from "../../assets/img/take-position/chat-bottom.png";
 
+import GameState from "../data/GameState";
+
 export default class ChatTimeScene extends Scene {
   constructor() {
     super({
@@ -34,6 +36,8 @@ export default class ChatTimeScene extends Scene {
 
     this.previousScene = preScene;
 
+    this.gameState = new GameState();
+
     this.screenWidth = this.cameras.main.width;
     this.screenHeight = this.cameras.main.height;
 
@@ -55,12 +59,16 @@ export default class ChatTimeScene extends Scene {
       this.screenCenterY,
       "clock-bg"
     );
+
     this.clockText = this.add
-      .text(this.clockBg.x, this.clockBg.y, "00:00", {
-        font: "18px Arial",
-        fill: "#85F560",
-        align: "center",
-      })
+      .bitmapText(
+        this.clockBg.x,
+        this.clockBg.y,
+        "segments-basic",
+        "00:00",
+        20,
+        Phaser.Display.Align.CENTER
+      )
       .setOrigin(0.5)
       .setAngle(-90);
 
@@ -136,19 +144,35 @@ export default class ChatTimeScene extends Scene {
     let strProgress =
       absProgress < 10 ? `0${absProgress}:00` : `${absProgress}:00`;
     this.clockText.setText(strProgress);
-    console.log(`absProgress`, absProgress);
-    console.log(`this.gameTimerDuration`, this.gameTimerDuration);
-
     if (absProgress <= 0) {
       if (this.previousScene === "TakePositionScene") {
         this.startNextScene();
       } else {
-        this.scene.stop("ChatTimeScene");
-        this.scene.start("ChangePositionsScene", {
-          server: {},
-          onGameOver: {},
-        });
+        this.startNextRound();
       }
+    }
+  }
+
+  startNextRound() {
+    //times up
+    //let's check if we have other rounds to play
+    //if players have played all rounds, show game summary scene else, show change positions
+
+    if (this.gameState.getCurrentRound() >= 4) {
+      this.scene.stop("ChatTimeScene");
+      this.scene.start("GameSummaryScene", {
+        server: {},
+        onGameOver: {},
+      });
+    } else {
+      let nextRound = this.gameState.getCurrentRound() + 1;
+      this.gameState.setCurrentRound(nextRound);
+
+      this.scene.stop("ChatTimeScene");
+      this.scene.start("ChangePositionsScene", {
+        server: {},
+        onGameOver: {},
+      });
     }
   }
 

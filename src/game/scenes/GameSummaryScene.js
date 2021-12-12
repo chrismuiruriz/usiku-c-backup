@@ -17,6 +17,8 @@ import rounds from "../../assets/img/game-complete/rounds-241x70.png";
 
 import gameCompleteText from "../../assets/img/game-complete/game-complete.png";
 
+import GameState from "../data/GameState";
+
 export default class GameSummaryScene extends Scene {
   constructor() {
     super({
@@ -60,11 +62,14 @@ export default class GameSummaryScene extends Scene {
     this.screenCenterX = this.cameras.main.worldView.x + this.screenWidth / 2;
     this.screenCenterY = this.cameras.main.worldView.y + this.screenHeight / 2;
 
+    this.gameState = new GameState();
+
     this.chats = [];
     this.currentChat = 1;
     this.chatCounter = 0;
 
     this.selectionCounter = 0;
+    this.selections = [];
 
     this.add
       .image(this.screenCenterX, this.screenCenterY, "gs_bg")
@@ -89,6 +94,9 @@ export default class GameSummaryScene extends Scene {
     this.createBottomScoreBoards();
 
     this.createButtons();
+
+    //let's make sure we clear everything
+    this.gameState.resetScores()
   }
 
   createTopScoreBoards() {
@@ -98,7 +106,7 @@ export default class GameSummaryScene extends Scene {
         this.scoreBoardDistance * this.scoreBoardScaleFactor -
         this.scoreBoardDistance,
       this.scoreBoardTopY * this.scoreBoardScaleFactor,
-      99,
+      this.gameState.getRoundScores(4),
       2,
       true,
       this.scoreBoardScaleFactor,
@@ -109,7 +117,7 @@ export default class GameSummaryScene extends Scene {
       "rounds",
       this.screenCenterX - this.scoreBoardDistance * this.scoreBoardScaleFactor,
       this.scoreBoardTopY * this.scoreBoardScaleFactor,
-      99,
+      this.gameState.getRoundScores(3),
       2,
       true,
       this.scoreBoardScaleFactor,
@@ -120,7 +128,7 @@ export default class GameSummaryScene extends Scene {
       "rounds",
       this.screenCenterX + this.scoreBoardDistance * this.scoreBoardScaleFactor,
       this.scoreBoardTopY * this.scoreBoardScaleFactor,
-      99,
+      this.gameState.getRoundScores(2),
       2,
       true,
       this.scoreBoardScaleFactor,
@@ -133,7 +141,7 @@ export default class GameSummaryScene extends Scene {
         this.scoreBoardDistance * this.scoreBoardScaleFactor +
         this.scoreBoardDistance,
       this.scoreBoardTopY * this.scoreBoardScaleFactor,
-      99,
+      this.gameState.getRoundScores(1),
       2,
       true,
       this.scoreBoardScaleFactor,
@@ -148,7 +156,7 @@ export default class GameSummaryScene extends Scene {
         this.scoreBoardDistance * this.scoreBoardScaleFactor -
         this.scoreBoardDistance,
       this.scoreBoardBottomY * this.scoreBoardScaleFactor,
-      99,
+      this.gameState.getRoundScores(1),
       2,
       false,
       this.scoreBoardScaleFactor,
@@ -159,7 +167,7 @@ export default class GameSummaryScene extends Scene {
       "rounds",
       this.screenCenterX - this.scoreBoardDistance * this.scoreBoardScaleFactor,
       this.scoreBoardBottomY * this.scoreBoardScaleFactor,
-      99,
+      this.gameState.getRoundScores(2),
       2,
       false,
       this.scoreBoardScaleFactor,
@@ -170,7 +178,7 @@ export default class GameSummaryScene extends Scene {
       "rounds",
       this.screenCenterX + this.scoreBoardDistance * this.scoreBoardScaleFactor,
       this.scoreBoardBottomY * this.scoreBoardScaleFactor,
-      99,
+      this.gameState.getRoundScores(3),
       2,
       false,
       this.scoreBoardScaleFactor,
@@ -183,7 +191,7 @@ export default class GameSummaryScene extends Scene {
         this.scoreBoardDistance * this.scoreBoardScaleFactor +
         this.scoreBoardDistance,
       this.scoreBoardBottomY * this.scoreBoardScaleFactor,
-      99,
+      this.gameState.getRoundScores(4),
       2,
       false,
       this.scoreBoardScaleFactor,
@@ -231,8 +239,8 @@ export default class GameSummaryScene extends Scene {
     }
 
     let scores = this.add.text(board.x, board.y, scoresText, {
-      fill: "#FFFFFF",
-      font: "86px cursive",
+      fill: "#FFEE43",
+      font: "86px natlog",
       align: "center",
       wordWrap: { width: board.width - 30, useAdvancedWrap: true },
     });
@@ -280,8 +288,15 @@ export default class GameSummaryScene extends Scene {
     this.topLeftButton.setInteractive();
 
     this.topLeftButton.on("pointerdown", (pointer) => {
-      this.topLeftButton.setFrame(1);
-      this.selectionCounter++;
+      if (this.selections.includes("topLeft")) {
+        this.selectionCounter--;
+        this.selections.splice(this.selections.indexOf(1), 1);
+        this.topLeftButton.setFrame(0);
+      } else {
+        this.selectionCounter++;
+        this.selections.push("topLeft");
+        this.topLeftButton.setFrame(1);
+      }
 
       this.checkIfAllSelected();
     });
@@ -304,8 +319,15 @@ export default class GameSummaryScene extends Scene {
     this.topRightButton.setInteractive();
 
     this.topRightButton.on("pointerdown", (pointer) => {
-      this.topRightButton.setFrame(1);
-      this.selectionCounter++;
+      if (this.selections.includes("topRight")) {
+        this.selectionCounter--;
+        this.selections.splice(this.selections.indexOf(1), 1);
+        this.topRightButton.setFrame(0);
+      } else {
+        this.selectionCounter++;
+        this.selections.push("topRight");
+        this.topRightButton.setFrame(1);
+      }
 
       this.checkIfAllSelected();
     });
@@ -327,9 +349,15 @@ export default class GameSummaryScene extends Scene {
     this.bottomRightButton.setInteractive();
 
     this.bottomRightButton.on("pointerdown", (pointer) => {
-      this.bottomRightButton.setFrame(1);
-
-      this.selectionCounter++;
+      if (this.selections.includes("bottomRight")) {
+        this.selectionCounter--;
+        this.selections.splice(this.selections.indexOf(1), 1);
+        this.bottomRightButton.setFrame(0);
+      } else {
+        this.selectionCounter++;
+        this.selections.push("bottomRight");
+        this.bottomRightButton.setFrame(1);
+      }
 
       this.checkIfAllSelected();
       //do something
@@ -353,9 +381,15 @@ export default class GameSummaryScene extends Scene {
     this.bottomLeftButton.setInteractive();
 
     this.bottomLeftButton.on("pointerdown", (pointer) => {
-      this.bottomLeftButton.setFrame(1);
-
-      this.selectionCounter++;
+      if (this.selections.includes("bottomLeft")) {
+        this.selectionCounter--;
+        this.selections.splice(this.selections.indexOf(1), 1);
+        this.bottomLeftButton.setFrame(0);
+      } else {
+        this.selectionCounter++;
+        this.selections.push("bottomLeft");
+        this.bottomLeftButton.setFrame(1);
+      }
 
       this.checkIfAllSelected();
       //do something
@@ -370,8 +404,8 @@ export default class GameSummaryScene extends Scene {
 
   createChatBubbles(blScores, brScores, trScores, tlScores) {
     const styles = {
-      fill: "#FFFFFF",
-      font: "60px cursive",
+      fill: "#FFEE43",
+      font: "60px natlog",
       align: "left",
       wordWrap: { width: 150, useAdvancedWrap: false },
     };
@@ -458,6 +492,9 @@ export default class GameSummaryScene extends Scene {
   }
 
   startNextScene() {
+    //reset all scores
+    this.gameState.resetScores();
+
     this.scene.stop("GameSummaryScene");
     this.scene.start("LoadingScene", {
       server: {},

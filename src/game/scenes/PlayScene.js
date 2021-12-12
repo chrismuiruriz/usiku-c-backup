@@ -2,6 +2,7 @@ import { Scene } from "phaser";
 import Quiz from "../data/Quiz";
 import LabStation from "../sections/LabStation";
 import FactoryStation from "../sections/FactoryStation";
+import GameState from "../data/GameState";
 
 export default class PlayScene extends Scene {
   constructor() {
@@ -27,15 +28,15 @@ export default class PlayScene extends Scene {
     this.isGamePaused = false;
 
     //game timer
-    this.gameTimerDuration = 15; //secs
-    this.gameTimerCountdown = 15; //secs
+    this.gameTimerDuration = 25; //secs
+    this.gameTimerCountdown = 25; //secs
     this.gameTimer = new Phaser.Time.TimerEvent({
       delay: this.gameTimerDuration * 1000,
     });
     //use startAt: 10 * 1000; to handle pause = 90 secs
 
     this.truckSpeed = 8000;
-    this.firstTruckStartDelay = 2000;
+    this.firstTruckStartDelay = 800;
     this.excavatorArmRotateSpeed = 447;
     this.bottleSpeedOnRiver = 2500;
 
@@ -66,6 +67,10 @@ export default class PlayScene extends Scene {
 
     this.server = server;
     this.onGameOver = onGameOver;
+
+    this.gameState = new GameState();
+
+    console.log("Current round", this.gameState.getCurrentRound());
 
     this.sound.add("thud");
 
@@ -137,6 +142,8 @@ export default class PlayScene extends Scene {
     //setup listeners
     this.setEventListeners();
   }
+
+  //
 
   //create pipes
   createPipes() {
@@ -416,8 +423,8 @@ export default class PlayScene extends Scene {
 
     //text style
     const textStyle = {
-      font: "14px Arial",
-      fill: "#85F560",
+      font: "bold 16px natlog",
+      fill: "#F5D7A0",
       align: "center",
     };
 
@@ -429,7 +436,14 @@ export default class PlayScene extends Scene {
     );
     this.clockBg.setScale(0.7);
     this.clockText = this.add
-      .text(this.clockBg.x, this.clockBg.y, "00:00", textStyle)
+      .bitmapText(
+        this.clockBg.x,
+        this.clockBg.y,
+        "segments-basic",
+        "00:00",
+        14,
+        Phaser.Display.Align.CENTER
+      )
       .setOrigin(0.5)
       .setAngle(-90);
 
@@ -465,11 +479,13 @@ export default class PlayScene extends Scene {
     this.titleBar.setScale(0.9, 1);
     this.titleBar.x = 0;
     this.titleText = this.add
-      .text(
+      .bitmapText(
         this.titleBar.x + this.titleBar.width / 2 - 5,
         this.titleBar.y,
-        "ROUND 1 OF 1",
-        textStyle
+        "natural-log",
+        `ROUND ${this.gameState.getCurrentRound()} OF 4`,
+        26,
+        Phaser.Display.Align.CENTER
       )
       .setOrigin(0.5)
       .setAngle(-90);
@@ -510,26 +526,19 @@ export default class PlayScene extends Scene {
 
   //set points
   setGamePoints(points, source) {
+    let currentRound = this.gameState.getCurrentRound();
     switch (source) {
       case "excavator":
-        sessionStorage.excavatorPoints = sessionStorage.excavatorPoints
-          ? parseInt(sessionStorage.excavatorPoints) + parseInt(points)
-          : 0;
+        this.gameState.setPlayerRoundScore(1, currentRound, points);
         break;
       case "factory":
-        sessionStorage.factoryPoints = sessionStorage.factoryPoints
-          ? parseInt(sessionStorage.factoryPoints) + parseInt(points)
-          : 0;
+        this.gameState.setPlayerRoundScore(2, currentRound, points);
         break;
       case "farm":
-        sessionStorage.farmPoints = sessionStorage.farmPoints
-          ? parseInt(sessionStorage.farmPoints) + parseInt(points)
-          : 0;
+        this.gameState.setPlayerRoundScore(3, currentRound, points);
         break;
       case "lab":
-        sessionStorage.labPoints = sessionStorage.labPoints
-          ? parseInt(sessionStorage.labPoints) + parseInt(points)
-          : 0;
+        this.gameState.setPlayerRoundScore(4, currentRound, points);
         break;
     }
   }
@@ -612,9 +621,8 @@ export default class PlayScene extends Scene {
     let strProgress =
       absProgress < 10 ? `0${absProgress}:00` : `${absProgress}:00`;
     this.clockText.setText(strProgress);
-    console.log;
     if (absProgress <= 0) {
-      //round over
+      //times up - round over
       this.onGameTimerComplete();
     }
   }

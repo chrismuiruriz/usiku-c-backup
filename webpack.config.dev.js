@@ -33,7 +33,7 @@ module.exports = {
         },
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.(png|svg|jpg|jpeg|gif|xml)$/i,
         type: "asset/resource",
         generator: {
           filename: "[path][name][ext][query]",
@@ -47,7 +47,7 @@ module.exports = {
         },
       },
       {
-        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        test: /\.(woff|woff2|eot|ttf|otf|fnt)$/i,
         type: "asset/resource",
         generator: {
           filename: "[path][name][ext][query]",

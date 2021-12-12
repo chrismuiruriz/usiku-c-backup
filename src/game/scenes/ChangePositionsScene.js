@@ -40,6 +40,7 @@ export default class ChangePositionsScene extends Scene {
     this.chatCounter = 0;
 
     this.selectionCounter = 0;
+    this.selections = [];
 
     this.add
       .image(this.screenCenterX, this.screenCenterY, "cp_bg")
@@ -80,8 +81,15 @@ export default class ChangePositionsScene extends Scene {
     this.topLeftButton.setInteractive();
 
     this.topLeftButton.on("pointerdown", (pointer) => {
-      this.topLeftButton.setFrame(1);
-      this.selectionCounter++;
+      if (this.selections.includes("topLeft")) {
+        this.selectionCounter--;
+        this.selections.splice(this.selections.indexOf(1), 1);
+        this.topLeftButton.setFrame(0);
+      } else {
+        this.selectionCounter++;
+        this.selections.push("topLeft");
+        this.topLeftButton.setFrame(1);
+      }
 
       this.checkIfAllSelected();
       //do something
@@ -104,8 +112,15 @@ export default class ChangePositionsScene extends Scene {
     this.topRightButton.setInteractive();
 
     this.topRightButton.on("pointerdown", (pointer) => {
-      this.topRightButton.setFrame(1);
-      this.selectionCounter++;
+      if (this.selections.includes("topRight")) {
+        this.selectionCounter--;
+        this.selections.splice(this.selections.indexOf(1), 1);
+        this.topRightButton.setFrame(0);
+      } else {
+        this.selectionCounter++;
+        this.selections.push("topRight");
+        this.topRightButton.setFrame(1);
+      }
 
       this.checkIfAllSelected();
       //do something
@@ -126,9 +141,15 @@ export default class ChangePositionsScene extends Scene {
     this.bottomRightButton.setInteractive();
 
     this.bottomRightButton.on("pointerdown", (pointer) => {
-      this.bottomRightButton.setFrame(1);
-
-      this.selectionCounter++;
+      if (this.selections.includes("bottomRight")) {
+        this.selectionCounter--;
+        this.selections.splice(this.selections.indexOf(1), 1);
+        this.bottomRightButton.setFrame(0);
+      } else {
+        this.selectionCounter++;
+        this.selections.push("bottomRight");
+        this.bottomRightButton.setFrame(1);
+      }
 
       this.checkIfAllSelected();
       //do something
@@ -148,9 +169,15 @@ export default class ChangePositionsScene extends Scene {
     this.bottomLeftButton.setInteractive();
 
     this.bottomLeftButton.on("pointerdown", (pointer) => {
-      this.bottomLeftButton.setFrame(1);
-
-      this.selectionCounter++;
+      if (this.selections.includes("bottomLeft")) {
+        this.selectionCounter--;
+        this.selections.splice(this.selections.indexOf(1), 1);
+        this.bottomLeftButton.setFrame(0);
+      } else {
+        this.selectionCounter++;
+        this.selections.push("bottomLeft");
+        this.bottomLeftButton.setFrame(1);
+      }
 
       this.checkIfAllSelected();
       //do something
@@ -188,14 +215,14 @@ export default class ChangePositionsScene extends Scene {
   }
 
   checkIfAllSelected() {
-    if (this.selectionCounter >= 4) {
+    if (this.selections.length >= 4) {
       this.startNextScene();
     }
   }
 
   startNextScene() {
     this.scene.stop("ChangePositionsScene");
-    this.scene.start("GameSummaryScene", {
+    this.scene.start("PlayScene", {
       server: {},
       onGameOver: {},
     });

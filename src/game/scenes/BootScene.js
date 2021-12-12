@@ -60,6 +60,16 @@ import storyCharacterElder from "../../assets/img/story/characters/elder-smile.p
 
 import greenBackground from "../../assets/img/common/green-bg.png";
 
+//fonts
+import alloyinkPNG from "../../assets/fonts/alloyink-nrlyo/bitmap.png";
+import alloyinkXML from "../../assets/fonts/alloyink-nrlyo/bitmap.xml";
+
+import naturalLogPNG from "../../assets/fonts/natural-log/bitmap.png";
+import naturalLogXML from "../../assets/fonts/natural-log/bitmap.xml";
+
+import segmentsBasicPNG from "../../assets/fonts/16segments-basic/bitmap.png";
+import segmentsBasicXML from "../../assets/fonts/16segments-basic/bitmap.xml";
+
 export default class BootScene extends Scene {
   constructor() {
     super({ key: "BootScene" });
@@ -142,6 +152,10 @@ export default class BootScene extends Scene {
       frameWidth: 146,
       frameHeight: 154,
     });
+
+    this.load.bitmapFont("alloyink", alloyinkPNG, alloyinkXML);
+    this.load.bitmapFont("natural-log", naturalLogPNG, naturalLogXML);
+    this.load.bitmapFont("segments-basic", segmentsBasicPNG, segmentsBasicXML);
   }
 
   init() {
@@ -167,7 +181,7 @@ export default class BootScene extends Scene {
   };
 
   createNewGame() {
-    this.scene.start("LoadingScene", {
+    this.scene.start("GameSummaryScene", {
       server: this.server,
       onGameOver: this.handleGameOver,
     });

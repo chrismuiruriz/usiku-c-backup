@@ -96,14 +96,14 @@ export default class FactoryStation {
   //create factory station buttons
   createFactoryStationButtons() {
     const textStyle = {
-      font: "bold 18px Arial",
-      fill: "#FFFFFF",
+      font: "18px AlloyInk-nRLyO",
+      fill: "#D0C499",
       align: "center",
     };
 
     const quizTextStyle = {
-      font: "bold 24px Arial",
-      fill: "#FFFFFF",
+      font: "24px AlloyInk-nRLyO",
+      fill: "#D0C499",
       align: "center",
     };
 

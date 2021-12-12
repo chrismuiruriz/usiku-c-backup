@@ -76,32 +76,42 @@ export default class GameSetupScene extends Scene {
       align: "center",
     };
 
-    this.text2 = this.add.text(
+    // this.text2 = this.add.text(
+    //   this.board.x,
+    //   this.board.y - 20,
+    //   "Take turns playing at each station",
+    //   styleConfig
+    // );
+
+    this.text2 = this.add.bitmapText(
       this.board.x,
       this.board.y - 20,
+      "natural-log",
       "Take turns playing at each station",
-      styleConfig
+      38,
+      Phaser.Display.Align.CENTER
     );
     this.text2.setOrigin(0.5);
-    this.text2.width = this.board.width;
 
-    this.text1 = this.add.text(
+    this.text1 = this.add.bitmapText(
       this.text2.x,
       this.text2.y - 100,
+      "natural-log",
       "Work together to clean the river",
-      styleConfig
+      38,
+      Phaser.Display.Align.CENTER
     );
     this.text1.setOrigin(0.5);
-    this.text1.width = this.board.width;
 
-    this.text3 = this.add.text(
+    this.text3 = this.add.bitmapText(
       this.text2.x,
       this.text2.y + 100,
+      "natural-log",
       "Play together on one device",
-      styleConfig
+      38,
+      Phaser.Display.Align.CENTER
     );
     this.text3.setOrigin(0.5);
-    this.text3.width = this.board.width;
   }
 
   createNavigationButtons() {

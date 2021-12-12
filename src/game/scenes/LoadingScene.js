@@ -6,12 +6,6 @@ export default class LoadingScene extends Scene {
   }
 
   async create(data) {
-    let styleConfig = {
-      color: "#FFFFFF",
-      fontSize: "18px",
-      fontFamily: "'Bubblegum Sans', cursive",
-      align: "center",
-    };
     const { width, height } = this.scale;
 
     this.screenWidth = this.cameras.main.width;
@@ -34,11 +28,13 @@ export default class LoadingScene extends Scene {
       .setOrigin(0.5);
     kicdLogo.x = this.screenCenterX + this.screenCenterX / 2;
 
-    this.add.text(
+    this.add.bitmapText(
       this.screenCenterX,
       gameLogo.y + gameLogo.height / 2 + 50,
+      "alloyink",
       "LOADING...",
-      styleConfig
+      24,
+      Phaser.Display.Align.CENTER
     );
 
     this.time.delayedCall(

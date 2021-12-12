@@ -13,6 +13,8 @@ import rc_starFrame from "../../assets/img/round-summary/star-frame.png";
 
 import rc_stars from "../../assets/img/round-summary/stars-39x38.png";
 
+import GameState from "../data/GameState";
+
 export default class RoundCompleteScene extends Scene {
   constructor() {
     super({
@@ -54,6 +56,11 @@ export default class RoundCompleteScene extends Scene {
     this.chatCounter = 0;
 
     this.selectionCounter = 0;
+    this.selections = [];
+
+    this.gameState = new GameState();
+    this.currentRound = this.gameState.getCurrentRound();
+    this.totalGroupScore = this.gameState.getRoundScores(this.currentRound);
 
     this.add
       .image(this.screenCenterX, this.screenCenterY, "rc_bg")
@@ -63,7 +70,7 @@ export default class RoundCompleteScene extends Scene {
       "rc_group-score",
       200,
       this.screenCenterY,
-      99,
+      this.totalGroupScore,
       2,
       false,
       1
@@ -73,13 +80,18 @@ export default class RoundCompleteScene extends Scene {
       "rc_group-score",
       this.screenWidth - 200,
       this.screenCenterY,
-      99,
+      this.totalGroupScore,
       1,
       true,
       1
     );
 
-    this.createChatBubbles("990", "99", "99", "0");
+    this.createChatBubbles(
+      this.gameState.getPlayerRoundScore(1, this.currentRound),
+      this.gameState.getPlayerRoundScore(2, this.currentRound),
+      this.gameState.getPlayerRoundScore(3, this.currentRound),
+      this.gameState.getPlayerRoundScore(4, this.currentRound)
+    );
 
     this.createButtons();
   }
@@ -120,8 +132,8 @@ export default class RoundCompleteScene extends Scene {
     }
 
     let scores = this.add.text(board.x, board.y, scoresText, {
-      fill: "#FFFFFF",
-      font: "86px cursive",
+      fill: "#FFEE43",
+      font: "86px natlog",
       align: "center",
       wordWrap: { width: board.width - 30, useAdvancedWrap: true },
     });
@@ -169,8 +181,15 @@ export default class RoundCompleteScene extends Scene {
     this.topLeftButton.setInteractive();
 
     this.topLeftButton.on("pointerdown", (pointer) => {
-      this.topLeftButton.setFrame(1);
-      this.selectionCounter++;
+      if (this.selections.includes("topLeft")) {
+        this.selectionCounter--;
+        this.selections.splice(this.selections.indexOf(1), 1);
+        this.topLeftButton.setFrame(0);
+      } else {
+        this.selectionCounter++;
+        this.selections.push("topLeft");
+        this.topLeftButton.setFrame(1);
+      }
 
       this.checkIfAllSelected();
     });
@@ -193,8 +212,15 @@ export default class RoundCompleteScene extends Scene {
     this.topRightButton.setInteractive();
 
     this.topRightButton.on("pointerdown", (pointer) => {
-      this.topRightButton.setFrame(1);
-      this.selectionCounter++;
+      if (this.selections.includes("topRight")) {
+        this.selectionCounter--;
+        this.selections.splice(this.selections.indexOf(1), 1);
+        this.topRightButton.setFrame(0);
+      } else {
+        this.selectionCounter++;
+        this.selections.push("topRight");
+        this.topRightButton.setFrame(1);
+      }
 
       this.checkIfAllSelected();
     });
@@ -216,9 +242,15 @@ export default class RoundCompleteScene extends Scene {
     this.bottomRightButton.setInteractive();
 
     this.bottomRightButton.on("pointerdown", (pointer) => {
-      this.bottomRightButton.setFrame(1);
-
-      this.selectionCounter++;
+      if (this.selections.includes("bottomRight")) {
+        this.selectionCounter--;
+        this.selections.splice(this.selections.indexOf(1), 1);
+        this.bottomRightButton.setFrame(0);
+      } else {
+        this.selectionCounter++;
+        this.selections.push("bottomRight");
+        this.bottomRightButton.setFrame(1);
+      }
 
       this.checkIfAllSelected();
       //do something
@@ -242,9 +274,15 @@ export default class RoundCompleteScene extends Scene {
     this.bottomLeftButton.setInteractive();
 
     this.bottomLeftButton.on("pointerdown", (pointer) => {
-      this.bottomLeftButton.setFrame(1);
-
-      this.selectionCounter++;
+      if (this.selections.includes("bottomLeft")) {
+        this.selectionCounter--;
+        this.selections.splice(this.selections.indexOf(1), 1);
+        this.bottomLeftButton.setFrame(0);
+      } else {
+        this.selectionCounter++;
+        this.selections.push("bottomLeft");
+        this.bottomLeftButton.setFrame(1);
+      }
 
       this.checkIfAllSelected();
       //do something
@@ -259,8 +297,8 @@ export default class RoundCompleteScene extends Scene {
 
   createChatBubbles(blScores, brScores, trScores, tlScores) {
     const styles = {
-      fill: "#FFFFFF",
-      font: "60px cursive",
+      fill: "#FFEE43",
+      font: "60px natlog",
       align: "left",
       wordWrap: { width: 150, useAdvancedWrap: false },
     };
@@ -341,7 +379,7 @@ export default class RoundCompleteScene extends Scene {
   }
 
   checkIfAllSelected() {
-    if (this.selectionCounter >= 4) {
+    if (this.selections.length >= 4) {
       this.startNextScene();
     }
   }
