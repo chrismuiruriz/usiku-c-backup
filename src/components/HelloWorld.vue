@@ -5,7 +5,6 @@
 <script>
 //import Phaser from "phaser";
 import gameConfig from "../game/game";
-import { mapActions } from "vuex";
 
 export default {
   name: "HelloWorld",
@@ -25,9 +24,7 @@ export default {
     this.initializeTheGame();
   },
   methods: {
-    ...mapActions("game", ["initializeGame"]),
     initializeTheGame: function() {
-      this.initializeGame();
       this.initialize = true;
     },
   },

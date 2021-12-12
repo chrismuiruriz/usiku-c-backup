@@ -1,5 +1,4 @@
 import { Scene } from "phaser";
-import store from "../../store";
 
 import label from "../../assets/img/take-position/labels-168x49.png";
 import bg from "../../assets/img/take-position/take-position-bg.png";

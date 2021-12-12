@@ -1,5 +1,4 @@
 import { Scene } from "phaser";
-import store from "../../store";
 
 export default class PlayScene extends Scene {
   constructor() {
@@ -28,16 +27,6 @@ export default class PlayScene extends Scene {
     store.dispatch("game/setGameOver", {
       isGameOver: true,
     });
-
-    //listen for game restart change
-    store.watch(
-      (state) => state.game.isGameRestarted,
-      (newValue, oldValue) => {
-        if (data.onRestart && newValue === true) {
-          data.onRestart();
-        }
-      }
-    );
 
     this.input.keyboard.once("keyup-SPACE", () => {
       if (data.onRestart) {

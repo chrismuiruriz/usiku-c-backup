@@ -1,4 +1,3 @@
-import { Scene } from "phaser"; //to remove later
 import Quiz from "../data/Quiz";
 
 export default class FactoryStation {

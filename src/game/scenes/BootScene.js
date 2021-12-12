@@ -1,5 +1,4 @@
 import { Scene } from "phaser";
-import Server from "../services/Server";
 
 import paper from "../../assets/img/paper.png";
 import thudMp3 from "../../assets/media/thud.mp3";
@@ -181,7 +180,7 @@ export default class BootScene extends Scene {
   };
 
   createNewGame() {
-    this.scene.start("GameSummaryScene", {
+    this.scene.start("LoadingScene", {
       server: this.server,
       onGameOver: this.handleGameOver,
     });

@@ -9,7 +9,6 @@
 
 <script>
 import HelloWorld from "../components/HelloWorld.vue";
-import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Home",
@@ -19,33 +18,12 @@ export default {
       name_: "Creaw",
     };
   },
-  computed: {
-    ...mapGetters("game", [
-      "getPlayerGameMode",
-      "getHasJoinGameError",
-      "getPlayerTurnText",
-      "getGameOver",
-    ]),
-  },
   components: {
     HelloWorld,
   },
   created() {},
   mounted() {},
-  methods: {
-    ...mapActions("game", [
-      "pauseGame",
-      "resumeGame",
-      "resetState",
-      "restartGame",
-    ]),
-    showIntialScreen() {
-      return this.getPlayerGameMode === null ||
-        this.getHasJoinGameError === true
-        ? true
-        : false;
-    },
-  },
+  methods: {},
 };
 </script>
 
