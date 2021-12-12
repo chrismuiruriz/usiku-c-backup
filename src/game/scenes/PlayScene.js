@@ -10,14 +10,14 @@ export default class PlayScene extends Scene {
       key: "PlayScene",
       physics: {
         arcade: {
-          debug: true,
+          debug: false,
         },
         matter: {
           gravity: {
             x: 0,
             y: 0,
           },
-          debug: true,
+          debug: false,
         },
       },
     });
@@ -28,15 +28,15 @@ export default class PlayScene extends Scene {
     this.isGamePaused = false;
 
     //game timer
-    this.gameTimerDuration = 25; //secs
-    this.gameTimerCountdown = 25; //secs
+    this.gameTimerDuration = 60; //secs
+    this.gameTimerCountdown = 60; //secs
     this.gameTimer = new Phaser.Time.TimerEvent({
       delay: this.gameTimerDuration * 1000,
     });
     //use startAt: 10 * 1000; to handle pause = 90 secs
 
-    this.truckSpeed = 8000;
-    this.firstTruckStartDelay = 800;
+    this.truckSpeed = 5000;
+    this.firstTruckStartDelay = 50;
     this.excavatorArmRotateSpeed = 447;
     this.bottleSpeedOnRiver = 2500;
 
@@ -70,9 +70,8 @@ export default class PlayScene extends Scene {
 
     this.gameState = new GameState();
 
-    console.log("Current round", this.gameState.getCurrentRound());
-
-    this.sound.add("thud");
+    //add sounds
+    this.soundCollectStar = this.sound.add("s-start-collected");
 
     //grid
     this.screenWidth = this.cameras.main.width;
@@ -415,11 +414,11 @@ export default class PlayScene extends Scene {
 
     this.star2 = this.add
       .sprite(90, this.star1.y + this.star1.height + 7, "stars")
-      .setFrame(1);
+      .setFrame(0);
 
     this.star3 = this.add
       .sprite(90, this.star2.y + this.star2.height + 7, "stars")
-      .setFrame(1);
+      .setFrame(0);
 
     //text style
     const textStyle = {
@@ -504,6 +503,8 @@ export default class PlayScene extends Scene {
     } else {
       this.star1.setFrame(1);
     }
+
+    this.soundCollectStar.play();
   }
 
   //update progress bar
@@ -540,6 +541,18 @@ export default class PlayScene extends Scene {
       case "lab":
         this.gameState.setPlayerRoundScore(4, currentRound, points);
         break;
+    }
+    //TODO: better mechanics of lighting a star
+    let roundScore = this.gameState.getRoundScores(currentRound);
+    if (roundScore == 30) {
+      this.lightStar(3);
+      this.gameState.setRoundStar(currentRound, 1);
+    } else if (roundScore == 60) {
+      this.lightStar(2);
+      this.gameState.setRoundStar(currentRound, 2);
+    } else if (roundScore == 80) {
+      this.lightStar(1);
+      this.gameState.setRoundStar(currentRound, 3);
     }
   }
 

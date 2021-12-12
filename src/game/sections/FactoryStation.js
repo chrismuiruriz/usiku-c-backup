@@ -35,6 +35,9 @@ export default class FactoryStation {
       callbackScope: this,
       loop: true,
     });
+
+    this.correctAnsSound = this.scene.sound.add("s-correct-answer");
+    this.wrongAnsSound = this.scene.sound.add("s-wrong-answer");
   }
 
   /**
@@ -49,7 +52,7 @@ export default class FactoryStation {
     }
 
     let question = this.quiz.getNextQuestion(currentQuizIdx);
-    this.question.setText(question.question);
+    this.question.setText(`${question.question} = ?`);
     this.optionA.setText(question.A);
     this.optionB.setText(question.B);
     this.optionC.setText(question.C);
@@ -224,11 +227,13 @@ export default class FactoryStation {
     this.clearQuiz();
     this.scene.updateProgressBar(10, "factory");
     this.question.setText("Correct!");
+    this.correctAnsSound.play();
   }
 
   isWrong() {
     this.clearQuiz();
     this.question.setText("Wrong!");
+    this.wrongAnsSound.play();
   }
 
   moveTimer() {

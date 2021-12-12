@@ -4,6 +4,10 @@ import paper from "../../assets/img/paper.png";
 import thudMp3 from "../../assets/media/thud.mp3";
 import thudOgg from "../../assets/media/thud.ogg";
 
+import s_correctAns from "../../assets/media/correct-answer.wav";
+import s_wrongAns from "../../assets/media/wrong-answer.wav";
+import s_starCollected from "../../assets/media/star-collected.mp3";
+
 import gameBg from "../../assets/img/game-play/game-bg.png";
 import pipes from "../../assets/img/game-play/pipes.png";
 
@@ -78,6 +82,10 @@ export default class BootScene extends Scene {
   preload() {
     this.load.image("paper", paper);
     this.load.audio("thud", [thudMp3, thudOgg]);
+
+    this.load.audio("s-correct-answer", s_correctAns);
+    this.load.audio("s-wrong-answer", s_wrongAns);
+    this.load.audio("s-start-collected", s_starCollected);
 
     this.load.image("game-backround", gameBg);
     this.load.image("pipes", pipes);

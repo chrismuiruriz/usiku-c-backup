@@ -107,7 +107,7 @@ export default class GameSummaryScene extends Scene {
         this.scoreBoardDistance,
       this.scoreBoardTopY * this.scoreBoardScaleFactor,
       this.gameState.getRoundScores(4),
-      2,
+      this.gameState.getRoundStar(4),
       true,
       this.scoreBoardScaleFactor,
       3
@@ -118,7 +118,7 @@ export default class GameSummaryScene extends Scene {
       this.screenCenterX - this.scoreBoardDistance * this.scoreBoardScaleFactor,
       this.scoreBoardTopY * this.scoreBoardScaleFactor,
       this.gameState.getRoundScores(3),
-      2,
+      this.gameState.getRoundStar(3),
       true,
       this.scoreBoardScaleFactor,
       2
@@ -129,7 +129,7 @@ export default class GameSummaryScene extends Scene {
       this.screenCenterX + this.scoreBoardDistance * this.scoreBoardScaleFactor,
       this.scoreBoardTopY * this.scoreBoardScaleFactor,
       this.gameState.getRoundScores(2),
-      2,
+      this.gameState.getRoundStar(2),
       true,
       this.scoreBoardScaleFactor,
       1
@@ -142,7 +142,7 @@ export default class GameSummaryScene extends Scene {
         this.scoreBoardDistance,
       this.scoreBoardTopY * this.scoreBoardScaleFactor,
       this.gameState.getRoundScores(1),
-      2,
+      this.gameState.getRoundStar(1),
       true,
       this.scoreBoardScaleFactor,
       0
@@ -157,7 +157,7 @@ export default class GameSummaryScene extends Scene {
         this.scoreBoardDistance,
       this.scoreBoardBottomY * this.scoreBoardScaleFactor,
       this.gameState.getRoundScores(1),
-      2,
+      this.gameState.getRoundStar(1),
       false,
       this.scoreBoardScaleFactor,
       0
@@ -168,7 +168,7 @@ export default class GameSummaryScene extends Scene {
       this.screenCenterX - this.scoreBoardDistance * this.scoreBoardScaleFactor,
       this.scoreBoardBottomY * this.scoreBoardScaleFactor,
       this.gameState.getRoundScores(2),
-      2,
+      this.gameState.getRoundStar(2),
       false,
       this.scoreBoardScaleFactor,
       1
@@ -179,7 +179,7 @@ export default class GameSummaryScene extends Scene {
       this.screenCenterX + this.scoreBoardDistance * this.scoreBoardScaleFactor,
       this.scoreBoardBottomY * this.scoreBoardScaleFactor,
       this.gameState.getRoundScores(3),
-      2,
+      this.gameState.getRoundStar(3),
       false,
       this.scoreBoardScaleFactor,
       2
@@ -192,7 +192,7 @@ export default class GameSummaryScene extends Scene {
         this.scoreBoardDistance,
       this.scoreBoardBottomY * this.scoreBoardScaleFactor,
       this.gameState.getRoundScores(4),
-      2,
+      this.gameState.getRoundStar(4),
       false,
       this.scoreBoardScaleFactor,
       3

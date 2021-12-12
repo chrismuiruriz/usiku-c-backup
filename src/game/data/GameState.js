@@ -51,6 +51,22 @@ export default class GameState {
     return localStorage.getItem(label) || 0;
   }
 
+  setRoundStar(round, star) {
+    let label = `round_${round}_star`;
+    let newStar = localStorage.getItem(label)
+      ? parseInt(localStorage.getItem(label))
+      : star;
+
+    localStorage.setItem(label, newStar);
+  }
+
+  getRoundStar(round) {
+    let label = `round_${round}_star`;
+    return localStorage.getItem(label)
+      ? parseInt(localStorage.getItem(label))
+      : 0;
+  }
+
   getGroupScores() {
     let groupScore = 0;
     for (let i = 1; i <= 4; i++) {

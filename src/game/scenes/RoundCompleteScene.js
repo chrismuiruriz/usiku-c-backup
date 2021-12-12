@@ -61,6 +61,7 @@ export default class RoundCompleteScene extends Scene {
     this.gameState = new GameState();
     this.currentRound = this.gameState.getCurrentRound();
     this.totalGroupScore = this.gameState.getRoundScores(this.currentRound);
+    this.roundStarCount = this.gameState.getRoundStar(this.currentRound);
 
     this.add
       .image(this.screenCenterX, this.screenCenterY, "rc_bg")
@@ -71,7 +72,7 @@ export default class RoundCompleteScene extends Scene {
       200,
       this.screenCenterY,
       this.totalGroupScore,
-      2,
+      this.roundStarCount,
       false,
       1
     );
@@ -81,7 +82,7 @@ export default class RoundCompleteScene extends Scene {
       this.screenWidth - 200,
       this.screenCenterY,
       this.totalGroupScore,
-      1,
+      this.roundStarCount,
       true,
       1
     );
