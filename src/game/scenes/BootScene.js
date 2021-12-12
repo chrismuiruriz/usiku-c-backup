@@ -14,6 +14,7 @@ import bigProgressBar from "../../assets/img/game-play/big-progress-bar-21x340.p
 import brownBarTitle from "../../assets/img/game-play/brown-bar-title.png";
 import cleanPolluteIcon from "../../assets/img/game-play/icon.png";
 import clockBg from "../../assets/img/game-play/icon.png";
+import fullscreenButton from "../../assets/img/common/fullscreen.png";
 
 import factoryStation from "../../assets/img/game-play/factory-station.png";
 import redTriangleButton from "../../assets/img/game-play/red-triangle-button.png";
@@ -81,6 +82,7 @@ export default class BootScene extends Scene {
     this.load.image("game-backround", gameBg);
     this.load.image("pipes", pipes);
     this.load.image("menu-button", menuButton);
+    this.load.image("fullscreen-button", fullscreenButton);
     this.load.image("clean-pollute-icon", cleanPolluteIcon);
     this.load.image("clock-bg", clockBg);
     this.load.spritesheet("stars", stars, { frameWidth: 25, frameHeight: 25 });
