@@ -636,7 +636,7 @@ export default class PlayScene extends Scene {
     this.clockText.setText(strProgress);
     if (absProgress <= 0) {
       //times up - round over
-      this.onGameTimerComplete();
+      //this.onGameTimerComplete();
     }
   }
 

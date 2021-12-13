@@ -30,7 +30,7 @@ export default {
   input: {
     activePointers: 3,
   },
-  backgroundColor: 0x333333,
+  backgroundColor: 0x000000,
   scene: [
     BootScene,
     LoadingScene,

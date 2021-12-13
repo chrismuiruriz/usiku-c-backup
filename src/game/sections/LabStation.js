@@ -133,7 +133,6 @@ export default class LapFactory {
     var min = 1;
     var max = 2;
     if (type == "random") {
-      console.log("createPebble called from PlayScene!");
       img_num = Math.floor(Math.random() * (max - min + 1)) + min;
     } else if (type == "default") {
       img_num = 0;
@@ -272,7 +271,7 @@ export default class LapFactory {
     }
   }
 
-  findMatches() {
+  findMatchesOld() {
     this.pebbles.forEach((pebble) => {
       this.pebbles.some((other_pebble) => {
         // if it's the same type
@@ -296,6 +295,70 @@ export default class LapFactory {
     });
 
     this.processMatches(); //process matches immediately
+  }
+
+  findMatches() {
+    this.pebbles.forEach((pebble, index) => {
+      this.pebbles.forEach((other_pebble, other_index) => {
+        if (other_pebble.type == pebble.type) {
+          //do we have a similar pebble above this
+          this.isPartOfMatch(pebble, other_pebble);
+        }
+      });
+    });
+
+    this.processMatches(); //process matches immediately
+  }
+
+  isPartOfMatch(pebble, other_pebble) {
+    return (
+      this.isPartOfHorizontalMatch(pebble, other_pebble) ||
+      this.isPartOfVerticalMatch(pebble, other_pebble)
+    );
+  }
+
+  isPartOfHorizontalMatch(pebble, other_pebble) {
+    if (other_pebble.col == pebble.col && pebble.row == other_pebble.row - 1) {
+      //do we have a similar pebble above the other pebble
+      this.pebbles.some((other_other_pebble) => {
+        if (
+          other_pebble.type == pebble.type &&
+          other_other_pebble.type == other_pebble.type
+        ) {
+          if (
+            other_other_pebble.col == other_pebble.col &&
+            other_pebble.row == other_other_pebble.row - 1
+          ) {
+            other_other_pebble.matched = true;
+            other_pebble.matched = true;
+            pebble.matched = true;
+            return true;
+          }
+        }
+      });
+    }
+  }
+
+  isPartOfVerticalMatch(pebble, other_pebble) {
+    if (other_pebble.row == pebble.row && pebble.col == other_pebble.col - 1) {
+      //do we have a similar pebble above the other pebble
+      this.pebbles.some((other_other_pebble) => {
+        if (
+          other_pebble.type == pebble.type &&
+          other_other_pebble.type == other_pebble.type
+        ) {
+          if (
+            other_other_pebble.row == other_pebble.row &&
+            other_pebble.col == other_other_pebble.col - 1
+          ) {
+            other_other_pebble.matched = true;
+            other_pebble.matched = true;
+            pebble.matched = true;
+            return true;
+          }
+        }
+      });
+    }
   }
 
   processMatches() {

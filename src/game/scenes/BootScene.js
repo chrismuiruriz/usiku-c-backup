@@ -172,6 +172,21 @@ export default class BootScene extends Scene {
   }
 
   create() {
+    this.screenWidth = this.cameras.main.width;
+    this.screenHeight = this.cameras.main.height;
+
+    this.screenCenterX = this.cameras.main.worldView.x + this.screenWidth / 2;
+    this.screenCenterY = this.cameras.main.worldView.y + this.screenHeight / 2;
+
+    this.add.bitmapText(
+      this.screenCenterX,
+      this.screenCenterY,
+      "alloyink",
+      "LOADING...",
+      24,
+      Phaser.Display.Align.CENTER
+    );
+
     this.createNewGame();
   }
 
@@ -190,7 +205,7 @@ export default class BootScene extends Scene {
   };
 
   createNewGame() {
-    this.scene.start("LoadingScene", {
+    this.scene.start("PlayScene", {
       server: this.server,
       onGameOver: this.handleGameOver,
     });
