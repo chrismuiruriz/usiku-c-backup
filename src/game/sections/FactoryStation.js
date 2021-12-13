@@ -249,8 +249,8 @@ export default class FactoryStation {
     this.boatLine = new Phaser.Geom.Line(
       this.dock.x + 66,
       this.dock.y + 4.5,
-      sWidth - 235,
-      50
+      sWidth - 230,
+      30
     );
 
     let points = [];

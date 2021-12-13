@@ -100,6 +100,8 @@ export default class PlayScene extends Scene {
       )
       .setOrigin(0.5);
 
+    this.drawMatatuTrack();
+
     this.createPipes();
 
     this.createShapes();
@@ -782,6 +784,105 @@ export default class PlayScene extends Scene {
 
       this.bottle.setPosition(p.x, p.y);
     }
+  }
+
+  //matatu track
+  drawMatatuTrack() {
+    let graphics = this.add.graphics();
+
+    let matatuLine = new Phaser.Geom.Line(
+      this.screenWidth - 5,
+      this.screenHeight - 5,
+      this.screenWidth - 10,
+      0
+    );
+
+    let points = [];
+
+    points.push(matatuLine.getPointA());
+
+    //push points
+    points.push(
+      new Phaser.Math.Vector2(this.screenWidth - 140, this.screenCenterY + 140)
+    );
+
+    points.push(matatuLine.getPointB());
+
+    let matatuCurve = new Phaser.Curves.Spline(points);
+
+    graphics.lineStyle(4, 0xffff00, this.debugAlphaFull);
+    matatuCurve.draw(graphics, 64);
+    let ppaths = [];
+    for (var i = 0; i < matatuCurve.points.length; i++) {
+      ppaths.push(matatuCurve.points[i].x + "," + matatuCurve.points[i].y);
+      graphics.fillCircle(matatuCurve.points[i].x, matatuCurve.points[i].y, 4);
+    }
+
+    // track followers
+    let matatu = this.add
+      .follower(
+        matatuCurve,
+        this.screenWidth - 5,
+        this.screenHeight - 5,
+        "matatus"
+      )
+      .setFrame(0);
+    matatu.startFollow({
+      duration: 3000,
+      repeat: -1,
+      rotateToPath: true,
+      verticalAdjust: true,
+    });
+
+    this.drawMatatuTrack2();
+  }
+
+  drawMatatuTrack2() {
+    let graphics = this.add.graphics();
+
+    let matatuLine = new Phaser.Geom.Line(
+      this.screenWidth + 25,
+      0,
+      this.screenWidth + 10,
+      this.screenHeight - 40
+    );
+
+    let points = [];
+
+    points.push(matatuLine.getPointA());
+
+    //push points
+    points.push(
+      new Phaser.Math.Vector2(this.screenWidth - 105, this.screenCenterY + 140)
+    );
+
+    points.push(matatuLine.getPointB());
+
+    let matatuCurve = new Phaser.Curves.Spline(points);
+
+    graphics.lineStyle(4, 0xff0000, this.debugAlphaFull);
+    matatuCurve.draw(graphics, 64);
+    let ppaths = [];
+    for (var i = 0; i < matatuCurve.points.length; i++) {
+      ppaths.push(matatuCurve.points[i].x + "," + matatuCurve.points[i].y);
+      graphics.fillCircle(matatuCurve.points[i].x, matatuCurve.points[i].y, 4);
+    }
+
+    // track followers
+    let matatu2 = this.add
+      .follower(
+        matatuCurve,
+        this.screenWidth + 25,
+        0,
+        "matatus"
+      )
+      .setFrame(1);
+    matatu2.startFollow({
+      duration: 2500,
+      repeat: -1,
+      rotateToPath: true,
+      verticalAdjust: true,
+    });
   }
 
   //open menu

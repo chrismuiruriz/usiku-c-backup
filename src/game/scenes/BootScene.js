@@ -74,6 +74,8 @@ import naturalLogXML from "../../assets/fonts/natural-log/bitmap.xml";
 import segmentsBasicPNG from "../../assets/fonts/16segments-basic/bitmap.png";
 import segmentsBasicXML from "../../assets/fonts/16segments-basic/bitmap.xml";
 
+import matatu from "../../assets/img/game-play/matatu.png";
+
 export default class BootScene extends Scene {
   constructor() {
     super({ key: "BootScene" });
@@ -160,6 +162,11 @@ export default class BootScene extends Scene {
     this.load.spritesheet("ok-btn", okBtn, {
       frameWidth: 146,
       frameHeight: 154,
+    });
+
+    this.load.spritesheet("matatus", matatu, {
+      frameWidth: 74,
+      frameHeight: 38,
     });
 
     this.load.bitmapFont("alloyink", alloyinkPNG, alloyinkXML);
