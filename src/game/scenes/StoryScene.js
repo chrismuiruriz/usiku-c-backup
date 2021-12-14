@@ -42,23 +42,23 @@ export default class StoryScene extends Scene {
       .image(this.screenCenterX, this.screenCenterY, "story-scene-bg")
       .setOrigin(0.5);
 
-    this.startButton = this.add
-      .sprite(this.screenCenterX, 617, "continue-btn")
+    this.letsGoButton = this.add
+      .sprite(this.screenCenterX, 617, "letsgo-btn")
       .setFrame(0)
       .setScale(0.8);
-    this.startButton.setInteractive();
-    this.startButton.setVisible(false);
+    this.letsGoButton.setInteractive();
+    this.letsGoButton.setVisible(false);
 
-    this.startButton.on("pointerover", (pointer) => {
-      this.startButton.setFrame(1);
+    this.letsGoButton.on("pointerover", (pointer) => {
+      this.letsGoButton.setFrame(1);
     });
 
-    this.startButton.on("pointerout", (pointer) => {
-      this.startButton.setFrame(0);
+    this.letsGoButton.on("pointerout", (pointer) => {
+      this.letsGoButton.setFrame(0);
     });
 
-    this.startButton.on("pointerup", (pointer) => {
-      this.startButton.setFrame(1);
+    this.letsGoButton.on("pointerup", (pointer) => {
+      this.letsGoButton.setFrame(1);
       this.startNextScene();
     });
 
@@ -68,14 +68,29 @@ export default class StoryScene extends Scene {
 
     this.createNavigationButtons();
 
-    this.input.on(
-      "pointerdown",
-      () => {
-        this.displayChats();
-        this.chatCounter++;
-      },
-      this
-    );
+    this.createNextButton();
+  }
+
+  createNextButton() {
+    this.nextButton = this.add
+      .sprite(this.screenCenterX, 617, "next-btn")
+      .setFrame(0)
+      .setScale(0.8);
+    this.nextButton.setInteractive();
+
+    this.nextButton.on("pointerover", (pointer) => {
+      this.nextButton.setFrame(1);
+    });
+
+    this.nextButton.on("pointerout", (pointer) => {
+      this.nextButton.setFrame(0);
+    });
+
+    this.nextButton.on("pointerup", (pointer) => {
+      this.nextButton.setFrame(1);
+      this.displayChats();
+      this.chatCounter++;
+    });
   }
 
   displayChats() {
@@ -103,7 +118,8 @@ export default class StoryScene extends Scene {
         this.chat7.setVisible(true);
         break;
       case 7:
-        this.startButton.setVisible(true);
+        this.nextButton.setVisible(false);
+        this.letsGoButton.setVisible(true);
         break;
       default:
         //Do Nothing

@@ -372,7 +372,7 @@ export default class LapFactory {
         this.point_count += 1; //get some points for it
         //TODO: find a better approach for this
         if (pebble.type == 1 || pebble.type == 2) {
-          this.scene.updateProgressBar(10, "lab");
+          this.scene.updateProgressBar(1, "lab");
         }
 
         pebble.destroy(); //delete it from the board

@@ -81,16 +81,67 @@ export default class ChatTimeScene extends Scene {
     this.text2 = this.add.sprite(0, 0, "chat-time-text").setOrigin(0, 0.5);
     this.text2.y = this.clockBg.y;
 
-    this.createChatBubbles();
+    let bPlaceholder = this.add
+      .image(0, 0, "chat-time-bubble")
+      .setVisible(false);
+    let bXGap = 100;
+    let bYGap = 50;
+
+    //TL
+    this.createChatBubbles(bXGap, bPlaceholder.height + bYGap, 180, 3);
+
+    //TR
+    this.createChatBubbles(
+      this.screenWidth - bPlaceholder.width - bXGap,
+      bPlaceholder.height + bYGap,
+      180,
+      2
+    );
+
+    //BR
+    this.createChatBubbles(
+      this.screenWidth - bPlaceholder.width - bXGap,
+      this.screenHeight - bYGap,
+      0,
+      1
+    );
+
+    //BL
+    this.createChatBubbles(bXGap, this.screenHeight - bYGap, 0, 0);
 
     this.startGameTimer();
   }
 
-  createChatBubbles() {
-    this.add.image(this.screenCenterX, 0, "chat-top").setOrigin(0.5, 0);
-    this.add
-      .image(this.screenCenterX, this.screenHeight, "chat-bottom")
-      .setOrigin(0.5, 1);
+  createChatBubbles(x, y, angle, frame) {
+    let b = this.add
+      .image(x, y, "chat-time-bubble")
+      .setOrigin(0, 1)
+      .setFrame(frame);
+
+    let tX = b.x;
+    let tY = b.y;
+
+    let t = this.add
+      .bitmapText(
+        0,
+        0,
+        "natural-log",
+        "Each player should sit facing their\ncorner of the tablet",
+        20,
+        1
+      )
+      .setAngle(angle);
+
+    if (frame == 3 || frame == 2) {
+      tX = b.x + b.width / 2 + t.width / 2;
+      tY = b.y - b.height / 2 + t.height / 2 + 15;
+    } else {
+      tX = b.x + b.width / 2 - t.width / 2;
+      tY = b.y - b.height / 2 - t.height / 2 - 15;
+    }
+
+    t.x = tX;
+    t.y = tY;
   }
 
   createNavigationButtons() {

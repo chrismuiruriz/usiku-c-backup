@@ -1,7 +1,8 @@
 import { Scene } from "phaser";
 
-import label from "../../assets/img/take-position/labels-168x49.png";
-import bg from "../../assets/img/take-position/take-position-bg.png";
+import tk_label from "../../assets/img/take-position/labels-168x49.png";
+import tk_bg from "../../assets/img/take-position/take-position-bg.png";
+import tk_text from "../../assets/img/take-position/take-position-text.png";
 
 import chatTop from "../../assets/img/take-position/chat-top.png";
 import chatBottom from "../../assets/img/take-position/chat-bottom.png";
@@ -14,19 +15,18 @@ export default class TakePositionScene extends Scene {
   }
 
   preload() {
-    this.load.image(`bg`, bg);
-    this.load.spritesheet(`label`, label, {
+    this.load.image(`tk_bg`, tk_bg);
+    this.load.spritesheet(`tk_label`, tk_label, {
       frameWidth: 168,
       frameHeight: 49,
     });
 
     this.load.image(`chat-top`, chatTop);
     this.load.image(`chat-bottom`, chatBottom);
+    this.load.image(`tk_text`, tk_text);
   }
 
   async create(data) {
-    const { width, height } = this.scale;
-
     this.screenWidth = this.cameras.main.width;
     this.screenHeight = this.cameras.main.height;
 
@@ -40,7 +40,9 @@ export default class TakePositionScene extends Scene {
     this.selectionCounter = 0;
     this.selections = [];
 
-    this.add.image(this.screenCenterX, this.screenCenterY, "bg").setOrigin(0.5);
+    this.add
+      .image(this.screenCenterX, this.screenCenterY, "tk_bg")
+      .setOrigin(0.5);
 
     //add temporary text
 
@@ -50,15 +52,13 @@ export default class TakePositionScene extends Scene {
       align: "center",
     };
     this.text1 = this.add
-      .text(this.screenCenterX, 0, "TAKE YOUR POSITIONS!", styleConfig)
-      .setOrigin(0.5)
+      .image(this.screenCenterX, this.screenCenterY, "tk_text")
+      .setOrigin(0.5, 0)
       .setAngle(180);
-    this.text1.y = this.screenCenterY - 30;
 
     this.text2 = this.add
-      .text(this.screenCenterX, 0, "TAKE YOUR POSITIONS!", styleConfig)
-      .setOrigin(0.5);
-    this.text2.y = this.screenCenterY + 30;
+      .image(this.screenCenterX, this.screenCenterY, "tk_text")
+      .setOrigin(0.5, 0);
 
     this.createChatBubbles();
 
@@ -98,7 +98,7 @@ export default class TakePositionScene extends Scene {
     this.labLabel = this.add.image(
       this.topLeftButton.x,
       this.topLeftButton.y + this.topLeftButton.height / 2 + 30,
-      "label"
+      "tk_label"
     );
     this.labLabel.setFrame(3);
 
@@ -129,7 +129,7 @@ export default class TakePositionScene extends Scene {
     this.farmLabel = this.add.image(
       this.topRightButton.x,
       this.topRightButton.y + this.topRightButton.height / 2 + 30,
-      "label"
+      "tk_label"
     );
     this.farmLabel.setFrame(2);
 
@@ -158,7 +158,7 @@ export default class TakePositionScene extends Scene {
     this.factoryLabel = this.add.image(
       this.bottomRightButton.x,
       this.bottomRightButton.y + this.bottomRightButton.height / 2 + 30,
-      "label"
+      "tk_label"
     );
     this.factoryLabel.setFrame(1);
 
@@ -186,7 +186,7 @@ export default class TakePositionScene extends Scene {
     this.excavatorLabel = this.add.image(
       this.bottomLeftButton.x,
       this.bottomLeftButton.y + this.bottomLeftButton.height / 2 + 30,
-      "label"
+      "tk_label"
     );
     this.excavatorLabel.setFrame(0);
   }

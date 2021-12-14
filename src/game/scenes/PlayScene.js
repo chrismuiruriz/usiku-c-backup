@@ -211,13 +211,13 @@ export default class PlayScene extends Scene {
       if (Math.abs(this.farmCleanButton.x - cleanOrPolluteIcon.x) < 20) {
         cleanOrPolluteIcon.destroy();
         this.labStation.createPebble(2);
-        this.updateProgressBar(10, "farm");
+        this.updateProgressBar(1, "farm");
       }
 
       if (Math.abs(this.farmPollutingButton.x - cleanOrPolluteIcon.x) < 20) {
         cleanOrPolluteIcon.destroy();
         this.labStation.createPebble(1);
-        this.updateProgressBar(10, "farm");
+        this.updateProgressBar(1, "farm");
       }
     });
   }
@@ -261,11 +261,11 @@ export default class PlayScene extends Scene {
     this.bottle = this.matter.add.image(
       this.screenWidth - 150,
       350,
-      "excavator-base",
+      "bottle",
       null,
       { label: "bottle" }
     );
-    this.bottle.setScale(0.3);
+    this.bottle.setScale(0.4);
     this.bottle.setFriction(0.15);
   }
 
@@ -524,7 +524,7 @@ export default class PlayScene extends Scene {
       newGreenScaleY
     );
 
-    this.setGamePoints(10, source);
+    this.setGamePoints(1, source);
   }
 
   //set points
@@ -769,7 +769,7 @@ export default class PlayScene extends Scene {
             truck.setFrame(1);
             truck.resumeFollow();
 
-            this.updateProgressBar(10, "excavator");
+            this.updateProgressBar(1, "excavator");
 
             //make sure we have some trucks left
             if (this.trucks.length > 1) {
@@ -870,12 +870,7 @@ export default class PlayScene extends Scene {
 
     // track followers
     let matatu2 = this.add
-      .follower(
-        matatuCurve,
-        this.screenWidth + 25,
-        0,
-        "matatus"
-      )
+      .follower(matatuCurve, this.screenWidth + 25, 0, "matatus")
       .setFrame(1);
     matatu2.startFollow({
       duration: 2500,

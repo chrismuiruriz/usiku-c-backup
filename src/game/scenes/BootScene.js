@@ -27,6 +27,7 @@ import blueTriangleButton from "../../assets/img/game-play/blue-triangle-button.
 
 import dock from "../../assets/img/game-play/dock-2.png";
 import boat from "../../assets/img/game-play/boat-5.png";
+import bottle from "../../assets/img/game-play/bottle.png";
 
 import labStation from "../../assets/img/game-play/lab-station.png";
 import labStationRightButton from "../../assets/img/game-play/lab-station-right-button.png";
@@ -56,6 +57,8 @@ import storySceneBg from "../../assets/img/story/story-bg.png";
 import startSceneCharacters from "../../assets/img/start/characters.png";
 
 import startBtn from "../../assets/img/common/start-btn-241x129.png";
+import letsGoBtn from "../../assets/img/story/letsgo-241x129.png";
+import nextBtn from "../../assets/img/story/next-241x129.png";
 import continueBtn from "../../assets/img/common/continue-btn-283x169.png";
 import okBtn from "../../assets/img/common/ok-btn-146x154.png";
 
@@ -75,6 +78,9 @@ import segmentsBasicPNG from "../../assets/fonts/16segments-basic/bitmap.png";
 import segmentsBasicXML from "../../assets/fonts/16segments-basic/bitmap.xml";
 
 import matatu from "../../assets/img/game-play/matatu.png";
+import chatTimeBubble from "../../assets/img/chat-time/bubble-420x187.png";
+//drop-icons-135x135-plain.png
+import dropIcons from "../../assets/img/game-play/drop-icons-135x135.png";
 
 export default class BootScene extends Scene {
   constructor() {
@@ -88,6 +94,7 @@ export default class BootScene extends Scene {
     this.load.audio("s-correct-answer", s_correctAns);
     this.load.audio("s-wrong-answer", s_wrongAns);
     this.load.audio("s-start-collected", s_starCollected);
+    this.load.image("bottle", bottle);
 
     this.load.image("game-backround", gameBg);
     this.load.image("pipes", pipes);
@@ -155,6 +162,14 @@ export default class BootScene extends Scene {
       frameWidth: 241,
       frameHeight: 129,
     });
+    this.load.spritesheet("letsgo-btn", letsGoBtn, {
+      frameWidth: 241,
+      frameHeight: 129,
+    });
+    this.load.spritesheet("next-btn", nextBtn, {
+      frameWidth: 241,
+      frameHeight: 129,
+    });
     this.load.spritesheet("continue-btn", continueBtn, {
       frameWidth: 283,
       frameHeight: 169,
@@ -167,6 +182,16 @@ export default class BootScene extends Scene {
     this.load.spritesheet("matatus", matatu, {
       frameWidth: 74,
       frameHeight: 38,
+    });
+
+    this.load.spritesheet("chat-time-bubble", chatTimeBubble, {
+      frameWidth: 420,
+      frameHeight: 187,
+    });
+
+    this.load.spritesheet("drop-icons", dropIcons, {
+      frameWidth: 135,
+      frameHeight: 135,
     });
 
     this.load.bitmapFont("alloyink", alloyinkPNG, alloyinkXML);

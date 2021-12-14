@@ -47,28 +47,28 @@ export default class HowToPlayScene extends Scene {
 
   createBoards() {
     this.boardTL = this.add.sprite(0, 0, "how-to-play-board").setAngle(180);
-    this.boardTL.x = this.boardTL.width / 2;
+    this.boardTL.x = this.boardTL.width / 2 + 110;
     this.boardTL.y = this.boardTL.height / 2;
 
     this.boardTR = this.add.sprite(0, 0, "how-to-play-board").setAngle(180);
-    this.boardTR.x = this.screenWidth - this.boardTR.width / 2;
+    this.boardTR.x = this.screenWidth - this.boardTR.width / 2 - 110;
     this.boardTR.y = this.boardTR.height / 2;
 
     this.boardBR = this.add.sprite(0, 0, "how-to-play-board");
-    this.boardBR.x = this.screenWidth - this.boardBR.width / 2;
+    this.boardBR.x = this.screenWidth - this.boardBR.width / 2 - 110;
     this.boardBR.y = this.screenHeight - this.boardBR.height / 2;
 
     this.boardBL = this.add.sprite(0, 0, "how-to-play-board");
-    this.boardBL.x = this.boardBL.width / 2;
+    this.boardBL.x = this.boardBL.width / 2 + 110;
     this.boardBL.y = this.screenHeight - this.boardBL.height / 2;
   }
 
   createButtons() {
     this.styleConfig = {
       fill: "#CDC297",
-      font: "22px natlog",
+      font: "19px natlog",
       align: "center",
-      wordWrap: { width: this.boardTL.width - 40, useAdvancedWrap: true },
+      wordWrap: { width: this.boardTL.width - 80, useAdvancedWrap: true },
     };
 
     this.labLabel = this.add.image(this.boardTL.x, 0, "how-to-play-label");
@@ -95,9 +95,10 @@ export default class HowToPlayScene extends Scene {
       .sprite(0, 0, "ok-btn")
       .setFrame(0)
       .setAngle(180)
-      .setScale(0.8);
-    this.topLeftButton.x = this.topLeftButton.width / 2;
-    this.topLeftButton.y = this.topLeftButton.height / 2;
+      .setScale(0.8)
+      .setOrigin(1, 1);
+    this.topLeftButton.x = 0;
+    this.topLeftButton.y = 0;
     this.topLeftButton.setInteractive();
 
     this.topLeftButton.on("pointerdown", (pointer) => {
@@ -132,8 +133,7 @@ export default class HowToPlayScene extends Scene {
         this.styleConfig
       )
       .setOrigin(0.5, 0)
-      .setAngle(180)
-      .setScale(0.8);
+      .setAngle(180);
     this.textTR.width = this.boardTR.width - 15;
     this.textTR.y = this.farmLabel.y - this.farmLabel.height;
 
@@ -141,9 +141,10 @@ export default class HowToPlayScene extends Scene {
       .sprite(0, 0, "ok-btn")
       .setFrame(0)
       .setAngle(180)
-      .setScale(0.8);
-    this.topRightButton.x = this.screenWidth - this.topRightButton.width / 2;
-    this.topRightButton.y = this.topRightButton.height / 2;
+      .setScale(0.8)
+      .setOrigin(0, 1);
+    this.topRightButton.x = this.screenWidth;
+    this.topRightButton.y = 0;
     this.topRightButton.setInteractive();
 
     this.topRightButton.on("pointerdown", (pointer) => {
@@ -183,11 +184,10 @@ export default class HowToPlayScene extends Scene {
     this.bottomRightButton = this.add
       .sprite(0, 0, "ok-btn")
       .setFrame(0)
+      .setOrigin(1, 1)
       .setScale(0.8);
-    this.bottomRightButton.x =
-      this.screenWidth - this.bottomRightButton.width / 2;
-    this.bottomRightButton.y =
-      this.screenHeight - this.bottomRightButton.height / 2;
+    this.bottomRightButton.x = this.screenWidth;
+    this.bottomRightButton.y = this.screenHeight;
     this.bottomRightButton.setInteractive();
 
     this.bottomRightButton.on("pointerdown", (pointer) => {
@@ -232,10 +232,10 @@ export default class HowToPlayScene extends Scene {
     this.bottomLeftButton = this.add
       .sprite(0, 0, "ok-btn")
       .setFrame(0)
+      .setOrigin(0, 1)
       .setScale(0.8);
-    this.bottomLeftButton.x = this.bottomLeftButton.width / 2;
-    this.bottomLeftButton.y =
-      this.screenHeight - this.bottomLeftButton.height / 2;
+    this.bottomLeftButton.x = 0;
+    this.bottomLeftButton.y = this.screenHeight;
     this.bottomLeftButton.setInteractive();
 
     this.bottomLeftButton.on("pointerdown", (pointer) => {
