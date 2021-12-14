@@ -139,10 +139,10 @@ export default class GameSetupScene extends Scene {
   }
 
   startNextScene() {
-    this.scene.stop("GameSetupScene");
     this.scene.start("TakePositionScene", {
       server: {},
       onGameOver: {},
     });
+    this.scene.stop("GameSetupScene");
   }
 }

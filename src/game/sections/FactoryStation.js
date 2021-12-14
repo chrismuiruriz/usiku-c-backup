@@ -282,7 +282,7 @@ export default class FactoryStation {
 
   boatFollowPath() {
     //add 50 followers to boats
-    for (var i = 0; i < 50; i++) {
+    for (var i = 0; i < 100; i++) {
       this.boats.push(
         this.scene.add
           .follower(this.boatCurve, this.dock.x + 66, this.dock.y + 4.5, "boat")
@@ -299,7 +299,7 @@ export default class FactoryStation {
     }
 
     this.boats[boatIndex].startFollow({
-      duration: 6000,
+      duration: 4000,
       ease: "Sine.easeInOut",
       rotateToPath: true,
       verticalAdjust: true,
@@ -308,14 +308,13 @@ export default class FactoryStation {
           this.generateCleanOrPolluteIcon();
         }
       },
-      onComplete() {
-        console.log("boat follow complete");
+      onComplete: () => {
+        //do something when it ends
       },
     });
   }
 
   generateCleanOrPolluteIcon() {
-    console.log(`Boat`);
     this.boats[this.currentBoatIndex].setVisible(false);
     this.boats.splice(this.currentBoatIndex, 1);
 

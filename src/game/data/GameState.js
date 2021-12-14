@@ -67,12 +67,24 @@ export default class GameState {
       : 0;
   }
 
+  setRoundGroupScore(round, score) {
+    let label = `round_${round}_group_score`;
+    let newScore = localStorage.getItem(label)
+      ? parseInt(localStorage.getItem(label)) + score
+      : score;
+
+    localStorage.setItem(label, newScore);
+  }
+
+  getRoundGroupScore(round) {
+    let label = `round_${round}_group_score`;
+    return localStorage.getItem(label) || 0;
+  }
+
   getGroupScores() {
     let groupScore = 0;
     for (let i = 1; i <= 4; i++) {
-      for (let j = 1; j <= 4; j++) {
-        groupScore += parseInt(this.getPlayerRoundScore(j, i));
-      }
+      groupScore += parseInt(this.getRoundGroupScore(i));
     }
     return groupScore;
   }

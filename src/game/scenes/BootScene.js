@@ -8,6 +8,16 @@ import s_correctAns from "../../assets/media/correct-answer.wav";
 import s_wrongAns from "../../assets/media/wrong-answer.wav";
 import s_starCollected from "../../assets/media/star-collected.mp3";
 
+import s_correctSort from "../../assets/media/correct-sort.wav";
+import s_wrongSort from "../../assets/media/wrong-sort.wav";
+
+import s_trashPicked from "../../assets/media/excavator-collect.wav";
+import s_excavatorMove from "../../assets/media/excavator-tap.wav";
+
+import s_riverFlow from "../../assets/media/river-flow.WAV";
+import s_newQuestion from "../../assets/media/new-question.wav";
+import s_materialArrives from "../../assets/media/material-arrives.wav";
+
 import gameBg from "../../assets/img/game-play/game-bg.png";
 import pipes from "../../assets/img/game-play/pipes.png";
 
@@ -94,6 +104,15 @@ export default class BootScene extends Scene {
     this.load.audio("s-correct-answer", s_correctAns);
     this.load.audio("s-wrong-answer", s_wrongAns);
     this.load.audio("s-start-collected", s_starCollected);
+
+    this.load.audio("s-correct-sort", s_correctSort);
+    this.load.audio("s-wrong-sort", s_wrongSort);
+    this.load.audio("s-trash-picked", s_trashPicked);
+    this.load.audio("s-excavator-move", s_excavatorMove);
+    this.load.audio("s-river-flow", s_riverFlow);
+    this.load.audio("s-new-question", s_newQuestion);
+    this.load.audio("s-material-arrives", s_materialArrives);
+
     this.load.image("bottle", bottle);
 
     this.load.image("game-backround", gameBg);
@@ -237,7 +256,7 @@ export default class BootScene extends Scene {
   };
 
   createNewGame() {
-    this.scene.start("PlayScene", {
+    this.scene.start("LoadingScene", {
       server: this.server,
       onGameOver: this.handleGameOver,
     });

@@ -68,11 +68,11 @@ export default class StartScene extends Scene {
   }
 
   startNextScene() {
-    this.scene.stop("StartScene");
     this.scene.start("StoryScene", {
       server: {},
       onGameOver: {},
     });
+    this.scene.stop("StartScene");
   }
 
   toggleFullScreen() {

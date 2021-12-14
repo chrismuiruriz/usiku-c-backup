@@ -88,6 +88,7 @@ export default class MenuScene extends Scene {
 
     this.returnToGameBtn.on("pointerup", (pointer) => {
       //TODO:: Return to game
+      this.startNextScene();
     });
 
     /**********************/
@@ -111,7 +112,7 @@ export default class MenuScene extends Scene {
     });
 
     this.showInstructionsBtn.on("pointerup", (pointer) => {
-      //TODO:: Show instructions
+      this.goToScene("HowToPlayScene");
     });
 
     /**********************/
@@ -125,7 +126,7 @@ export default class MenuScene extends Scene {
     });
 
     this.quitGameBtn.on("pointerup", (pointer) => {
-      //TODO:: Close game
+      this.goToScene("LoadingScene");
     });
   }
 
@@ -142,7 +143,16 @@ export default class MenuScene extends Scene {
 
   startNextScene() {
     this.scene.stop("MenuScene");
-    this.scene.start("PlayScene", {
+    this.scene.resume("PlayScene", {
+      server: {},
+      onGameOver: {},
+    });
+  }
+
+  goToScene(scene) {
+    this.scene.stop("PlayScene");
+    this.scene.stop("MenuScene");
+    this.scene.start(scene, {
       server: {},
       onGameOver: {},
     });

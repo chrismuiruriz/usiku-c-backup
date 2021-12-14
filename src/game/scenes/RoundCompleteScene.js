@@ -60,7 +60,7 @@ export default class RoundCompleteScene extends Scene {
 
     this.gameState = new GameState();
     this.currentRound = this.gameState.getCurrentRound();
-    this.totalGroupScore = this.gameState.getRoundScores(this.currentRound);
+    this.totalGroupScore = this.gameState.getRoundGroupScore(this.currentRound);
     this.roundStarCount = this.gameState.getRoundStar(this.currentRound);
 
     this.add
@@ -386,11 +386,11 @@ export default class RoundCompleteScene extends Scene {
   }
 
   startNextScene() {
-    this.scene.stop("RoundCompleteScene");
     this.scene.start("ChatTimeScene", {
       server: {},
       preScene: "RoundCompleteScene",
       onGameOver: {},
     });
+    this.scene.stop("RoundCompleteScene");
   }
 }

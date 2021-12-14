@@ -35,7 +35,7 @@ export default class PlayScene extends Scene {
     });
     //use startAt: 10 * 1000; to handle pause = 90 secs
 
-    this.truckSpeed = 5000;
+    this.truckSpeed = 3500;
     this.firstTruckStartDelay = 50;
     this.excavatorArmRotateSpeed = 447;
     this.bottleSpeedOnRiver = 2500;
@@ -193,13 +193,23 @@ export default class PlayScene extends Scene {
 
   //create cleanOrPollute icon
   createCleanOrPolluteIcon() {
+    let cleanIcons = [0, 3];
+    let dirtyIcons = [1, 2];
+
+    let max = 3;
+    let min = 0;
+    let randomFrame = Math.floor(Math.random() * (max - min + 1)) + min;
+
     let cleanOrPolluteIcon = this.physics.add
       .sprite(
         this.farmCleanButton.x + this.farmCleanButton.width / 2,
         this.farmCleanButton.y + this.farmCleanButton.height,
-        "clean-pollute-icon"
+        "drop-icons"
       )
+      .setFrame(randomFrame)
+      .setScale(0.8)
       .setInteractive({ draggable: true, dropZone: true });
+    cleanOrPolluteIcon.iconType = randomFrame;
 
     cleanOrPolluteIcon.on("drag", (pointer, dragX, dragY) => {
       cleanOrPolluteIcon.x = dragX;
@@ -211,13 +221,18 @@ export default class PlayScene extends Scene {
       if (Math.abs(this.farmCleanButton.x - cleanOrPolluteIcon.x) < 20) {
         cleanOrPolluteIcon.destroy();
         this.labStation.createPebble(2);
-        this.updateProgressBar(1, "farm");
+
+        if (cleanIcons.includes(cleanOrPolluteIcon.iconType)) {
+          this.updateProgressBar(1, "farm");
+        }
       }
 
       if (Math.abs(this.farmPollutingButton.x - cleanOrPolluteIcon.x) < 20) {
         cleanOrPolluteIcon.destroy();
         this.labStation.createPebble(1);
-        this.updateProgressBar(1, "farm");
+        if (dirtyIcons.includes(cleanOrPolluteIcon.iconType)) {
+          this.updateProgressBar(1, "farm");
+        }
       }
     });
   }
@@ -359,7 +374,7 @@ export default class PlayScene extends Scene {
     //this.truckFollow = this.add.follower(this.truckCurve, 0, 730, "truck");
 
     //add 10 truckFollow to trucks array
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 100; i++) {
       this.trucks.push(
         this.add.follower(this.truckCurve, 0 - 30, 730, "trucks").setFrame(0)
       );
@@ -379,11 +394,7 @@ export default class PlayScene extends Scene {
       //let's keep track of the moving truck
       if (truck.isFollowing()) {
         //check if truckX is between 465 and 467
-        if (
-          Math.round(truckX) >= 455 &&
-          Math.round(truckX) <= 456 &&
-          !truck.isFull
-        ) {
+        if (Math.round(truckX) >= 455 && !truck.isFull) {
           this.trucks[idx].isActive = true;
           truck.pauseFollow();
         }
@@ -524,7 +535,7 @@ export default class PlayScene extends Scene {
       newGreenScaleY
     );
 
-    this.setGamePoints(1, source);
+    this.setGamePoints(point, source);
   }
 
   //set points
@@ -541,18 +552,19 @@ export default class PlayScene extends Scene {
         this.gameState.setPlayerRoundScore(3, currentRound, points);
         break;
       case "lab":
+        this.gameState.setRoundGroupScore(currentRound, points);
         this.gameState.setPlayerRoundScore(4, currentRound, points);
         break;
     }
     //TODO: better mechanics of lighting a star
-    let roundScore = this.gameState.getRoundScores(currentRound);
-    if (roundScore == 30) {
+    let roundScore = this.gameState.getRoundGroupScore(currentRound);
+    if (roundScore == 7) {
       this.lightStar(3);
       this.gameState.setRoundStar(currentRound, 1);
-    } else if (roundScore == 60) {
+    } else if (roundScore == 14) {
       this.lightStar(2);
       this.gameState.setRoundStar(currentRound, 2);
-    } else if (roundScore == 80) {
+    } else if (roundScore == 21) {
       this.lightStar(1);
       this.gameState.setRoundStar(currentRound, 3);
     }
@@ -882,8 +894,8 @@ export default class PlayScene extends Scene {
 
   //open menu
   openMenu() {
-    this.scene.stop("PlayScene");
-    this.scene.start("MenuScene", {
+    this.scene.pause("PlayScene");
+    this.scene.launch("MenuScene", {
       server: {},
       onGameOver: {},
     });

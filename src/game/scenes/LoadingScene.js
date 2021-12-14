@@ -1,5 +1,7 @@
 import { Scene } from "phaser";
 
+import GameState from "../data/GameState";
+
 export default class LoadingScene extends Scene {
   constructor() {
     super({ key: "LoadingScene" });
@@ -7,6 +9,11 @@ export default class LoadingScene extends Scene {
 
   async create(data) {
     const { width, height } = this.scale;
+
+    this.gameState = new GameState();
+
+    //let's make sure we clear everything
+    this.gameState.resetScores();
 
     this.screenWidth = this.cameras.main.width;
     this.screenHeight = this.cameras.main.height;
@@ -48,10 +55,11 @@ export default class LoadingScene extends Scene {
   }
 
   startNextScene() {
-    this.scene.stop("LoadingScene");
     this.scene.start("StartScene", {
       server: {},
       onGameOver: {},
     });
+    console.log(`Yebo`)
+    this.scene.stop("LoadingScene");
   }
 }

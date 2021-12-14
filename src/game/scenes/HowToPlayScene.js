@@ -285,10 +285,10 @@ export default class HowToPlayScene extends Scene {
   }
 
   startNextScene() {
-    this.scene.stop("HowToPlayScene");
     this.scene.start("PlayScene", {
       server: {},
       onGameOver: {},
     });
+    this.scene.stop("HowToPlayScene");
   }
 }

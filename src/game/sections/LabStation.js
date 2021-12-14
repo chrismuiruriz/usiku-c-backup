@@ -365,6 +365,7 @@ export default class LapFactory {
 
   processMatches() {
     // this.pebbles.forEach((pebble, index)=>{
+    let totalMatches = 0;
     var i;
     for (i = this.pebbles.length - 1; i >= 0; i -= 1) {
       var pebble = this.pebbles[i];
@@ -372,12 +373,16 @@ export default class LapFactory {
         this.point_count += 1; //get some points for it
         //TODO: find a better approach for this
         if (pebble.type == 1 || pebble.type == 2) {
-          this.scene.updateProgressBar(1, "lab");
+          totalMatches += 1;
         }
 
         pebble.destroy(); //delete it from the board
         this.pebbles.splice(i, 1); //remove it from the pebbles array
       }
+    }
+
+    if (totalMatches >= 1) {
+      this.scene.updateProgressBar(totalMatches / 2, "lab");
     }
   }
 

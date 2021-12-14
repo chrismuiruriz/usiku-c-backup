@@ -3,9 +3,6 @@ import { Scene } from "phaser";
 import chatTimeBg from "../../assets/img/chat-time/chat-time-bg.png";
 import chatTimeText from "../../assets/img/chat-time/chat-time.png";
 
-import chatTop from "../../assets/img/take-position/chat-top.png";
-import chatBottom from "../../assets/img/take-position/chat-bottom.png";
-
 import GameState from "../data/GameState";
 
 export default class ChatTimeScene extends Scene {
@@ -16,8 +13,8 @@ export default class ChatTimeScene extends Scene {
   }
 
   init() {
-    this.gameTimerDuration = 10; //secs
-    this.gameTimerCountdown = 10; //secs
+    this.gameTimerDuration = 3; //secs
+    this.gameTimerCountdown = 3; //secs
     this.gameTimer = new Phaser.Time.TimerEvent({
       delay: this.gameTimerDuration * 1000,
     });
@@ -26,9 +23,6 @@ export default class ChatTimeScene extends Scene {
   preload() {
     this.load.image(`chat-time-bg`, chatTimeBg);
     this.load.image(`chat-time-text`, chatTimeText);
-
-    this.load.image(`chat-top`, chatTop);
-    this.load.image(`chat-bottom`, chatBottom);
   }
 
   async create(data) {
@@ -210,28 +204,28 @@ export default class ChatTimeScene extends Scene {
     //if players have played all rounds, show game summary scene else, show change positions
 
     if (this.gameState.getCurrentRound() >= 4) {
-      this.scene.stop("ChatTimeScene");
       this.scene.start("GameSummaryScene", {
         server: {},
         onGameOver: {},
       });
+      this.scene.stop("ChatTimeScene");
     } else {
       let nextRound = this.gameState.getCurrentRound() + 1;
       this.gameState.setCurrentRound(nextRound);
 
-      this.scene.stop("ChatTimeScene");
       this.scene.start("ChangePositionsScene", {
         server: {},
         onGameOver: {},
       });
+      this.scene.stop("ChatTimeScene");
     }
   }
 
   startNextScene() {
-    this.scene.stop("ChatTimeScene");
     this.scene.start("HowToPlayScene", {
       server: {},
       onGameOver: {},
     });
+    this.scene.stop("ChatTimeScene");
   }
 }

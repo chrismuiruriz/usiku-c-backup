@@ -96,7 +96,7 @@ export default class GameSummaryScene extends Scene {
     this.createButtons();
 
     //let's make sure we clear everything
-    this.gameState.resetScores()
+    this.gameState.resetScores();
   }
 
   createTopScoreBoards() {
@@ -106,7 +106,7 @@ export default class GameSummaryScene extends Scene {
         this.scoreBoardDistance * this.scoreBoardScaleFactor -
         this.scoreBoardDistance,
       this.scoreBoardTopY * this.scoreBoardScaleFactor,
-      this.gameState.getRoundScores(4),
+      this.gameState.getRoundGroupScore(4),
       this.gameState.getRoundStar(4),
       true,
       this.scoreBoardScaleFactor,
@@ -117,7 +117,7 @@ export default class GameSummaryScene extends Scene {
       "rounds",
       this.screenCenterX - this.scoreBoardDistance * this.scoreBoardScaleFactor,
       this.scoreBoardTopY * this.scoreBoardScaleFactor,
-      this.gameState.getRoundScores(3),
+      this.gameState.getRoundGroupScore(3),
       this.gameState.getRoundStar(3),
       true,
       this.scoreBoardScaleFactor,
@@ -128,7 +128,7 @@ export default class GameSummaryScene extends Scene {
       "rounds",
       this.screenCenterX + this.scoreBoardDistance * this.scoreBoardScaleFactor,
       this.scoreBoardTopY * this.scoreBoardScaleFactor,
-      this.gameState.getRoundScores(2),
+      this.gameState.getRoundGroupScore(2),
       this.gameState.getRoundStar(2),
       true,
       this.scoreBoardScaleFactor,
@@ -141,7 +141,7 @@ export default class GameSummaryScene extends Scene {
         this.scoreBoardDistance * this.scoreBoardScaleFactor +
         this.scoreBoardDistance,
       this.scoreBoardTopY * this.scoreBoardScaleFactor,
-      this.gameState.getRoundScores(1),
+      this.gameState.getRoundGroupScore(1),
       this.gameState.getRoundStar(1),
       true,
       this.scoreBoardScaleFactor,
@@ -156,7 +156,7 @@ export default class GameSummaryScene extends Scene {
         this.scoreBoardDistance * this.scoreBoardScaleFactor -
         this.scoreBoardDistance,
       this.scoreBoardBottomY * this.scoreBoardScaleFactor,
-      this.gameState.getRoundScores(1),
+      this.gameState.getRoundGroupScore(1),
       this.gameState.getRoundStar(1),
       false,
       this.scoreBoardScaleFactor,
@@ -167,7 +167,7 @@ export default class GameSummaryScene extends Scene {
       "rounds",
       this.screenCenterX - this.scoreBoardDistance * this.scoreBoardScaleFactor,
       this.scoreBoardBottomY * this.scoreBoardScaleFactor,
-      this.gameState.getRoundScores(2),
+      this.gameState.getRoundGroupScore(2),
       this.gameState.getRoundStar(2),
       false,
       this.scoreBoardScaleFactor,
@@ -178,7 +178,7 @@ export default class GameSummaryScene extends Scene {
       "rounds",
       this.screenCenterX + this.scoreBoardDistance * this.scoreBoardScaleFactor,
       this.scoreBoardBottomY * this.scoreBoardScaleFactor,
-      this.gameState.getRoundScores(3),
+      this.gameState.getRoundGroupScore(3),
       this.gameState.getRoundStar(3),
       false,
       this.scoreBoardScaleFactor,
@@ -191,7 +191,7 @@ export default class GameSummaryScene extends Scene {
         this.scoreBoardDistance * this.scoreBoardScaleFactor +
         this.scoreBoardDistance,
       this.scoreBoardBottomY * this.scoreBoardScaleFactor,
-      this.gameState.getRoundScores(4),
+      this.gameState.getRoundGroupScore(4),
       this.gameState.getRoundStar(4),
       false,
       this.scoreBoardScaleFactor,
@@ -495,10 +495,11 @@ export default class GameSummaryScene extends Scene {
     //reset all scores
     this.gameState.resetScores();
 
-    this.scene.stop("GameSummaryScene");
-    this.scene.start("LoadingScene", {
+    this.scene.start("EndScene", {
       server: {},
       onGameOver: {},
     });
+
+    this.scene.stop("GameSummaryScene");
   }
 }

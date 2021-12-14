@@ -12,7 +12,7 @@ import MenuScene from "./scenes/MenuScene";
 import RoundCompleteScene from "./scenes/RoundCompleteScene";
 import ChangePositionsScene from "./scenes/ChangePositionsScene";
 import GameSummaryScene from "./scenes/GameSummaryScene";
-import GameOverScene from "./scenes/GameOverScene";
+import EndScene from "./scenes/EndScene";
 
 export default {
   type: Phaser.AUTO,
@@ -45,6 +45,6 @@ export default {
     RoundCompleteScene,
     ChangePositionsScene,
     GameSummaryScene,
-    GameOverScene,
+    EndScene,
   ],
 };
