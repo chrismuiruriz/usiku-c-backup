@@ -129,11 +129,10 @@ export default class FactoryStation {
 
       if (this.quiz.checkAnswer(this.currentQuestion.index, "B")) {
         this.isCorrect();
+        this.startBoat();
       } else {
         this.isWrong();
       }
-
-      this.startBoat();
     });
 
     this.optionB = this.scene.add
@@ -163,10 +162,10 @@ export default class FactoryStation {
 
       if (this.quiz.checkAnswer(this.currentQuestion.index, "A")) {
         this.isCorrect();
+        this.startBoat();
       } else {
         this.isWrong();
       }
-      this.startBoat();
     });
 
     this.optionA = this.scene.add
@@ -196,10 +195,10 @@ export default class FactoryStation {
 
       if (this.quiz.checkAnswer(this.currentQuestion.index, "C")) {
         this.isCorrect();
+        this.startBoat();
       } else {
         this.isWrong();
       }
-      this.startBoat();
     });
 
     this.optionC = this.scene.add
@@ -293,7 +292,6 @@ export default class FactoryStation {
   }
 
   startBoat() {
-    console.log("start boat idx", this.currentBoatIndex);
     let boatIndex = this.currentBoatIndex + 1;
     if (this.currentBoatIndex < 0) {
       boatIndex = 0;

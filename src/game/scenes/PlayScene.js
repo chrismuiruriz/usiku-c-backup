@@ -389,7 +389,7 @@ export default class PlayScene extends Scene {
         }
 
         //if this truck is full and truckX rounded is greater than 700
-        if (this.trucks[idx].isFull && Math.round(truckX) >= 760) {
+        if (this.trucks[idx].isFull && Math.round(truckX) >= 750) {
           //destroy truck
           this.trucks[idx].destroy();
           //remove truck from trucks array
@@ -638,7 +638,7 @@ export default class PlayScene extends Scene {
     this.clockText.setText(strProgress);
     if (absProgress <= 0) {
       //times up - round over
-      this.onGameTimerComplete();
+      //this.onGameTimerComplete();
     }
   }
 

@@ -130,7 +130,7 @@ export default class LapFactory {
   // create a pebble of a specified type, and add it to the 'stack'
   createPebble(type) {
     var img_num = 0;
-    var min = 1;
+    var min = 0;
     var max = 2;
     if (type == "random") {
       img_num = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -300,7 +300,7 @@ export default class LapFactory {
   findMatches() {
     this.pebbles.forEach((pebble, index) => {
       this.pebbles.forEach((other_pebble, other_index) => {
-        if (other_pebble.type == pebble.type) {
+        if (other_pebble.type !== pebble.type) {
           //do we have a similar pebble above this
           this.isPartOfMatch(pebble, other_pebble);
         }
@@ -322,8 +322,9 @@ export default class LapFactory {
       //do we have a similar pebble above the other pebble
       this.pebbles.some((other_other_pebble) => {
         if (
-          other_pebble.type == pebble.type &&
-          other_other_pebble.type == other_pebble.type
+          pebble.type !== other_pebble.type &&
+          pebble.type !== other_other_pebble.type &&
+          other_pebble.type !== other_other_pebble.type
         ) {
           if (
             other_other_pebble.col == other_pebble.col &&
@@ -344,8 +345,9 @@ export default class LapFactory {
       //do we have a similar pebble above the other pebble
       this.pebbles.some((other_other_pebble) => {
         if (
-          other_pebble.type == pebble.type &&
-          other_other_pebble.type == other_pebble.type
+          pebble.type !== other_pebble.type &&
+          pebble.type !== other_other_pebble.type &&
+          other_pebble.type !== other_other_pebble.type
         ) {
           if (
             other_other_pebble.row == other_pebble.row &&
@@ -390,7 +392,7 @@ export default class LapFactory {
     this.pebbles = [];
     this.active_pebble = false;
 
-    //this.timerRunning = true;
-    //this.createPebble("random");
+    this.timerRunning = true;
+    this.createPebble("default");
   }
 }
