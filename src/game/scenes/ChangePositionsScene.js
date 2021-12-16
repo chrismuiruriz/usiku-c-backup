@@ -46,6 +46,8 @@ export default class ChangePositionsScene extends Scene {
       .image(this.screenCenterX, this.screenCenterY, "cp_bg")
       .setOrigin(0.5);
 
+    this.soundButtonClick = this.sound.add("s-button-click");
+
     //add temporary text
 
     this.text1 = this.add
@@ -81,6 +83,7 @@ export default class ChangePositionsScene extends Scene {
     this.topLeftButton.setInteractive();
 
     this.topLeftButton.on("pointerdown", (pointer) => {
+      this.soundButtonClick.play();
       if (this.selections.includes("topLeft")) {
         this.selectionCounter--;
         this.selections.splice(this.selections.indexOf(1), 1);
@@ -112,6 +115,7 @@ export default class ChangePositionsScene extends Scene {
     this.topRightButton.setInteractive();
 
     this.topRightButton.on("pointerdown", (pointer) => {
+      this.soundButtonClick.play();
       if (this.selections.includes("topRight")) {
         this.selectionCounter--;
         this.selections.splice(this.selections.indexOf(1), 1);
@@ -141,6 +145,7 @@ export default class ChangePositionsScene extends Scene {
     this.bottomRightButton.setInteractive();
 
     this.bottomRightButton.on("pointerdown", (pointer) => {
+      this.soundButtonClick.play();
       if (this.selections.includes("bottomRight")) {
         this.selectionCounter--;
         this.selections.splice(this.selections.indexOf(1), 1);
@@ -169,6 +174,7 @@ export default class ChangePositionsScene extends Scene {
     this.bottomLeftButton.setInteractive();
 
     this.bottomLeftButton.on("pointerdown", (pointer) => {
+      this.soundButtonClick.play();
       if (this.selections.includes("bottomLeft")) {
         this.selectionCounter--;
         this.selections.splice(this.selections.indexOf(1), 1);

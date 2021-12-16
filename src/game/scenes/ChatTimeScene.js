@@ -13,8 +13,8 @@ export default class ChatTimeScene extends Scene {
   }
 
   init() {
-    this.gameTimerDuration = 3; //secs
-    this.gameTimerCountdown = 3; //secs
+    this.gameTimerDuration = 5; //secs
+    this.gameTimerCountdown = 5; //secs
     this.gameTimer = new Phaser.Time.TimerEvent({
       delay: this.gameTimerDuration * 1000,
     });
@@ -121,7 +121,7 @@ export default class ChatTimeScene extends Scene {
         0,
         "natural-log",
         "Each player should sit facing their\ncorner of the tablet",
-        20,
+        25,
         1
       )
       .setAngle(angle);

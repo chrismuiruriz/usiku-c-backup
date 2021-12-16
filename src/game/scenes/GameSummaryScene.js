@@ -11,7 +11,7 @@ import chatBubbles from "../../assets/img/round-summary/chatbubbles-441x163.png"
 
 import starFrame from "../../assets/img/round-summary/star-frame.png";
 
-import stars from "../../assets/img/round-summary/stars-39x38.png";
+import ge_stars from "../../assets/img/round-summary/stars-39x38.png";
 
 import rounds from "../../assets/img/game-complete/rounds-241x70.png";
 
@@ -49,7 +49,7 @@ export default class GameSummaryScene extends Scene {
       frameHeight: 70,
     });
 
-    this.load.spritesheet("stars_", stars, {
+    this.load.spritesheet("stars_", ge_stars, {
       frameWidth: 39,
       frameHeight: 38,
     });
@@ -74,6 +74,8 @@ export default class GameSummaryScene extends Scene {
     this.add
       .image(this.screenCenterX, this.screenCenterY, "gs_bg")
       .setOrigin(0.5);
+
+    this.soundButtonClick = this.sound.add("s-button-click");
 
     this.add
       .image(this.screenCenterX, this.screenCenterY, "game-complete-text")
@@ -288,6 +290,7 @@ export default class GameSummaryScene extends Scene {
     this.topLeftButton.setInteractive();
 
     this.topLeftButton.on("pointerdown", (pointer) => {
+      this.soundButtonClick.play();
       if (this.selections.includes("topLeft")) {
         this.selectionCounter--;
         this.selections.splice(this.selections.indexOf(1), 1);
@@ -319,6 +322,7 @@ export default class GameSummaryScene extends Scene {
     this.topRightButton.setInteractive();
 
     this.topRightButton.on("pointerdown", (pointer) => {
+      this.soundButtonClick.play();
       if (this.selections.includes("topRight")) {
         this.selectionCounter--;
         this.selections.splice(this.selections.indexOf(1), 1);
@@ -349,6 +353,7 @@ export default class GameSummaryScene extends Scene {
     this.bottomRightButton.setInteractive();
 
     this.bottomRightButton.on("pointerdown", (pointer) => {
+      this.soundButtonClick.play();
       if (this.selections.includes("bottomRight")) {
         this.selectionCounter--;
         this.selections.splice(this.selections.indexOf(1), 1);
@@ -381,6 +386,7 @@ export default class GameSummaryScene extends Scene {
     this.bottomLeftButton.setInteractive();
 
     this.bottomLeftButton.on("pointerdown", (pointer) => {
+      this.soundButtonClick.play();
       if (this.selections.includes("bottomLeft")) {
         this.selectionCounter--;
         this.selections.splice(this.selections.indexOf(1), 1);

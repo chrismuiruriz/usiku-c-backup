@@ -59,7 +59,6 @@ export default class LoadingScene extends Scene {
       server: {},
       onGameOver: {},
     });
-    console.log(`Yebo`)
     this.scene.stop("LoadingScene");
   }
 }

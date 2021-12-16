@@ -18,21 +18,7 @@ export default class StartScene extends Scene {
       .image(this.screenCenterX, this.screenCenterY, "start-scene-bg")
       .setOrigin(0.5);
 
-    // let fullscreenBtn = this.add
-    //   .image(0, 0, "fullscreen-button")
-    //   .setOrigin(1, 0)
-    //   .setScale(0.6)
-    //   .setInteractive();
-    // fullscreenBtn.x = this.screenWidth - fullscreenBtn.width / 2 + 20;
-    // fullscreenBtn.y = fullscreenBtn.height / 2 - 20;
-
-    // fullscreenBtn.on("pointerup", () => {
-    //   if (this.scale.isFullscreen) {
-    //     this.scale.stopFullscreen();
-    //   } else {
-    //     this.scale.startFullscreen();
-    //   }
-    // });
+    this.soundButtonClick = this.sound.add("s-button-click");
 
     let gameLogo = this.add
       .image(this.screenCenterX, 0, "game-logo")
@@ -57,6 +43,7 @@ export default class StartScene extends Scene {
     });
 
     this.startButton.on("pointerup", (pointer) => {
+      this.soundButtonClick.play();
       this.startButton.setFrame(1);
       this.toggleFullScreen();
       this.startNextScene();

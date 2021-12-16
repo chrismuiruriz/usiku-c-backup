@@ -38,6 +38,8 @@ export default class FactoryStation {
 
     this.correctAnsSound = this.scene.sound.add("s-correct-answer");
     this.wrongAnsSound = this.scene.sound.add("s-wrong-answer");
+    this.materialArrives = this.scene.sound.add("s-material-arrives");
+    this.newQuestionSound = this.scene.sound.add("s-new-question");
   }
 
   /**
@@ -58,6 +60,7 @@ export default class FactoryStation {
     this.optionC.setText(question.C);
 
     this.currentQuestion = question;
+    this.newQuestionSound.play();
   }
 
   clearQuiz() {
@@ -319,5 +322,6 @@ export default class FactoryStation {
     this.boats.splice(this.currentBoatIndex, 1);
 
     this.scene.createCleanOrPolluteIcon();
+    this.materialArrives.play();
   }
 }

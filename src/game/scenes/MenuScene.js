@@ -31,6 +31,8 @@ export default class MenuScene extends Scene {
       .image(this.screenCenterX, this.screenCenterY, "green-bg")
       .setOrigin(0.5);
 
+    this.soundButtonClick = this.sound.add("s-button-click");
+
     this.createMenuButtons();
 
     this.createNavigationButtons();
@@ -88,6 +90,7 @@ export default class MenuScene extends Scene {
 
     this.returnToGameBtn.on("pointerup", (pointer) => {
       //TODO:: Return to game
+      this.soundButtonClick.play();
       this.startNextScene();
     });
 
@@ -112,6 +115,7 @@ export default class MenuScene extends Scene {
     });
 
     this.showInstructionsBtn.on("pointerup", (pointer) => {
+      this.soundButtonClick.play();
       this.goToScene("HowToPlayScene");
     });
 
@@ -126,6 +130,7 @@ export default class MenuScene extends Scene {
     });
 
     this.quitGameBtn.on("pointerup", (pointer) => {
+      this.soundButtonClick.play();
       this.goToScene("LoadingScene");
     });
   }
@@ -137,6 +142,7 @@ export default class MenuScene extends Scene {
       .setInteractive();
 
     this.closeBtn.on("pointerdown", (pointer) => {
+      this.soundButtonClick.play();
       this.startNextScene();
     });
   }

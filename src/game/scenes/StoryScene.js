@@ -42,6 +42,8 @@ export default class StoryScene extends Scene {
       .image(this.screenCenterX, this.screenCenterY, "story-scene-bg")
       .setOrigin(0.5);
 
+    this.soundButtonClick = this.sound.add("s-button-click");
+
     this.letsGoButton = this.add
       .sprite(this.screenCenterX, 617, "letsgo-btn")
       .setFrame(0)
@@ -58,6 +60,7 @@ export default class StoryScene extends Scene {
     });
 
     this.letsGoButton.on("pointerup", (pointer) => {
+      this.soundButtonClick.play();
       this.letsGoButton.setFrame(1);
       this.startNextScene();
     });
@@ -87,6 +90,7 @@ export default class StoryScene extends Scene {
     });
 
     this.nextButton.on("pointerup", (pointer) => {
+      this.soundButtonClick.play();
       this.nextButton.setFrame(1);
       this.displayChats();
       this.chatCounter++;
@@ -103,21 +107,25 @@ export default class StoryScene extends Scene {
         this.chat2.setVisible(true);
         break;
       case 2:
-        this.chat3.setVisible(true);
+        this.chat2_2.setVisible(true);
         break;
       case 3:
-        this.chat4.setVisible(true);
+        this.chat3.setVisible(true);
         break;
       case 4:
-        this.chat5.setVisible(true);
+        this.chat4.setVisible(true);
         break;
       case 5:
-        this.chat6.setVisible(true);
+        this.chat5.setVisible(true);
         break;
       case 6:
-        this.chat7.setVisible(true);
+        this.chat6.setVisible(true);
         break;
       case 7:
+        this.chat7.setVisible(true);
+        break;
+      case 8:
+        this.chatCounter = 0;
         this.nextButton.setVisible(false);
         this.letsGoButton.setVisible(true);
         break;
@@ -130,6 +138,7 @@ export default class StoryScene extends Scene {
   hideAllChats() {
     this.chat1.setVisible(false);
     this.chat2.setVisible(false);
+    this.chat2_2.setVisible(false);
     this.chat3.setVisible(false);
     this.chat4.setVisible(false);
     this.chat5.setVisible(false);
@@ -142,6 +151,7 @@ export default class StoryScene extends Scene {
     this.backBtn.setInteractive();
 
     this.backBtn.on("pointerdown", (pointer) => {
+      this.soundButtonClick.play();
       this.scene.start("StartScene", {
         server: {},
         onGameOver: {},
@@ -154,6 +164,7 @@ export default class StoryScene extends Scene {
       .setInteractive();
 
     this.closeBtn.on("pointerdown", (pointer) => {
+      this.soundButtonClick.play();
       this.scene.start("LoadingScene", {
         server: {},
         onGameOver: {},
@@ -173,61 +184,311 @@ export default class StoryScene extends Scene {
   }
 
   createChatBubbles() {
-    this.chat1 = this.add
-      .image(
-        this.kids.x - 100,
-        this.kids.y - this.kids.height / 2 - 60,
-        "chat_1"
-      )
-      .setVisible(false);
+    this.chat1 = this.add.group();
+    this.bubble1 = this.add.image(
+      this.kids.x - 100,
+      this.kids.y - this.kids.height / 2 - 60,
+      "chat_1"
+    );
+    this.chat1Text = this.createText(
+      this.bubble1.x + 10,
+      this.bubble1.y - 15,
+      this.bubble1.width,
+      this.bubble1.height,
+      "DAVID",
+      "Shikamoo",
+      24,
+      1
+    );
 
-    this.chat2 = this.add
+    this.chat1Char = this.createCharText(
+      this.bubble1.x + 10,
+      this.bubble1.y - 20,
+      this.bubble1.width,
+      this.bubble1.height,
+      "David",
+      1
+    );
+
+    this.chat1.add(this.bubble1);
+    this.chat1.add(this.chat1Text);
+    this.chat1.add(this.chat1Char);
+    this.chat1.setVisible(false);
+
+    // ********************************* //
+
+    this.chat2 = this.add.group();
+    this.bubble2 = this.add
       .image(
         this.kids.x + 50,
         this.kids.y - this.kids.height / 2 - 60,
         "chat_2"
       )
-      .setVisible(false);
+      .setVisible(true);
+    this.chat2Text = this.createText(
+      this.bubble2.x + 5,
+      this.bubble2.y - 25,
+      this.bubble2.width,
+      this.bubble2.height,
+      "Kezia",
+      "What are you doing\ntoday?",
+      24,
+      1
+    );
 
-    this.chat3 = this.add
+    this.chat2Char = this.createCharText(
+      this.bubble2.x + 10,
+      this.bubble2.y - 20,
+      this.bubble2.width,
+      this.bubble2.height,
+      "Kezia",
+      1
+    );
+
+    this.chat2.add(this.bubble2);
+    this.chat2.add(this.chat2Text);
+    this.chat2.add(this.chat2Char);
+    this.chat2.setVisible(false);
+
+    // ********************************* //
+
+    this.chat2_2 = this.add.group();
+    this.bubble2_2 = this.add.image(
+      this.elder.x + 200,
+      this.elder.y - this.elder.height / 2 + 50,
+      "chat_3"
+    );
+
+    this.chat2_2Text = this.createText(
+      this.bubble2_2.x + 10,
+      this.bubble2_2.y - 20,
+      this.bubble2_2.width,
+      this.bubble2_2.height,
+      "ELDER",
+      "Marahaba!",
+      24,
+      1
+    );
+
+    this.chat2_2Char = this.createCharText(
+      this.bubble2_2.x + 10,
+      this.bubble2_2.y - 10,
+      this.bubble2_2.width,
+      this.bubble2_2.height,
+      "Elder",
+      1
+    );
+
+    this.chat2_2.add(this.bubble2_2);
+    this.chat2_2.add(this.chat2_2Text);
+    this.chat2_2.add(this.chat2_2Char);
+    this.chat2_2.setVisible(false);
+
+    // ********************************* //
+
+    this.chat3 = this.add.group();
+    this.bubble3 = this.add
       .image(
-        this.elder.x + 150,
+        this.elder.x + 250,
         this.elder.y - this.elder.height / 2 + 50,
         "chat_3"
       )
-      .setVisible(false);
+      .setScale(2);
+    this.chat3Text = this.createText(
+      this.bubble3.x + 10,
+      this.bubble3.y - 40,
+      this.bubble3.width,
+      this.bubble3.height,
+      "ELDER",
+      "I am very sad today, as you can see the river is\nvery polluted from the city and\nit's not what it used to be",
+      24,
+      1
+    );
 
-    this.chat4 = this.add
+    this.chat3Char = this.createCharText(
+      this.bubble3.x + 140,
+      this.bubble3.y - 50,
+      this.bubble3.width,
+      this.bubble3.height,
+      "Elder",
+      1
+    );
+
+    this.chat3.add(this.bubble3);
+    this.chat3.add(this.chat3Text);
+    this.chat3.add(this.chat3Char);
+    this.chat3.setVisible(false);
+
+    // ********************************* //
+
+    this.chat4 = this.add.group();
+    this.bubble4 = this.add
       .image(
-        this.elder.x + 200,
-        this.elder.y - this.elder.height / 2 + 50,
+        this.elder.x + 300,
+        this.elder.y - this.elder.height / 2 + 100,
         "chat_4"
       )
-      .setVisible(false);
+      .setScale(1.2);
 
-    this.chat5 = this.add
-      .image(
-        this.elder.x + 200,
-        this.elder.y - this.elder.height / 2 + 50,
-        "chat_5"
-      )
-      .setVisible(false);
+    this.chat4Text = this.createText(
+      this.bubble4.x + 10,
+      this.bubble4.y - 50,
+      this.bubble4.width,
+      this.bubble4.height,
+      "ELDER",
+      "When I was your age... I used to come\nhere almost everyday to swim with my friends\nand sometimes...",
+      24,
+      1
+    );
 
-    this.chat6 = this.add
+    this.chat4Char = this.createCharText(
+      this.bubble4.x + 50,
+      this.bubble4.y - 25,
+      this.bubble4.width,
+      this.bubble4.height,
+      "ELDER",
+      1
+    );
+
+    this.chat4.add(this.bubble4);
+    this.chat4.add(this.chat4Text);
+    this.chat4.add(this.chat4Char);
+    this.chat4.setVisible(false);
+
+    // ********************************* //
+
+    this.chat5 = this.add.group();
+    this.bubble5 = this.add.image(
+      this.elder.x + 200,
+      this.elder.y - this.elder.height / 2 + 50,
+      "chat_5"
+    );
+
+    this.chat5Text = this.createText(
+      this.bubble5.x + 10,
+      this.bubble5.y - 30,
+      this.bubble5.width,
+      this.bubble5.height,
+      "ELDER",
+      "We would even find some fish!",
+      24,
+      1
+    );
+
+    this.chat5Char = this.createCharText(
+      this.bubble5.x + 10,
+      this.bubble5.y - 10,
+      this.bubble5.width,
+      this.bubble5.height,
+      "Elder",
+      1
+    );
+
+    this.chat5.add(this.bubble5);
+    this.chat5.add(this.chat5Text);
+    this.chat5.add(this.chat5Char);
+    this.chat5.setVisible(false);
+
+    // ********************************* //
+
+    this.chat6 = this.add.group();
+    this.bubble6 = this.add
       .image(
         this.elder.x + 200,
         this.elder.y - this.elder.height / 2 + 50,
         "chat_6"
       )
-      .setVisible(false);
+      .setScale(1.2);
+    this.chat6Text = this.createText(
+      this.bubble6.x + 10,
+      this.bubble6.y - 30,
+      this.bubble6.width,
+      this.bubble6.height,
+      "ELDER",
+      "I don't know how we can save it from\nbeing polluted further",
+      24,
+      1
+    );
 
-    this.chat7 = this.add
-      .image(
-        this.elder.x + 200,
-        this.elder.y - this.elder.height / 2 + 50,
-        "chat_7"
-      )
-      .setVisible(false);
+    this.chat6Char = this.createCharText(
+      this.bubble6.x + 50,
+      this.bubble6.y - 20,
+      this.bubble6.width,
+      this.bubble6.height,
+      "Elder",
+      1
+    );
+
+    this.chat6.add(this.bubble6);
+    this.chat6.add(this.chat6Text);
+    this.chat6.add(this.chat6Char);
+    this.chat6.setVisible(false);
+
+    // ********************************* //
+
+    this.chat7 = this.add.group();
+    this.bubble7 = this.add.image(
+      this.kids.x + this.kids.width / 2 - 220,
+      this.kids.y - this.kids.height / 2 - 90,
+      "chat_7"
+    );
+    this.chat7Text = this.createText(
+      this.bubble7.x + 10,
+      this.bubble7.y - 40,
+      this.bubble7.width,
+      this.bubble7.height,
+      "DAVID & KEZIA",
+      "Don't worry! We are going to\nhelp save and clean the river!",
+      24,
+      1
+    );
+
+    this.chat7Char = this.createCharText(
+      this.bubble7.x + 5,
+      this.bubble7.y - 15,
+      this.bubble7.width,
+      this.bubble7.height,
+      "David & Kezia",
+      1
+    );
+
+    this.chat7.add(this.bubble7);
+    this.chat7.add(this.chat7Text);
+    this.chat7.add(this.chat7Char);
+    this.chat7.setVisible(false);
+  }
+
+  createText(x, y, w, h, name, text, size, align) {
+    let t = new Phaser.GameObjects.BitmapText(
+      this,
+      x,
+      y,
+      "natural-log",
+      text,
+      size,
+      align
+    );
+    t.x = x - t.width / 2;
+
+    this.add.existing(t);
+    return t;
+  }
+
+  createCharText(x, y, w, h, text, align) {
+    let char = new Phaser.GameObjects.BitmapText(
+      this,
+      0,
+      0,
+      "natural-log",
+      text,
+      20,
+      align
+    );
+    char.x = x + w / 2 - char.width - 20;
+    char.y = y - h / 2 + char.height / 2 + 20;
+
+    this.add.existing(char);
+    return char;
   }
 
   startNextScene() {

@@ -3,6 +3,7 @@ import { Scene } from "phaser";
 import paper from "../../assets/img/paper.png";
 import thudMp3 from "../../assets/media/thud.mp3";
 import thudOgg from "../../assets/media/thud.ogg";
+import s_buttonClick from "../../assets/media/usafi-mtoni-button-2.mp3";
 
 import s_correctAns from "../../assets/media/correct-answer.wav";
 import s_wrongAns from "../../assets/media/wrong-answer.wav";
@@ -10,6 +11,7 @@ import s_starCollected from "../../assets/media/star-collected.mp3";
 
 import s_correctSort from "../../assets/media/correct-sort.wav";
 import s_wrongSort from "../../assets/media/wrong-sort.wav";
+import s_correctMatch from "../../assets/media/correct-match.wav";
 
 import s_trashPicked from "../../assets/media/excavator-collect.wav";
 import s_excavatorMove from "../../assets/media/excavator-tap.wav";
@@ -100,6 +102,7 @@ export default class BootScene extends Scene {
   preload() {
     this.load.image("paper", paper);
     this.load.audio("thud", [thudMp3, thudOgg]);
+    this.load.audio("s-button-click", s_buttonClick);
 
     this.load.audio("s-correct-answer", s_correctAns);
     this.load.audio("s-wrong-answer", s_wrongAns);
@@ -112,6 +115,7 @@ export default class BootScene extends Scene {
     this.load.audio("s-river-flow", s_riverFlow);
     this.load.audio("s-new-question", s_newQuestion);
     this.load.audio("s-material-arrives", s_materialArrives);
+    this.load.audio("s-correct-match", s_correctMatch);
 
     this.load.image("bottle", bottle);
 

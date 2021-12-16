@@ -32,6 +32,8 @@ export default class GameSetupScene extends Scene {
       .image(this.screenCenterX, this.screenCenterY, "green-bg")
       .setOrigin(0.5);
 
+    this.soundButtonClick = this.sound.add("s-button-click");
+
     this.board = this.add.sprite(
       this.screenCenterX,
       this.screenCenterY,
@@ -60,6 +62,7 @@ export default class GameSetupScene extends Scene {
     });
 
     this.startButton.on("pointerup", (pointer) => {
+      this.soundButtonClick.play();
       this.startButton.setFrame(1);
       this.startNextScene();
     });
@@ -119,7 +122,8 @@ export default class GameSetupScene extends Scene {
     this.backBtn.setInteractive();
 
     this.backBtn.on("pointerdown", (pointer) => {
-      this.scene.start("StartScene", {
+      this.soundButtonClick.play();
+      this.scene.start("StoryScene", {
         server: {},
         onGameOver: {},
       });
@@ -131,6 +135,7 @@ export default class GameSetupScene extends Scene {
       .setInteractive();
 
     this.closeBtn.on("pointerdown", (pointer) => {
+      this.soundButtonClick.play();
       this.scene.start("LoadingScene", {
         server: {},
         onGameOver: {},

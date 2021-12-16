@@ -72,6 +72,16 @@ export default class PlayScene extends Scene {
 
     //add sounds
     this.soundCollectStar = this.sound.add("s-start-collected");
+    this.soundRiverFlow = this.sound.add("s-river-flow", {
+      volume: 0.5,
+      loop: true,
+    });
+    this.soundRiverFlow.play();
+    this.soundMoveExacavator = this.sound.add("s-excavator-move");
+    this.soundPickTrash = this.sound.add("s-trash-picked");
+    this.correctMatch = this.sound.add("s-correct-match");
+
+    this.soundButtonClick = this.sound.add("s-button-click");
 
     //grid
     this.screenWidth = this.cameras.main.width;
@@ -218,7 +228,7 @@ export default class PlayScene extends Scene {
 
     cleanOrPolluteIcon.on("drop", (pointer, gameObject, dropZone) => {
       //get the difference between farmCleanButton and cleanOrPolluteIcon x position and check if it's less than 20
-      if (Math.abs(this.farmCleanButton.x - cleanOrPolluteIcon.x) < 20) {
+      if (Math.abs(this.farmCleanButton.x - cleanOrPolluteIcon.x) <= 40) {
         cleanOrPolluteIcon.destroy();
         this.labStation.createPebble(2);
 
@@ -227,7 +237,7 @@ export default class PlayScene extends Scene {
         }
       }
 
-      if (Math.abs(this.farmPollutingButton.x - cleanOrPolluteIcon.x) < 20) {
+      if (Math.abs(this.farmPollutingButton.x - cleanOrPolluteIcon.x) <= 40) {
         cleanOrPolluteIcon.destroy();
         this.labStation.createPebble(1);
         if (dirtyIcons.includes(cleanOrPolluteIcon.iconType)) {
@@ -253,6 +263,7 @@ export default class PlayScene extends Scene {
       .setInteractive();
 
     this.menuButton.on("pointerdown", () => {
+      this.soundButtonClick.play();
       this.openMenu();
     });
   }
@@ -552,6 +563,7 @@ export default class PlayScene extends Scene {
         this.gameState.setPlayerRoundScore(3, currentRound, points);
         break;
       case "lab":
+        this.correctMatch.play();
         this.gameState.setRoundGroupScore(currentRound, points);
         this.gameState.setPlayerRoundScore(4, currentRound, points);
         break;
@@ -615,6 +627,8 @@ export default class PlayScene extends Scene {
       (pointer, localX, localY, event) => {
         this.isPlayerTouchingExcavator = true;
 
+        this.soundMoveExacavator.play();
+
         this.excavatorArmTween = this.tweens.add({
           targets: this.excavatorArm,
           angle: { from: 90, to: 0 },
@@ -650,7 +664,7 @@ export default class PlayScene extends Scene {
     this.clockText.setText(strProgress);
     if (absProgress <= 0) {
       //times up - round over
-      //this.onGameTimerComplete();
+      this.onGameTimerComplete();
     }
   }
 
@@ -676,6 +690,7 @@ export default class PlayScene extends Scene {
 
   //this is called once the timer elapses
   onGameTimerComplete() {
+    this.soundRiverFlow.stop();
     this.scene.stop("PlayScene");
     this.scene.start("RoundCompleteScene", {
       server: {},
@@ -782,6 +797,8 @@ export default class PlayScene extends Scene {
             truck.resumeFollow();
 
             this.updateProgressBar(1, "excavator");
+            //trash picked here
+            this.soundPickTrash.play();
 
             //make sure we have some trucks left
             if (this.trucks.length > 1) {
