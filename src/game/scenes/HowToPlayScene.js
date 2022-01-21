@@ -177,8 +177,7 @@ export default class HowToPlayScene extends Scene {
         0,
         `Answer a math question once the forklifts arrive from the
         digger. Make sure not to get the incorrect answer or take too
-        long, or else the forklift will get stuck in traffic,
-        creating a queue to get into the factory.`,
+        long, or else the forklift will get stuck in traffic, creating a queue to get into the factory.`,
         this.styleConfig
       )
       .setOrigin(0.5, 0);
