@@ -5,20 +5,20 @@ import thudMp3 from "../../assets/media/thud.mp3";
 import thudOgg from "../../assets/media/thud.ogg";
 import s_buttonClick from "../../assets/media/usafi-mtoni-button-2.mp3";
 
-import s_correctAns from "../../assets/media/correct-answer.wav";
-import s_wrongAns from "../../assets/media/wrong-answer.wav";
+import s_correctAns from "../../assets/media/correct-answer.mp3";
+import s_wrongAns from "../../assets/media/wrong-answer.mp3";
 import s_starCollected from "../../assets/media/star-collected.mp3";
 
-import s_correctSort from "../../assets/media/correct-sort.wav";
-import s_wrongSort from "../../assets/media/wrong-sort.wav";
-import s_correctMatch from "../../assets/media/correct-match.wav";
+import s_correctSort from "../../assets/media/correct-sort.mp3";
+import s_wrongSort from "../../assets/media/wrong-sort.mp3";
+import s_correctMatch from "../../assets/media/correct-match.mp3";
 
-import s_trashPicked from "../../assets/media/excavator-collect.wav";
-import s_excavatorMove from "../../assets/media/excavator-tap.wav";
+import s_trashPicked from "../../assets/media/excavator-collect.mp3";
+import s_excavatorMove from "../../assets/media/excavator-tap.mp3";
 
-import s_riverFlow from "../../assets/media/river-flow.WAV";
-import s_newQuestion from "../../assets/media/new-question.wav";
-import s_materialArrives from "../../assets/media/material-arrives.wav";
+import s_riverFlow from "../../assets/media/river-flow.mp3";
+import s_newQuestion from "../../assets/media/new-question.mp3";
+import s_materialArrives from "../../assets/media/material-arrives.mp3";
 
 import gameBg from "../../assets/img/game-play/game-bg.png";
 import pipes from "../../assets/img/game-play/pipes.png";

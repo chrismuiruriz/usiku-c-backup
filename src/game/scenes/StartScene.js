@@ -63,10 +63,6 @@ export default class StartScene extends Scene {
   }
 
   toggleFullScreen() {
-    if (this.scale.isFullscreen) {
-      this.scale.stopFullscreen();
-    } else {
-      this.scale.startFullscreen();
-    }
+    this.scale.startFullscreen();
   }
 }
