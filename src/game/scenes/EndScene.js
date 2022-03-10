@@ -63,7 +63,7 @@ export default class EndScene extends Scene {
         0,
         "natural-log",
         "Congratulations, you have helped\nclean up the river. Well done!",
-        22,
+        30,
         1
       )
       .setAngle(angle);

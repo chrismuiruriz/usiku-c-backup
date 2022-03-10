@@ -192,12 +192,12 @@ export default class StoryScene extends Scene {
     );
     this.chat1Text = this.createText(
       this.bubble1.x + 10,
-      this.bubble1.y - 15,
+      this.bubble1.y - 20,
       this.bubble1.width,
       this.bubble1.height,
       "DAVID",
       "Shikamoo",
-      24,
+      30,
       1
     );
 
@@ -224,6 +224,7 @@ export default class StoryScene extends Scene {
         this.kids.y - this.kids.height / 2 - 60,
         "chat_2"
       )
+      .setScale(1.2)
       .setVisible(true);
     this.chat2Text = this.createText(
       this.bubble2.x + 5,
@@ -232,7 +233,7 @@ export default class StoryScene extends Scene {
       this.bubble2.height,
       "Kezia",
       "What are you doing\ntoday?",
-      24,
+      30,
       1
     );
 
@@ -266,7 +267,7 @@ export default class StoryScene extends Scene {
       this.bubble2_2.height,
       "ELDER",
       "Marahaba!",
-      24,
+      30,
       1
     );
 
@@ -293,15 +294,15 @@ export default class StoryScene extends Scene {
         this.elder.y - this.elder.height / 2 + 50,
         "chat_3"
       )
-      .setScale(2);
+      .setScale(2.2);
     this.chat3Text = this.createText(
       this.bubble3.x + 10,
-      this.bubble3.y - 40,
+      this.bubble3.y - 45,
       this.bubble3.width,
       this.bubble3.height,
       "ELDER",
       "I am very sad today, as you can see the river is\nvery polluted from the city and\nit's not what it used to be",
-      24,
+      30,
       1
     );
 
@@ -328,22 +329,22 @@ export default class StoryScene extends Scene {
         this.elder.y - this.elder.height / 2 + 100,
         "chat_4"
       )
-      .setScale(1.2);
+      .setScale(1.4);
 
     this.chat4Text = this.createText(
       this.bubble4.x + 10,
-      this.bubble4.y - 50,
+      this.bubble4.y - 54,
       this.bubble4.width,
       this.bubble4.height,
       "ELDER",
       "When I was your age... I used to come\nhere almost everyday to swim with my friends\nand sometimes...",
-      24,
+      30,
       1
     );
 
     this.chat4Char = this.createCharText(
-      this.bubble4.x + 50,
-      this.bubble4.y - 25,
+      this.bubble4.x + 75,
+      this.bubble4.y - 35,
       this.bubble4.width,
       this.bubble4.height,
       "ELDER",
@@ -371,7 +372,7 @@ export default class StoryScene extends Scene {
       this.bubble5.height,
       "ELDER",
       "We would even find some fish!",
-      24,
+      30,
       1
     );
 
@@ -394,25 +395,25 @@ export default class StoryScene extends Scene {
     this.chat6 = this.add.group();
     this.bubble6 = this.add
       .image(
-        this.elder.x + 200,
+        this.elder.x + 210,
         this.elder.y - this.elder.height / 2 + 50,
         "chat_6"
       )
-      .setScale(1.2);
+      .setScale(1.4);
     this.chat6Text = this.createText(
       this.bubble6.x + 10,
-      this.bubble6.y - 30,
+      this.bubble6.y - 31,
       this.bubble6.width,
       this.bubble6.height,
       "ELDER",
       "I don't know how we can save it from\nbeing polluted further",
-      24,
+      30,
       1
     );
 
     this.chat6Char = this.createCharText(
-      this.bubble6.x + 50,
-      this.bubble6.y - 20,
+      this.bubble6.x + 70,
+      this.bubble6.y - 30,
       this.bubble6.width,
       this.bubble6.height,
       "Elder",
@@ -434,12 +435,12 @@ export default class StoryScene extends Scene {
     );
     this.chat7Text = this.createText(
       this.bubble7.x + 10,
-      this.bubble7.y - 40,
+      this.bubble7.y - 42,
       this.bubble7.width,
       this.bubble7.height,
       "DAVID & KEZIA",
       "Don't worry! We are going to\nhelp save and clean the river!",
-      24,
+      30,
       1
     );
 

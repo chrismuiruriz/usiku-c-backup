@@ -13,6 +13,7 @@ export default class ChatTimeScene extends Scene {
   }
 
   init() {
+    this.showTimer = false;
     this.gameTimerDuration = 5; //secs
     this.gameTimerCountdown = 5; //secs
     this.gameTimer = new Phaser.Time.TimerEvent({
@@ -48,11 +49,46 @@ export default class ChatTimeScene extends Scene {
       .image(this.screenCenterX, this.screenCenterY, "chat-time-bg")
       .setOrigin(0.5);
 
-    this.clockBg = this.add.sprite(
-      this.screenCenterX,
-      this.screenCenterY,
-      "clock-bg"
-    );
+    this.createClock();
+
+    //add a sound for the button
+    this.soundButtonClick = this.sound.add("s-button-click");
+
+    //add a continue button
+    this.continueButton = this.add
+      .sprite(this.screenCenterX, this.screenCenterY, "continue-btn")
+      .setScale(0.6)
+      .setFrame(0);
+    this.continueButton.setInteractive();
+
+    this.continueButton.on("pointerover", (pointer) => {
+      this.continueButton.setFrame(1);
+    });
+
+    this.continueButton.on("pointerout", (pointer) => {
+      this.continueButton.setFrame(0);
+    });
+
+    this.continueButton.on("pointerup", (pointer) => {
+      this.soundButtonClick.play();
+      this.continueButton.setFrame(1);
+
+      if (this.previousScene === "TakePositionScene") {
+        this.startNextScene();
+      } else {
+        this.startNextRound();
+      }
+    });
+
+    if (showTimer) {
+      this.startGameTimer();
+    }
+  }
+
+  createClock() {
+    this.clockBg = this.add
+      .sprite(this.screenCenterX, this.screenCenterY, "clock-bg")
+      .setVisible(false);
 
     this.clockText = this.add
       .bitmapText(
@@ -64,7 +100,8 @@ export default class ChatTimeScene extends Scene {
         Phaser.Display.Align.CENTER
       )
       .setOrigin(0.5)
-      .setAngle(-90);
+      .setAngle(-90)
+      .setVisible(false);
 
     this.text1 = this.add
       .sprite(this.screenWidth, 0, "chat-time-text")
@@ -75,22 +112,9 @@ export default class ChatTimeScene extends Scene {
     this.text2 = this.add.sprite(0, 0, "chat-time-text").setOrigin(0, 0.5);
     this.text2.y = this.clockBg.y;
 
-    let bPlaceholder = this.add
-      .image(0, 0, "chat-time-bubble")
-      .setVisible(false);
+    let bPlaceholder = this.add.image(0, 0, "chat-time-bubble");
     let bXGap = 100;
     let bYGap = 50;
-
-    //TL
-    this.createChatBubbles(bXGap, bPlaceholder.height + bYGap, 180, 3);
-
-    //TR
-    this.createChatBubbles(
-      this.screenWidth - bPlaceholder.width - bXGap,
-      bPlaceholder.height + bYGap,
-      180,
-      2
-    );
 
     //BR
     this.createChatBubbles(
@@ -103,7 +127,16 @@ export default class ChatTimeScene extends Scene {
     //BL
     this.createChatBubbles(bXGap, this.screenHeight - bYGap, 0, 0);
 
-    this.startGameTimer();
+    //TL
+    this.createChatBubbles(bXGap, bPlaceholder.height + bYGap, 180, 3);
+
+    //TR
+    this.createChatBubbles(
+      this.screenWidth - bPlaceholder.width - bXGap,
+      bPlaceholder.height + bYGap,
+      180,
+      2
+    );
   }
 
   createChatBubbles(x, y, angle, frame) {
@@ -184,16 +217,20 @@ export default class ChatTimeScene extends Scene {
 
   update() {
     //update timer
-    let progress = this.gameTimer.getProgress() * this.gameTimerDuration;
-    let absProgress = this.gameTimerCountdown - parseInt(progress.toFixed(0));
-    let strProgress =
-      absProgress < 10 ? `0${absProgress}:00` : `${absProgress}:00`;
-    this.clockText.setText(strProgress);
-    if (absProgress <= 0) {
-      if (this.previousScene === "TakePositionScene") {
-        this.startNextScene();
-      } else {
-        this.startNextRound();
+
+    //no need if timer is not shown
+    if (this.showTimer) {
+      let progress = this.gameTimer.getProgress() * this.gameTimerDuration;
+      let absProgress = this.gameTimerCountdown - parseInt(progress.toFixed(0));
+      let strProgress =
+        absProgress < 10 ? `0${absProgress}:00` : `${absProgress}:00`;
+      this.clockText.setText(strProgress);
+      if (absProgress <= 0) {
+        if (this.previousScene === "TakePositionScene") {
+          this.startNextScene();
+        } else {
+          this.startNextRound();
+        }
       }
     }
   }
