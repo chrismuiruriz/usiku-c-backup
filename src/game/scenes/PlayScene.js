@@ -28,8 +28,8 @@ export default class PlayScene extends Scene {
     this.isGamePaused = false;
 
     //game timer
-    this.gameTimerDuration = 60; //secs
-    this.gameTimerCountdown = 60; //secs
+    this.gameTimerDuration = 180; //secs
+    this.gameTimerCountdown = 180; //secs
     this.gameTimer = new Phaser.Time.TimerEvent({
       delay: this.gameTimerDuration * 1000,
     });
@@ -461,7 +461,7 @@ export default class PlayScene extends Scene {
     this.clockText = this.add
       .bitmapText(
         this.clockBg.x,
-        this.clockBg.y,
+        this.clockBg.y + 5,
         "segments-basic",
         "00:00",
         14,
