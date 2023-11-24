@@ -37,14 +37,14 @@ export default class PlayScene extends Scene {
 
     this.truckSpeed = 3500;
     this.firstTruckStartDelay = 50;
-    this.excavatorArmRotateSpeed = 447;
-    this.bottleSpeedOnRiver = 2500;
+    this.excavatorArmRotateSpeed = 223;
+    this.bottleSpeedOnRiver = 5000;
 
     this.debugDir = "right";
     this.deltaTime = 0;
     this.deltaTimeRemoveBottle = 0;
 
-    this.bottleRemoveFromRiverDuration = 850;
+    this.bottleRemoveFromRiverDuration = 425;
 
     this.isPlayerTouchingExcavator = false;
     this.isBottleTouchingExcavator = false;
@@ -152,6 +152,9 @@ export default class PlayScene extends Scene {
 
     //setup listeners
     this.setEventListeners();
+
+    // let's pause the game
+    this.displayGuide();
   }
 
   //
@@ -203,10 +206,10 @@ export default class PlayScene extends Scene {
 
   //create cleanOrPollute icon
   createCleanOrPolluteIcon() {
-    let cleanIcons = [0, 3];
-    let dirtyIcons = [1, 2];
+    let cleanIcons = [0, 1, 2, 3];
+    let dirtyIcons = [4, 5, 6, 7];
 
-    let max = 3;
+    let max = 7;
     let min = 0;
     let randomFrame = Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -252,7 +255,7 @@ export default class PlayScene extends Scene {
     this.menuButton = this.add
       .sprite(
         this.screenWidth - 50,
-        this.screenCenterY - 90,
+        this.screenCenterY - 45,
         "menu-button",
         null,
         {
@@ -647,6 +650,15 @@ export default class PlayScene extends Scene {
     this.excavatorArm.on("pointerup", function(pointer, localX, localY, event) {
       this.isPlayerTouchingExcavator = false;
     });
+
+    // Listen for the resume event
+    this.events.on(
+      "resume",
+      function() {
+        this.soundRiverFlow.play();
+      },
+      this
+    );
   }
 
   update(time, delta) {
@@ -909,10 +921,26 @@ export default class PlayScene extends Scene {
     });
   }
 
-  //open menu
+  // open menu
   openMenu() {
     this.scene.pause("PlayScene");
+    this.soundRiverFlow.stop();
     this.scene.launch("MenuScene", {
+      server: {},
+      onGameOver: {},
+    });
+  }
+
+  // show guide
+  displayGuide() {
+    if (sessionStorage.seenGuide) {
+      return;
+    }
+
+    sessionStorage.seenGuide = "yes";
+    this.scene.pause("PlayScene");
+    this.soundRiverFlow.stop();
+    this.scene.launch("GamePlayGuideScene", {
       server: {},
       onGameOver: {},
     });

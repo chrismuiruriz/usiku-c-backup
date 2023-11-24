@@ -9,6 +9,7 @@ import ChatTimeScene from "./scenes/ChatTimeScene";
 import HowToPlayScene from "./scenes/HowToPlayScene";
 import PlayScene from "./scenes/PlayScene";
 import MenuScene from "./scenes/MenuScene";
+import GamePlayGuideScene from "./scenes/GamePlayGuideScene";
 import RoundCompleteScene from "./scenes/RoundCompleteScene";
 import ChangePositionsScene from "./scenes/ChangePositionsScene";
 import GameSummaryScene from "./scenes/GameSummaryScene";
@@ -41,6 +42,7 @@ export default {
     ChatTimeScene,
     HowToPlayScene,
     PlayScene,
+    GamePlayGuideScene,
     MenuScene,
     RoundCompleteScene,
     ChangePositionsScene,

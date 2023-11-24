@@ -21,6 +21,8 @@ import s_newQuestion from "../../assets/media/new-question.mp3";
 import s_materialArrives from "../../assets/media/material-arrives.mp3";
 
 import gameBg from "../../assets/img/game-play/game-bg.png";
+import howToPlayGuide from "../../assets/img/how-to-play/how-to-play-guide.png";
+import gamePlayGuide from "../../assets/img/game-play/game-play-guide.png";
 import pipes from "../../assets/img/game-play/pipes.png";
 
 import menuButton from "../../assets/img/game-play/menu-button.png";
@@ -91,8 +93,19 @@ import segmentsBasicXML from "../../assets/fonts/16segments-basic/bitmap.xml";
 
 import matatu from "../../assets/img/game-play/matatu.png";
 import chatTimeBubble from "../../assets/img/chat-time/bubble-420x187.png";
-//drop-icons-135x135-plain.png
+
 import dropIcons from "../../assets/img/game-play/drop-icons-135x135.png";
+
+// Intro story audio
+import introChat1Audio from "../../assets/img/story/audio/1-david.mp3";
+import introChat2Audio from "../../assets/img/story/audio/2-kezia.mp3";
+import introChat3Audio from "../../assets/img/story/audio/3-elder.mp3";
+import introChat4Audio from "../../assets/img/story/audio/4-elder.mp3";
+import introChat5Audio from "../../assets/img/story/audio/5-elder.mp3";
+import introChat6Audio from "../../assets/img/story/audio/6-elder.mp3";
+import introChat7Audio from "../../assets/img/story/audio/7-elder.mp3";
+import introChat8Audio from "../../assets/img/story/audio/8-kids.mp3";
+import introChat9Audio from "../../assets/img/story/audio/9-david.mp3";
 
 export default class BootScene extends Scene {
   constructor() {
@@ -120,6 +133,9 @@ export default class BootScene extends Scene {
     this.load.image("bottle", bottle);
 
     this.load.image("game-backround", gameBg);
+    this.load.image("how-to-play-guide", howToPlayGuide);
+    this.load.image("game-play-guide", gamePlayGuide);
+
     this.load.image("pipes", pipes);
     this.load.image("menu-button", menuButton);
     this.load.image("fullscreen-button", fullscreenButton);
@@ -220,6 +236,16 @@ export default class BootScene extends Scene {
     this.load.bitmapFont("alloyink", alloyinkPNG, alloyinkXML);
     this.load.bitmapFont("natural-log", naturalLogPNG, naturalLogXML);
     this.load.bitmapFont("segments-basic", segmentsBasicPNG, segmentsBasicXML);
+
+    this.load.audio("introChat1Audio", introChat1Audio);
+    this.load.audio("introChat2Audio", introChat2Audio);
+    this.load.audio("introChat3Audio", introChat3Audio);
+    this.load.audio("introChat4Audio", introChat4Audio);
+    this.load.audio("introChat5Audio", introChat5Audio);
+    this.load.audio("introChat6Audio", introChat6Audio);
+    this.load.audio("introChat7Audio", introChat7Audio);
+    this.load.audio("introChat8Audio", introChat8Audio);
+    this.load.audio("introChat9Audio", introChat9Audio);
   }
 
   init() {
@@ -264,5 +290,20 @@ export default class BootScene extends Scene {
       server: this.server,
       onGameOver: this.handleGameOver,
     });
+
+    // this.scene.start("StoryScene", {
+    //   server: this.server,
+    //   onGameOver: this.handleGameOver,
+    // });
+
+    // this.scene.start("HowToPlayScene", {
+    //   server: this.server,
+    //   onGameOver: this.handleGameOver,
+    // });
+
+    // this.scene.start("PlayScene", {
+    //   server: this.server,
+    //   onGameOver: this.handleGameOver,
+    // });
   }
 }
