@@ -28,8 +28,8 @@ export default class PlayScene extends Scene {
     this.isGamePaused = false;
 
     //game timer
-    this.gameTimerDuration = 180; //secs
-    this.gameTimerCountdown = 180; //secs
+    this.gameTimerDuration = 60; //secs default = 180
+    this.gameTimerCountdown = 60; //secs default = 180
     this.gameTimer = new Phaser.Time.TimerEvent({
       delay: this.gameTimerDuration * 1000,
     });
@@ -153,11 +153,11 @@ export default class PlayScene extends Scene {
     //setup listeners
     this.setEventListeners();
 
+    this.createStarEmitter();
+
     // let's pause the game
     this.displayGuide();
   }
-
-  //
 
   //create pipes
   createPipes() {
@@ -236,6 +236,7 @@ export default class PlayScene extends Scene {
         this.labStation.createPebble(2);
 
         if (cleanIcons.includes(cleanOrPolluteIcon.iconType)) {
+          this.emitStars(this.farmCleanButton.x, this.farmCleanButton.y);
           this.updateProgressBar(1, "farm");
         }
       }
@@ -244,6 +245,10 @@ export default class PlayScene extends Scene {
         cleanOrPolluteIcon.destroy();
         this.labStation.createPebble(1);
         if (dirtyIcons.includes(cleanOrPolluteIcon.iconType)) {
+          this.emitStars(
+            this.farmPollutingButton.x,
+            this.farmPollutingButton.y
+          );
           this.updateProgressBar(1, "farm");
         }
       }
@@ -598,6 +603,23 @@ export default class PlayScene extends Scene {
     });
   }
 
+  createStarEmitter() {
+    this.starEmitter = this.add.particles("star");
+
+    this.starEmitter.createEmitter({
+      lifespan: 1200,
+      quantity: 3,
+      speed: { min: 200, max: 350 },
+      scale: { start: 0.8, end: 0.1 },
+      rotate: { start: 0, end: 360 },
+      on: false,
+    });
+  }
+
+  emitStars(x, y) {
+    this.starEmitter.emitParticleAt(x, y);
+  }
+
   //bottle and excavator-arm collision start
   bottleAndExcavatorArmCollisionStart(bodyA, bodyB) {
     if (
@@ -606,8 +628,10 @@ export default class PlayScene extends Scene {
     ) {
       this.isBottleTouchingExcavator = true;
 
-      if (this.isPlayerTouchingExcavator) {
+      if (this.isPlayerTouchingExcavator && !this.bottleIsGrabbed) {
         this.isBottleGrabbedFromRiver = true;
+        this.bottleIsGrabbed = true;
+        this.emitStars(bodyA.gameObject.x, bodyA.gameObject.y);
       }
     }
   }
@@ -665,7 +689,7 @@ export default class PlayScene extends Scene {
     //make sure the bottle is touching the excavator
     this.followRiverPath(delta);
 
-    //let's truck the trucks
+    //let's track the trucks
     this.trackTruck();
 
     //update timer
@@ -809,8 +833,11 @@ export default class PlayScene extends Scene {
             truck.resumeFollow();
 
             this.updateProgressBar(1, "excavator");
+
             //trash picked here
             this.soundPickTrash.play();
+
+            this.bottleIsGrabbed = false;
 
             //make sure we have some trucks left
             if (this.trucks.length > 1) {

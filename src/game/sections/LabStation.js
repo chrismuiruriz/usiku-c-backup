@@ -36,6 +36,25 @@ export default class LapFactory {
       callbackScope: this,
       loop: true,
     });
+
+    this.createStarEmitter();
+  }
+
+  createStarEmitter() {
+    this.starEmitter = this.scene.add.particles("star");
+
+    this.starEmitter.createEmitter({
+      lifespan: 1200,
+      quantity: 3,
+      speed: { min: 180, max: 200 },
+      scale: { start: 0.5, end: 0.2 },
+      rotate: { start: 0, end: 360 },
+      on: false,
+    });
+  }
+
+  emitStars(x, y) {
+    this.starEmitter.emitParticleAt(x, y);
   }
 
   // lab station buttons
@@ -382,6 +401,10 @@ export default class LapFactory {
     }
 
     if (totalMatches >= 1) {
+      this.emitStars(
+        this.labStation.width - 70,
+        this.labStation.height / 2 + 20
+      );
       this.scene.updateProgressBar(totalMatches / 2, "lab");
     }
   }

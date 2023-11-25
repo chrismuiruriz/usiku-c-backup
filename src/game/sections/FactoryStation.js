@@ -40,6 +40,25 @@ export default class FactoryStation {
     this.wrongAnsSound = this.scene.sound.add("s-wrong-answer");
     this.materialArrives = this.scene.sound.add("s-material-arrives");
     this.newQuestionSound = this.scene.sound.add("s-new-question");
+
+    this.createStarEmitter();
+  }
+
+  createStarEmitter() {
+    this.starEmitter = this.scene.add.particles("star");
+
+    this.starEmitter.createEmitter({
+      lifespan: 1000,
+      quantity: 3,
+      speed: { min: 180, max: 180 },
+      scale: { start: 0.4, end: 0.1 },
+      rotate: { start: 0, end: 360 },
+      on: false,
+    });
+  }
+
+  emitStars(x, y) {
+    this.starEmitter.emitParticleAt(x, y);
   }
 
   /**
@@ -131,7 +150,7 @@ export default class FactoryStation {
       }
 
       if (this.quiz.checkAnswer(this.currentQuestion.index, "B")) {
-        this.isCorrect();
+        this.isCorrect(this.greenTriangleButton.x, this.greenTriangleButton.y);
         this.startBoat();
       } else {
         this.isWrong();
@@ -164,7 +183,7 @@ export default class FactoryStation {
       }
 
       if (this.quiz.checkAnswer(this.currentQuestion.index, "A")) {
-        this.isCorrect();
+        this.isCorrect(this.redTriangleButton.x, this.redTriangleButton.y);
         this.startBoat();
       } else {
         this.isWrong();
@@ -197,7 +216,7 @@ export default class FactoryStation {
       }
 
       if (this.quiz.checkAnswer(this.currentQuestion.index, "C")) {
-        this.isCorrect();
+        this.isCorrect(this.blueTriangleButton.x, this.blueTriangleButton.y);
         this.startBoat();
       } else {
         this.isWrong();
@@ -225,7 +244,8 @@ export default class FactoryStation {
     this.question.width = this.factoryStation.width;
   }
 
-  isCorrect() {
+  isCorrect(x, y) {
+    this.emitStars(x, y);
     this.clearQuiz();
     this.scene.updateProgressBar(1, "factory");
     this.question.setText("Correct!");

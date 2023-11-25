@@ -80,7 +80,7 @@ export default class ChatTimeScene extends Scene {
       }
     });
 
-    if (showTimer) {
+    if (this.showTimer) {
       this.startGameTimer();
     }
   }

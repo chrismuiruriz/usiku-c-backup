@@ -20,6 +20,7 @@ import s_riverFlow from "../../assets/media/river-flow.mp3";
 import s_newQuestion from "../../assets/media/new-question.mp3";
 import s_materialArrives from "../../assets/media/material-arrives.mp3";
 
+import star from "../../assets/img/game-play/star.png";
 import gameBg from "../../assets/img/game-play/game-bg.png";
 import howToPlayGuide from "../../assets/img/how-to-play/how-to-play-guide.png";
 import gamePlayGuide from "../../assets/img/game-play/game-play-guide.png";
@@ -107,6 +108,11 @@ import introChat7Audio from "../../assets/img/story/audio/7-elder.mp3";
 import introChat8Audio from "../../assets/img/story/audio/8-kids.mp3";
 import introChat9Audio from "../../assets/img/story/audio/9-david.mp3";
 
+// Outro audio
+import outroChat1Audio from "../../assets/img/end/audio/elder.mp3";
+import outroChat2Audio from "../../assets/img/end/audio/david.mp3";
+import outroChat3Audio from "../../assets/img/end/audio/kezia.mp3";
+
 export default class BootScene extends Scene {
   constructor() {
     super({ key: "BootScene" });
@@ -132,6 +138,7 @@ export default class BootScene extends Scene {
 
     this.load.image("bottle", bottle);
 
+    this.load.image("star", star);
     this.load.image("game-backround", gameBg);
     this.load.image("how-to-play-guide", howToPlayGuide);
     this.load.image("game-play-guide", gamePlayGuide);
@@ -246,6 +253,10 @@ export default class BootScene extends Scene {
     this.load.audio("introChat7Audio", introChat7Audio);
     this.load.audio("introChat8Audio", introChat8Audio);
     this.load.audio("introChat9Audio", introChat9Audio);
+
+    this.load.audio("outroChat1Audio", outroChat1Audio);
+    this.load.audio("outroChat2Audio", outroChat2Audio);
+    this.load.audio("outroChat3Audio", outroChat3Audio);
   }
 
   init() {
@@ -290,20 +301,5 @@ export default class BootScene extends Scene {
       server: this.server,
       onGameOver: this.handleGameOver,
     });
-
-    // this.scene.start("StoryScene", {
-    //   server: this.server,
-    //   onGameOver: this.handleGameOver,
-    // });
-
-    // this.scene.start("HowToPlayScene", {
-    //   server: this.server,
-    //   onGameOver: this.handleGameOver,
-    // });
-
-    // this.scene.start("PlayScene", {
-    //   server: this.server,
-    //   onGameOver: this.handleGameOver,
-    // });
   }
 }

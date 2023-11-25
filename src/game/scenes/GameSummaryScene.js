@@ -99,6 +99,28 @@ export default class GameSummaryScene extends Scene {
 
     //let's make sure we clear everything
     this.gameState.resetScores();
+
+    this.createStarEmitter(
+      this.screenCenterX - this.screenWidth / 2 + 150,
+      this.screenCenterY
+    );
+
+    this.createStarEmitter(this.screenWidth - 150, this.screenCenterY);
+  }
+
+  createStarEmitter(x, y) {
+    this.starEmitter = this.add.particles("star");
+
+    this.starEmitter.createEmitter({
+      lifespan: 1500,
+      quantity: 3,
+      speed: { min: 200, max: 300 },
+      scale: { start: 0.8, end: 0.1 },
+      rotate: { start: 0, end: 360 },
+      on: false,
+    });
+
+    this.starEmitter.emitParticleAt(x, y);
   }
 
   createTopScoreBoards() {
@@ -304,10 +326,10 @@ export default class GameSummaryScene extends Scene {
       this.checkIfAllSelected();
     });
 
-    this.labLabel = this.add.image(0, 0, "label").setOrigin(0, 0);
-    this.labLabel.x = this.topLeftButton.x + this.topLeftButton.width - 20;
-    this.labLabel.y = this.topLeftButton.y + 8;
-    this.labLabel.setFrame(3).setVisible(false);
+    // this.labLabel = this.add.image(0, 0, "label").setOrigin(0, 0);
+    // this.labLabel.x = this.topLeftButton.x + this.topLeftButton.width - 20;
+    // this.labLabel.y = this.topLeftButton.y + 8;
+    // this.labLabel.setFrame(3).setVisible(false);
 
     /*********************/
 
@@ -336,10 +358,10 @@ export default class GameSummaryScene extends Scene {
       this.checkIfAllSelected();
     });
 
-    this.farmLabel = this.add.image(0, 0, "label").setOrigin(0, 0);
-    this.farmLabel.x = this.topRightButton.x - this.topRightButton.width - 40;
-    this.farmLabel.y = this.topRightButton.y + 8;
-    this.farmLabel.setFrame(2).setVisible(false);
+    // this.farmLabel = this.add.image(0, 0, "label").setOrigin(0, 0);
+    // this.farmLabel.x = this.topRightButton.x - this.topRightButton.width - 40;
+    // this.farmLabel.y = this.topRightButton.y + 8;
+    // this.farmLabel.setFrame(2).setVisible(false);
 
     /*********************/
 
@@ -368,11 +390,11 @@ export default class GameSummaryScene extends Scene {
       //do something
     });
 
-    this.factoryLabel = this.add.image(0, 0, "label").setOrigin(1, 1);
-    this.factoryLabel.x =
-      this.screenWidth - this.bottomRightButton.width / 2 - 50;
-    this.factoryLabel.y = this.screenHeight - 8;
-    this.factoryLabel.setFrame(1).setVisible(false);
+    // this.factoryLabel = this.add.image(0, 0, "label").setOrigin(1, 1);
+    // this.factoryLabel.x =
+    //   this.screenWidth - this.bottomRightButton.width / 2 - 50;
+    // this.factoryLabel.y = this.screenHeight - 8;
+    // this.factoryLabel.setFrame(1).setVisible(false);
 
     /*********************/
 
@@ -401,11 +423,11 @@ export default class GameSummaryScene extends Scene {
       //do something
     });
 
-    this.excavatorLabel = this.add.image(0, 0, "label").setOrigin(0, 1);
-    this.excavatorLabel.x =
-      this.bottomLeftButton.x + this.bottomLeftButton.width - 30;
-    this.excavatorLabel.y = this.screenHeight - 8;
-    this.excavatorLabel.setFrame(0).setVisible(false);
+    // this.excavatorLabel = this.add.image(0, 0, "label").setOrigin(0, 1);
+    // this.excavatorLabel.x =
+    //   this.bottomLeftButton.x + this.bottomLeftButton.width - 30;
+    // this.excavatorLabel.y = this.screenHeight - 8;
+    // this.excavatorLabel.setFrame(0).setVisible(false);
   }
 
   createChatBubbles(blScores, brScores, trScores, tlScores) {

@@ -82,16 +82,6 @@ export default class StoryScene extends Scene {
     this.createNextButton();
   }
 
-  update() {
-    if (this.isAnySoundPlaying()) {
-      this.nextButton.setVisible(false);
-    } else if (this.letsGoButton.visible === true) {
-      this.nextButton.setVisible(false);
-    } else {
-      this.nextButton.setVisible(true);
-    }
-  }
-
   loadAudioSounds() {
     this.chatSounds = [
       this.sound.add("introChat1Audio"),
@@ -131,6 +121,7 @@ export default class StoryScene extends Scene {
 
   displayChats() {
     this.hideAllChats();
+    this.stopAnyChatSoundPlaying();
     switch (this.chatCounter) {
       case 0:
         this.chatSounds[0].play();
@@ -216,7 +207,7 @@ export default class StoryScene extends Scene {
     this.backBtn = this.add.sprite(50, 50, "navigation-btn").setFrame(0);
     this.backBtn.setInteractive();
 
-    this.backBtn.on("pointerdown", (pointer) => {
+    this.backBtn.on("pointerdown", () => {
       this.stopAnyChatSoundPlaying();
       this.soundButtonClick.play();
       this.scene.start("StartScene", {
@@ -249,6 +240,42 @@ export default class StoryScene extends Scene {
     this.kids = this.add.sprite(0, 0, "story-kids");
     this.kids.x = this.screenWidth - this.kids.width / 2;
     this.kids.y = this.screenHeight - this.kids.height / 2;
+
+    // elder label
+    this.elderLabel = this.createText(
+      this.elder.x / 2 - 20,
+      this.elder.height - 50,
+      this.elder.width,
+      100,
+      "ELDER",
+      "ELDER",
+      30,
+      1
+    );
+
+    // david label
+    this.davidLabel = this.createText(
+      this.kids.x - this.kids.width / 2 + 90,
+      this.elder.height - 50,
+      this.kids.width,
+      100,
+      "DAVID",
+      "DAVID",
+      30,
+      1
+    );
+
+    // kezia label
+    this.keziaLabel = this.createText(
+      this.kids.x + 25,
+      this.elder.height - 50,
+      this.kids.width,
+      100,
+      "KEZIA",
+      "KEZIA",
+      30,
+      1
+    );
   }
 
   createChatBubbles() {

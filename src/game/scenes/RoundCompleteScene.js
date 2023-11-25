@@ -97,6 +97,23 @@ export default class RoundCompleteScene extends Scene {
     );
 
     this.createButtons();
+
+    this.createStarEmitter();
+  }
+
+  createStarEmitter() {
+    this.starEmitter = this.add.particles("star");
+
+    this.starEmitter.createEmitter({
+      lifespan: 1000,
+      quantity: 3,
+      speed: { min: 400, max: 300 },
+      scale: { start: 1, end: 0.8 },
+      rotate: { start: 0, end: 360 },
+      on: false,
+    });
+
+    this.starEmitter.emitParticleAt(this.screenCenterX, this.screenCenterY);
   }
 
   createBoard(
@@ -184,7 +201,6 @@ export default class RoundCompleteScene extends Scene {
     this.topLeftButton.setInteractive();
 
     this.topLeftButton.on("pointerdown", (pointer) => {
-
       this.soundButtonClick.play();
       if (this.selections.includes("topLeft")) {
         this.selectionCounter--;
